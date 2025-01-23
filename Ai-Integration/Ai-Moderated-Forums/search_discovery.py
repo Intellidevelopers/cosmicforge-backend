@@ -206,6 +206,6 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client['telemedicine_app']
 search_system = SearchAndDiscoverySystem(db)
 
-# Initial training and indexing
+##  Initial training and indexing
 search_system.update_models()
 

@@ -206,7 +206,7 @@ class UserManager:
             potential_mentors = self.db.users.find({
                 'level': {'$gt': mentee['level']},
                 'health_interests': {'$in': mentee['health_interests']},
-                'mentee_ids': {'$not': {'$size': 5}}  # Limit to mentors with less than 5 mentees
+                'mentee_ids': {'$not': {'$size': 3}}  # Limit to mentors with less than 3 mentees
             }).sort('trust_score', -1).limit(1)
             
             if potential_mentors.count() > 0:
