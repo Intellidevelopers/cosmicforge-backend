@@ -36,9 +36,9 @@ app.get('/',(req,res)=>{
   })
 })
 
-
+const PORT = process.env.PORT || 3010
 connectDB().then(res=>{
-  app.listen(3010,()=>{
+  app.listen(PORT,()=>{
     console.log('on port 3010 h gg dgdg gg hhh')
   /*  const stream = file.createReadStream(path.join(__dirname,"src",'images.jpeg'))
     
