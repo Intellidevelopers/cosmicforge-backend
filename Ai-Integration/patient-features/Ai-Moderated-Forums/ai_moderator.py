@@ -118,10 +118,10 @@ class AIModeratorSystem:
             total_comment_length = user.get('total_comment_length', 0)
             report_count = user.get('report_count', 0)
             upvotes = user.get('upvotes', 0)
-            downvotes = user.get('downvotes', 1)  # Avoid division by zero
+            downvotes = user.get('downvotes', 1)  
 
             processed_data.append({
-                'post_frequency': post_count / 30,  # Assuming data is for last 30 days
+                'post_frequency': post_count / 30,  # if data is for last 30 days
                 'avg_post_length': total_post_length / post_count if post_count > 0 else 0,
                 'comment_frequency': comment_count / 30,
                 'avg_comment_length': total_comment_length / comment_count if comment_count > 0 else 0,

@@ -256,7 +256,7 @@ class ContentManager:
             return min(max(quality_score * 100, 0), 100)  # Normalize to 0-100 range
         except Exception as e:
             logger.error(f"Error in calculate_content_quality: {str(e)}")
-            return 50  # Default to neutral score in case of error
+            return 50  
 
     def flesch_reading_ease(self, text):
         sentences = sent_tokenize(text)
@@ -343,6 +343,6 @@ sample_data = [
     ("This is a post about diabetes management", "health"),
     ("Looking for advice on heart disease prevention", "health"),
     ("Spam message about miracle cures", "spam"),
-    # We would Add more training data as needed
+    # We Would Add more training data as needed
 ]
 content_manager.train_classifier(sample_data)

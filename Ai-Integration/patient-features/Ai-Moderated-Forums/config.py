@@ -8,7 +8,7 @@ class Config:
     # Database configuration
     MONGODB_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/telemedicine_app')
     
-    # SMTP configuration for email notifications
+    # SMTP configuration for email notifications. Use App Password to make it easier
     SMTP_SERVER = os.getenv('SMTP_SERVER', 'smtp.example.com')
     SMTP_PORT = int(os.getenv('SMTP_PORT', 587))
     SMTP_USERNAME = os.getenv('SMTP_USERNAME', 'noreply@example.com')
