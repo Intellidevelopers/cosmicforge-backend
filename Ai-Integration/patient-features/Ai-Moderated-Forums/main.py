@@ -44,6 +44,7 @@ def create_app(config_name):
         'password': Config.SMTP_PASSWORD
     }, Config.FIREBASE_CREDENTIALS)
 
+## WE TAKE NOTE OF THIS:
     # Register blueprints (routes) here
     # from .api import api as api_blueprint
     # app.register_blueprint(api_blueprint, url_prefix='/api')

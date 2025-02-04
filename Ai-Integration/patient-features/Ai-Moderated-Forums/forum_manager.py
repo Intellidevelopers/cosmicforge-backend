@@ -79,7 +79,7 @@ class ForumManager:
     def enrich_model_with_external_data(self, health_condition_model):
         try:
             # Using the MedlinePlus API to enrich our model
-            base_url = "https://connect.medlineplus.gov/service"
+            base_url = "https://connect.medlineplus.gov/service" ## I will move this to .env file
 
             for condition, terms in health_condition_model.items():
                 params = {

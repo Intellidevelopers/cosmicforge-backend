@@ -279,7 +279,7 @@ logger = logging.getLogger(__name__)
         if not engagement_times:
             return datetime.now().replace(hour=9, minute=0, second=0, microsecond=0)
 
-        # Convert to user's local timezone (assuming it's stored in user preferences)
+        # Convert to user's local timezone (if it's stored in user preferences)
         user_tz = pytz.timezone(self.db.users.find_one({'_id': user_id})['timezone'])
         local_times = [t.astimezone(user_tz) for t in engagement_times]
 
@@ -340,7 +340,7 @@ smtp_config = {
 }
 
 firebase_config = {
-    # Your Firebase configuration here
+    ## We gonna add Firebase configuration here
 }
 
 notification_system = NotificationSystem(db, smtp_config, firebase_config)
