@@ -4,7 +4,7 @@
     <link href='https://fonts.googleapis.com/css?family=IBM Plex Sans' rel='stylesheet'>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Otp to user</title>
+    <title>Succesfull Login</title>
     <style>
        body {
         margin:0;
@@ -22,7 +22,9 @@
        .email-text-container {
         width:100; margin: 10%; line-height:30px; word-spacing:3px;
        }
+      
        .footer {
+        width: 100%;
         position:absolute; background: rgba(245, 248, 255, 1); min-height: 150px; width: 100%;
         display: flex;
          justify-content: center;
@@ -37,13 +39,17 @@
         .email-text-container {
       margin: 5%; line-height:26px; 
        }
-          .footer{
-           
-        position: relative;
-          }
+         
           .email-text-container {
             margin: 5%;
           } 
+
+          .email-text-container :nth-child(2) {
+        margin-top: 15%;
+       }
+       .text-container{
+        margin-top:15%;
+       }
          
        }
     </style>
@@ -58,16 +64,14 @@
     </div>
 
     <div class="email-text-container" >
-      <h1 >Email Verification</h1>
-      <p>Hey <%= data.email  %> ,</p>
-      <p>
+      <h1 >Login Successfull</h1>
+      <p>Hello <%= data.fullName %> ,</p>
+      <p class="text-container">
 
-        Thanks for signing up on CosmicForge! This is the start of an exciting journey and we can’t wait to see all the beautiful designs you’ll create with our templates.
+      Welcome back.
         
         </p>
-        <p>Use otp code below to verify your account and get started.</p>
-
-        <p>Otp code:<%= data.otp %></p>
+        
     </div>
 
    

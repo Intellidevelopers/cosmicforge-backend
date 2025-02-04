@@ -27,6 +27,7 @@ export interface CompleteRegistrationRequestProps {
     fullName: string,
     lastName: string,
     password: string,
+    role:string
     otp: number
 }
 
@@ -52,7 +53,7 @@ export const registerNewUser = async (req: TypedRequest<RequestBodyProps>, res: 
             })
         }
 
-        console.log(await UsersModel.deleteMany())
+       // console.log(await UsersModel.deleteMany())
         const isEmailAlreadyRegistered = await UsersModel.findOne({ email })
 
         if (isEmailAlreadyRegistered) {
@@ -87,7 +88,7 @@ export const registerNewUser = async (req: TypedRequest<RequestBodyProps>, res: 
             userDetails: {
                 email
             },
-            expiringTime: new Date(Date.now() + 3 * 60 * 1000),
+            expiringTime: new Date(Date.now() + 5 * 60 * 1000),
             otpCode: otp
 
         })
@@ -169,7 +170,7 @@ export const resendOTP = async (req: TypedRequest<RequestBodyProps>, res: TypedR
                 title: 'Register new user message',
                 successful: false,
                 status: SERVER_STATUS.BAD_REQUEST,
-                message: "Otp already sent to this user and will expire in th next 3mins.",
+                message: "Otp already sent to this user and will expire in th next 5mins.",
 
 
 
@@ -184,7 +185,7 @@ export const resendOTP = async (req: TypedRequest<RequestBodyProps>, res: TypedR
 
         await isUserAlreadySentOtp.updateOne({
             otpCode: otp,
-            expiringTime: new Date(Date.now() + 3 * 60 * 1000)
+            expiringTime: new Date(Date.now() + 5 * 60 * 1000)
         })
 
 
@@ -273,6 +274,24 @@ export const validateOTP = async (req: TypedRequest<ValidateOTPRequestProps>, re
             return
         }
 
+        const otpExpiringTime = new Date(isUserAlreadySentOtp?.expiringTime!!).getTime()
+
+        if (otpExpiringTime < Date.now()) {
+            res.status(SERVER_STATUS.BAD_REQUEST).json({
+                title: 'Register new user message',
+                successful: false,
+                status: SERVER_STATUS.BAD_REQUEST,
+                message: "Can not validate an expired otp.",
+
+
+
+
+            })
+
+            return
+        }
+
+
         await isUserAlreadySentOtp.updateOne({
             isOtpValidated: true
         })
@@ -280,7 +299,7 @@ export const validateOTP = async (req: TypedRequest<ValidateOTPRequestProps>, re
             title: 'Otp validation message',
             successful: false,
             status: SERVER_STATUS.SUCCESS,
-            message: "Validated otp you can continuel with registration.",
+            message: "Validated otp you can continue with registration.",
             otp
         })
 
@@ -302,7 +321,7 @@ export const completeRegistrationProcess = async (req: TypedRequest<CompleteRegi
 
 
     try {
-        const { fullName, lastName, password, otp } = req.body
+        const { fullName, lastName, password,role, otp } = req.body
 
 
         const otpData = await OTPModel.findOne({ otpCode: otp })
@@ -356,7 +375,8 @@ export const completeRegistrationProcess = async (req: TypedRequest<CompleteRegi
             fullName,
             lastName,
             email: userEmail,
-            password: hashedPassword
+            password: hashedPassword,
+            role
         })
 
         await newUser.save()
@@ -365,11 +385,15 @@ export const completeRegistrationProcess = async (req: TypedRequest<CompleteRegi
 
         await OTPModel.deleteOne({ "userDetails.email": userEmail })
 
+       await sendMail({receiver:newUser.email,subject:"Successfull Sign up.",emailData:{
+            fullName:`${newUser.fullName } ${newUser.lastName}`
+        },template:"sign-up-success.ejs"})
+
         res.status(SERVER_STATUS.SUCCESS).json({
             title: 'Complete registration message.',
-            successful: false,
+            successful: true,
             status: SERVER_STATUS.SUCCESS,
-            message: "Sucvessfully registered welcome on board!!!",
+            message: "Successfully registered welcome on board!!!",
             data: {
                 ...newUser.toObject(),
                 token

@@ -1,17 +1,64 @@
-import swaggerJsDoc from 'swagger-jsdoc'
- import express from 'express'
-import { completeRegistrationProcess, CompleteRegistrationRequestProps, registerNewUser, RequestBodyProps, resendOTP, validateOTP, ValidateOTPRequestProps } from '../controller/newUser'
+import express from 'express'
+import { LoginRequestBodyProps, loginUser, resendOtpToResetPassword, resetPassword, sendOtpToResetPassword, validateResetPasswordOTP } from '../controller/login'
 import TypedRequest from '../../../util/interface/TypedRequest'
 import TypedResponse from '../../../util/interface/TypedResponse'
 import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
 
- const route = express.Router()
+
+
 /**
  * @swagger
- * /api/v1/cosmicforge/user/signup:
+ * /api/v1/cosmicforge/user/login:
+ *     post:
+ *        summary: Complete the registration process with validated otp.
+ *        tags: [Login]
+ *        requestBody:
+ *                 description: User data
+ *                 required: true
+ *                 content:   
+ *                     application/json:
+ *                           schema:
+ *                             type: object
+ *                             properties:
+ *                                     email: 
+ *                                       type: email
+ *                                       description: fullName required.
+ *                                    
+ *                                     password: 
+ *                                       type: string
+ *                                       description: password required .
+ *                                    
+ *                             required:
+ *                               -email
+ *                               -password
+ *                              
+ *        responses:
+ *                200:
+ *                 description: Login user after providing valid details.
+ *        content:
+ *           application/json:
+ *                shema:
+ *                     type: object
+ *                     properties:
+ *                         email:
+ *                            type: string
+ *                            format: email
+ *                    
+ * 
+ *        
+ *            
+ *  
+ * 
+ */
+
+
+
+/**
+ * @swagger
+ * /api/v1/cosmicforge/user/reset-password-otp:
  *     post:
  *        summary: A user provide email  and he/she is sent an otp code.
- *        tags: [Registeration]
+ *        tags: [Forgot Password]
  *        requestBody:
  *                 description: User data
  *                 required: true
@@ -23,7 +70,7 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
  *                                     email: 
  *                                       type: string
  *                                       format: email
- *                                       description: A email required to send otp for verification.
+ *                                       description: A email required to send otp for reseting password.
  *                           required:
  *                               -email
  *        responses:
@@ -48,10 +95,10 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
 
 /**
  * @swagger
- * /api/v1/cosmicforge/user/resend-otp:
+ * /api/v1/cosmicforge/user/resend-reset-password-otp:
  *     post:
  *        summary: This will resend otp to user.
- *        tags: [Registeration]
+ *        tags: [Forgot Password]
  *        requestBody:
  *                 description: User data
  *                 required: true
@@ -63,7 +110,7 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
  *                                     email: 
  *                                       type: string
  *                                       format: email
- *                                       description: A email required to send otp for verification.
+ *                                       description: A email required to send otp for reseting password.
  *                           required:
  *                               -email
  *        responses:
@@ -88,10 +135,10 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
 
 /**
  * @swagger
- * /api/v1/cosmicforge/user/validate-otp:
+ * /api/v1/cosmicforge/user/validate-reset-password-otp:
  *     post:
- *        summary: This will validate the otp for completing registeration.
- *        tags: [Registeration]
+ *        summary: This will validate the otp for reserting user password.
+ *        tags: [Forgot Password]
  *        requestBody:
  *                 description: User data
  *                 required: true
@@ -133,10 +180,10 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
 
 /**
  * @swagger
- * /api/v1/cosmicforge/user/complete-registration:
+ * /api/v1/cosmicforge/user/reset-password:
  *     post:
- *        summary: Complete the registration process with validated otp.
- *        tags: [Registeration]
+ *        summary: Reset usr password when valid otp is provided.
+ *        tags: [Forgot Password]
  *        requestBody:
  *                 description: User data
  *                 required: true
@@ -145,29 +192,18 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
  *                           schema:
  *                             type: object
  *                             properties:
- *                                     fullName: 
- *                                       type: string
- *                                       description: fullName required.
- *                                     lastName: 
- *                                       type: string
- *                                       description: lastName of user.
  *                                     password: 
  *                                       type: string
  *                                       description: password required .
- *                                     role:
- *                                       type: string
- *                                       description: role required to continue.
  *                                     otp:
  *                                       type: number
  *                                       description: otp validated otp
  *                             required:
- *                               -fullName
- *                               -lastName
  *                               -password
- *                               -role
+ *                               -otp
  *        responses:
  *                200:
- *                 description: User sent otp after providing a valid email
+ *                 description: User sent a successful response message.
  *        content:
  *           application/json:
  *                shema:
@@ -184,65 +220,25 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
  * 
  */
 
-/**
- * @swagger
- * /getData:
- *     get:
- *        summary: Receive user detail such as email and send user otp code.
- *        tags: [Admin]
- *        requestBody:
- *                 description: User data
- *                 required: true
- *                 content:   
- *                     application/json:
- *                           schema:
- *                             type: object
- *                           properties:
- *                                     email: 
- *                                       type: string
- *                                       format: email
- *                                       description: A email required to send otp for verification.
- *                           required:
- *                               -email
- *                                       
- *        responses:
- *                200:
- *                 description: User sent otp after providing a valid email
- *        content:
- *         application/json:
- *                shema:
- *                   type: object
- *         items:
- *           $ref:'#/component/schemas/User/signup
- *         parameters: ['email']
- * 
- *  
- * 
- */
 
 
 
-route.post('/signup',(req:TypedRequest<RequestBodyProps>,res:TypedResponse<ResponseBodyProps>)=>{
-         registerNewUser(req,res)
+const loginRouter =  express.Router()
+
+
+loginRouter.post("/login",(req:TypedRequest<LoginRequestBodyProps>,res:TypedResponse<ResponseBodyProps>)=>{
+    loginUser(req,res)
 })
 
+loginRouter.post('/reset-password-otp',sendOtpToResetPassword)
 
-route.post('/resend-otp',(req:TypedRequest<RequestBodyProps>,res:TypedResponse<ResponseBodyProps>)=>{
-    resendOTP(req,res)
-})
+loginRouter.post('/resend-reset-password-otp',resendOtpToResetPassword)
 
-route.post('/validate-otp',(req:TypedRequest<ValidateOTPRequestProps>,res:TypedResponse<ResponseBodyProps>)=>{
-    validateOTP(req,res)
-})
+loginRouter.post('/validate-reset-password-otp',validateResetPasswordOTP)
 
-
-route.post('/complete-registration',(req:TypedRequest<CompleteRegistrationRequestProps>,res:TypedResponse<ResponseBodyProps>)=>{
-    completeRegistrationProcess(req,res)
-})
+loginRouter.post('/reset-password',resetPassword)
 
 
 
 
-
-
-export default route
+export default loginRouter

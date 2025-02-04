@@ -1,5 +1,9 @@
 import mongoose, { model } from "mongoose";
 
+enum UserRoleProps {
+    client,doctor,admin
+}
+
 
  const UserSchema = new mongoose.Schema({
     fullName:{
@@ -27,12 +31,14 @@ import mongoose, { model } from "mongoose";
     password:{
         type:mongoose.SchemaTypes.String,
         required:[true,'password is required.'],
-        validate:{
-            validator:(value:string)=>{
-                const strongPasswordPattern = /^(?=.*[A-Za-z])(?=.*[A-Z a-z\d ])(?=.*[@$!*#?.&])[A-Za-z\d@$!*.#?&]{10,}$/
-               return strongPasswordPattern.test(value)
-            }
-        }
+       
+        
+    },
+
+    role:{
+        type:mongoose.SchemaTypes.String,
+        required:[true,'user must have a role.'],
+        enum:[UserRoleProps,'not a valid role assigned']
     }
  })
 

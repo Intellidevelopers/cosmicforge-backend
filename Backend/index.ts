@@ -8,8 +8,9 @@ import path from 'path'
 import uploadImage  from './src/config/cloudinary/cloudinary'
 import swaggersetup from './src/config/api-docummentation/swaggersetup'
 import { connectDB } from './src/config/database/databaseConfig'
-import route from './src/features/newUser/routes/newUserRoute'
+
 import cors from 'cors'
+import mainRouter from './src/routes/routes'
 
  dotenv.config()
 
@@ -24,15 +25,18 @@ app.use(cors())
 app.use(express.json({limit:'50mb'}));
 app.use(express.urlencoded({ extended: true,limit:'50mb' }));
 
-app.use('/api/v1/cosmicforge/user',route)
+app.use('/api/v1/cosmicforge/',mainRouter)
 
 
 
 
 
 app.get('/',(req,res)=>{
-  res.render(path.join(__dirname,'src','views','send-user-otp.ejs'),{
-    data:'devjoe'
+  res.render(path.join(__dirname,'src','views','reset-password.ejs'),{
+    data:{
+      fullName:"Agwu Emmanuel",
+      token:129099
+    }
   })
 })
 
