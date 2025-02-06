@@ -153,12 +153,14 @@ import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
  *                                       description: lastName of user.
  *                                     password: 
  *                                       type: string
+ *                                       pattern: '^[A-Za-z0-9\d@$!*.#?&]{12,2}'
  *                                       description: password required .
  *                                     role:
  *                                       type: string
  *                                       description: role required to continue.
  *                                     otp:
- *                                       type: number
+ *                                       type: string
+ *                                       pattern: '^[0-9]{6}'
  *                                       description: otp validated otp
  *                             required:
  *                               -fullName

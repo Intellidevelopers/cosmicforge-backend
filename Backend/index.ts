@@ -40,10 +40,24 @@ app.get('/',(req,res)=>{
   })
 })
 
+ import jwt  from 'jsonwebtoken'
 const PORT = process.env.PORT || 3010
 connectDB().then(res=>{
   app.listen(PORT,()=>{
     console.log('on port 3010 h gg dgdg gg hhh')
+
+    interface  AuthMiddlewareProps{
+      _id:string
+      fullName: string,
+      lastName: string,
+      password: string,
+      role:string
+  }
+
+  const d = jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2ExZjliZDlkZDI4ODNiMWQ4NjRhZjYiLCJmdWxsTmFtZSI6IiBFbW1hbnVlbCIsImxhc3ROYW1lIjoiQWd3dSIsImVtYWlsIjoiYmVuYWd1NDc3QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEtma2xmWnJnVjB0T1B3RDM0ZUIuRHVFL2FzZzh3ZEV3cXI3SnFzZlZabDhkUWoxL2VNekdpIiwicm9sZSI6ImNsaWVudCIsIl9fdiI6MCwiaWF0IjoxNzM4ODYwNTE2LCJleHAiOjE3NDE0NTI1MTZ9.UzuBVoY2i62HMwB1lHBtJUT5awC86YqTxTdgAgDAFPg',process.env?.JWT_SECRET!! ) as AuthMiddlewareProps
+console.log(
+  d._id
+  )
   /*  const stream = file.createReadStream(path.join(__dirname,"src",'images.jpeg'))
     
     let buffer:any = null
