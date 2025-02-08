@@ -9,6 +9,9 @@ import newUserModel from "../../newUser/model/newUserModel"
 import generateOTP from "../../../util/otpGenerator"
 import resetPasswordModel from "../../newUser/model/resetPasswordModel"
 import passwordHasher from 'bcryptjs'
+import { USER_ROLES } from "../../../util/interface/UserRole"
+import PatientProfileModel from "../../patient/profile/model/patientProfileModel"
+import MedicalPersonnelProfileModel from "../../medicalPersonnel/profile/model/profileModel"
 
 export interface LoginRequestBodyProps {
     email: string,
@@ -72,16 +75,57 @@ export const loginUser = async (req: TypedRequest<LoginRequestBodyProps>, res: T
             }, template: "login-success.ejs"
         })
 
-        res.status(SERVER_STATUS.SUCCESS).json({
-            title: "Login Message",
-            status: SERVER_STATUS.SUCCESS,
-            successful: true,
-            message: "Welcome back to cosmic",
-            data: {
-                ...userAccount.toObject(),
-                token
+        switch(userAccount.role){
+
+            case  USER_ROLES.CLIENT.toString() :{
+
+            const clientPtofile = await PatientProfileModel.findOne({userId:userAccount._id})
+            res.status(SERVER_STATUS.SUCCESS).json({
+                title: "Login Message",
+                status: SERVER_STATUS.SUCCESS,
+                successful: true,
+                message: "Welcome back to cosmic",
+                data: {
+                    ...userAccount.toObject(),
+                    profile:clientPtofile,
+                    token
+                }
+            })
+                return
             }
-        })
+
+            case  USER_ROLES.DOCTOR.toString() :{
+
+                const medicPtofile = await MedicalPersonnelProfileModel.findOne({userId:userAccount._id})
+                res.status(SERVER_STATUS.SUCCESS).json({
+                    title: "Login Message",
+                    status: SERVER_STATUS.SUCCESS,
+                    successful: true,
+                    message: "Welcome back to cosmic",
+                    data: {
+                        ...userAccount.toObject(),
+                        profile:medicPtofile,
+                        token
+                    }
+                })
+                    return
+                }
+
+
+                default: return   res.status(SERVER_STATUS.UNAUTHORIZED).json({
+                    title: "Login Message",
+                    status: SERVER_STATUS.UNAUTHORIZED,
+                    successful: false,
+                    message: "Invalid account detials provided.",
+                   
+                })
+
+
+        }
+
+        
+
+      
 
     } catch (error: any) {
 

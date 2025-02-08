@@ -92,7 +92,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
 
         if (userProfile) {
 
-            userProfile.updateOne({
+           await userProfile.updateOne({
                 profilePicture: profilePicture ?? userProfile.profilePicture,
                 professionalTitle: professionalTitle ?? userProfile.professionalTitle,
                 mobileNo: mobileNo ?? userProfile.mobileNo,
@@ -106,7 +106,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             })
 
 
-
+            userProfile = await MedicalPersonnelProfileModel.findOne({ _id: user._id })
 
             if (token) {
 
