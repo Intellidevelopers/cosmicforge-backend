@@ -22,7 +22,9 @@ import swaggerJsDoc from 'swagger-jsdoc'
         }
     ],
     },
-    apis:['./src/swagger-api/*.ts','./src/features/newUser/routes/newUserRoute.ts','./src/features/login/routes/loginRouter.ts','./src/features/medicalPersonnel/profile/routes/profileRoute.ts','./src/features/patient/profile/routes/patientProfileController.ts']
+    apis:['./src/swagger-api/*.ts','./src/features/newUser/routes/newUserRoute.ts','./src/features/login/routes/loginRouter.ts','./src/features/medicalPersonnel/profile/routes/profileRoute.ts','./src/features/patient/profile/routes/patientProfileController.ts','./src/features/ratings-and-reviews/routes/ratingsAndReviewsModel.ts',
+        './src/features/appointment/routes/bookAppointmentRouter.ts'
+    ]
 }
 
 export default swaggerJsDoc(options)

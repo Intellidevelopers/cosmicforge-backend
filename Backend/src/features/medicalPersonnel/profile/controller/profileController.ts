@@ -6,6 +6,7 @@ import newUserModel from "../../../newUser/model/newUserModel"
 import jwt from 'jsonwebtoken'
 import MedicalPersonnelProfileModel from "../model/profileModel"
 import { USER_ROLES } from "../../../../util/interface/UserRole"
+import uploader from "../../../../config/cloudinary/cloudinary"
 
 
 export interface MedicalPersonnelRequestProps {
@@ -66,6 +67,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         //update token if email is channged
         let token = null
 
+        
+
         if (email && email !== user.email) {
             await newUserModel.findOneAndUpdate({ _id: user._id }, {
                 email
@@ -90,10 +93,53 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         let userProfile = await MedicalPersonnelProfileModel.findOne({ _id: user._id })
         const userAccount = await newUserModel.findOne({ _id: user._id })
 
+
+        if(profilePicture){
+
+            const regex = /^data:image\/(png|jpg|jpeg|gif);base64,/i;
+        
+             if(!regex.test(profilePicture)){
+        
+                res.status(SERVER_STATUS.BAD_REQUEST).json({
+                    title: 'Update Profile Message',
+                    status: SERVER_STATUS.BAD_REQUEST,
+                    successful: false,
+                    message: 'Invalid profile picture format provided.'
+                })
+        
+                return
+        
+             }
+        
+
+             
+        
+                }
+
         if (userProfile) {
 
+            let profileUrl:string | null = null
+
+            if(profilePicture){
+
+                profileUrl = await new Promise<string>((resolve,reject)=>{
+                    uploader.upload(profilePicture,{
+                        folder:user._id.concat('/profile')
+                     },(error,uploadedResult)=>{
+                        
+                        if(error){
+                            reject(error.message)
+                        }
+
+                        resolve(uploadedResult?.secure_url!!)
+                
+                      
+                     })
+                })
+            }
+
            await userProfile.updateOne({
-                profilePicture: profilePicture ?? userProfile.profilePicture,
+                profilePicture: profileUrl ?? userProfile.profilePicture,
                 professionalTitle: professionalTitle ?? userProfile.professionalTitle,
                 mobileNo: mobileNo ?? userProfile.mobileNo,
                 specializationTitle: specialization ?? userProfile.specializationTitle,
@@ -156,10 +202,30 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             return
         }
 
+        let profileUrl:string | null = null
 
+        if(profilePicture){
+
+            profileUrl = await new Promise<string>((resolve,reject)=>{
+                uploader.upload(profilePicture,{
+                    folder:user._id.concat('/profile')
+                 },(error,uploadedResult)=>{
+                    
+                    if(error){
+                        reject(error.message)
+                    }
+
+                    resolve(uploadedResult?.secure_url!!)
+            
+                  
+                 })
+            })
+
+
+        }
         let createProfileforUser = new MedicalPersonnelProfileModel({
             userId: user._id,
-            profilePicture,
+            profilePicture:profileUrl,
             mobileNo,
             professionalTitle,
             specialization,

@@ -6,6 +6,7 @@ import { USER_ROLES } from "../../../../util/interface/UserRole";
 import jwt from 'jsonwebtoken'
 import newUserModel from "../../../newUser/model/newUserModel";
 import PatientProfileModel from "../model/patientProfileModel";
+import uploader from "../../../../config/cloudinary/cloudinary";
 
 enum profileType {
     personal, family
@@ -69,6 +70,27 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
 
         }
 
+        if(profilePicture){
+
+            const regex = /^data:image\/(png|jpg|jpeg|gif);base64,/i;
+        
+             if(!regex.test(profilePicture)){
+        
+                res.status(SERVER_STATUS.BAD_REQUEST).json({
+                    title: 'Update Profile Message',
+                    status: SERVER_STATUS.BAD_REQUEST,
+                    successful: false,
+                    message: 'Invalid profile picture format provided.'
+                })
+        
+                return
+        
+             }
+        
+
+             
+        
+                }
 
 
         //update token if email is channged
@@ -100,8 +122,27 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
 
         if (userProfile) {
 
+            let profileUrl:string | null = null
+
+            if(profilePicture){
+
+                profileUrl = await new Promise<string>((resolve,reject)=>{
+                    uploader.upload(profilePicture,{
+                        folder:user._id.concat('/profile')
+                     },(error,uploadedResult)=>{
+                        
+                        if(error){
+                            reject(error)
+                        }
+
+                        resolve(uploadedResult?.secure_url!!)
+                
+                      
+                     })
+                })
+            }
          await  userProfile.updateOne({
-                profilePicture: profilePicture ?? userProfile.profilePicture,
+                profilePicture: profileUrl ?? userProfile.profilePicture,
                 homeAddress: homeAddress ?? userProfile.homeAddress,
                 mobileNo: mobileNo ?? userProfile.mobileNo,
                 workAddress: workAddress ?? userProfile.workAddress,
@@ -163,10 +204,32 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
             return
         }
 
+        let profileUrl:string | null = null
+
+        if(profilePicture){
+
+            profileUrl = await new Promise<string>((resolve,reject)=>{
+                uploader.upload(profilePicture,{
+                    folder:user._id.concat('/profile')
+                 },(error,uploadedResult)=>{
+                    
+                    if(error){
+                        reject(error)
+                    }
+
+                    resolve(uploadedResult?.secure_url!!)
+            
+                  
+                 })
+            })
+
+
+        }
+
 
         let createProfileforUser = new PatientProfileModel({
             userId: user._id,
-            profilePicture,
+            profilePicture:profileUrl,
             mobileNo,
             homeAddress,
             workAddress,
