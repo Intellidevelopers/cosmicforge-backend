@@ -5,6 +5,7 @@ import { AuthMiddlewareProps } from "../../middleware/userAuthenticationMiddlewa
 import  Socket from 'socket.io';
 import { TypedSocket } from '../../util/interface/TypedSocket';
 import newUserModel from '../newUser/model/newUserModel';
+import UserConnectionsModel from './model/UserConnections';
 
 export default  (socketIO:Socket.Server) =>{
 
@@ -43,10 +44,44 @@ export default  (socketIO:Socket.Server) =>{
 
 
 
-    }).on('connection',(socket:TypedSocket<AuthMiddlewareProps>)=>{
+    }).on('connection',async(socket:TypedSocket<AuthMiddlewareProps>)=>{
 
-       console.log(socket.id)
-       socket.emit('message',JSON.stringify(socket.user))
+      
+    
+
+       let userConnection =  await UserConnectionsModel.findOne({userId:socket.user?._id})
+
+       if(!userConnection){
+         
+           userConnection =  new UserConnectionsModel({
+            userId:socket.user?._id,
+            connectionId:socket.id
+           })
+
+           await userConnection.save()
+
+           socket.emit('message',JSON.stringify(userConnection))
+
+
+           return
+
+       }
+
+      await userConnection.updateOne({
+        connectionId:socket.id,
+
+
+       },{
+        new:true,
+        returnDocument:'after'
+       })
+
+       userConnection = await UserConnectionsModel.findOne({userId:socket.user?._id})
+      console.log('updating....')
+      console.log(socket.id)
+       socket.emit('message',JSON.stringify(userConnection))
+
+
     })
 
 }

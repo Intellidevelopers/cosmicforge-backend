@@ -12,12 +12,12 @@ enum UserRoleProps {
     },
     lastName:{
         type:mongoose.SchemaTypes.String,
-        required:[true,'flastName is needed to continue.'],
+        required:[true,'firstName is needed to continue.'],
     },
     email:{
         type:mongoose.SchemaTypes.String,
         required:[true,'email is needed to continue.'],
-        unique:[true,'email must be unoque'],
+        unique:[true,'email must be unique'],
         validate: {
             validator: (value:string) => {
               const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@((([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})|(\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b))$/i;

@@ -14,6 +14,7 @@ import { connectDB } from './src/config/database/databaseConfig'
 
 import cors from 'cors'
 import mainRouter from './src/routes/routes'
+import { errorHandler } from './src/middleware/errorHandlerMiddleware'
 
  dotenv.config()
 
@@ -55,6 +56,7 @@ app.get('/',(req,res)=>{
   })
 })
 
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3010
 connectDB().then(res=>{
