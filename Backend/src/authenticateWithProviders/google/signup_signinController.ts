@@ -62,10 +62,10 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
             
             await  userTempRoleModel.deleteMany()
 
-            const url = new URL(`${process.env.web_base_url}account/auth`,req.protocol+'://'+req.get('host'))
+            const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('token',encode)
           
-            res.redirect(301,'https://www.github.com/dejoen')
+            res.redirect(301,url.href)
              return
 
 
@@ -86,7 +86,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
               secretKey
             },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
             await  userTempRoleModel.deleteMany()
-            const url = new URL(`${process.env.web_base_url}account/auth`,req.protocol+'://'+req.get('host'))
+            const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('token',encode)
  
             res.redirect(url.href)
@@ -117,7 +117,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
       },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
       await  userTempRoleModel.deleteMany()
 
-      const url = new URL(`${process.env.web_base_url}account/auth`,req.protocol+'://'+req.get('host'))
+      const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
       url.searchParams.set('token',encode)
 
       res.redirect(url.href)
