@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_OPTIONS='max-old-space-size=4096'  ts-node index.ts",
+    "start": " ts-node index.ts",
     "build": "tsc",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start:prod":"node build/index.js"
+
   },
   "repository": {
     "type": "git",
