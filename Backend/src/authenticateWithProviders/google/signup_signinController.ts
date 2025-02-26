@@ -58,9 +58,20 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
               secretKey
             },process.env.JWT_SECRET!!,{expiresIn:Math.floor(Date.now()/1000)+300})
                
-            console.log('redirecting mobile......')
+           
             
             await  userTempRoleModel.deleteMany()
+
+            const userAgent = req.headers['user-agent']
+
+            const isMobile = /Androin|iphone|ipad/i.test(userAgent!!)
+
+            if(isMobile){
+              console.log('redirecting mobile......')
+          res.set("Location",`${process.env.web_base_url}/auth?token=${encode}`)
+          res.status(302).send()
+              return
+            }
 
             const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('redirect','true')
