@@ -68,16 +68,18 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
             if(isMobile){
               console.log('redirecting mobile......')
-          res.set("Location",`${process.env.web_base_url}/auth?token=${encode}`)
-          res.status(302).send()
+       
               return
             }
 
-            const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
+          /*  const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('redirect','true')
             url.searchParams.set('token',encode)
           
-            res.redirect(301,url.href)
+            res.redirect(301,url.href)*/
+
+            res.set("Location",`${process.env.web_base_url}/auth?token=${encode}`)
+            res.status(302).send()
              return
 
 
