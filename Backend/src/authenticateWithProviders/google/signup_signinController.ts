@@ -109,6 +109,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
         secretKey
       },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
       await  userTempRoleModel.deleteMany()
+      
       res.redirect(301,`${process.env.web_base_url}account?token=${encode}`)
 
 
