@@ -11,6 +11,7 @@ import { googleSignUpSignInAuthcontroller } from '../authenticateWithProviders/g
 import TypedRequest from '../util/interface/TypedRequest'
 import SERVER_STATUS from '../util/interface/CODE'
 import { userTempRoleModel } from '../authenticateWithProviders/model/tempRoleModel'
+import TypedResponse from '../util/interface/TypedResponse'
 const mainRouter =  express.Router()
 
 mainRouter.use(session({
@@ -43,7 +44,7 @@ mainRouter.get('/auth/google',passportSetup.authenticate('google',{
     
 }))
 
-mainRouter.post('/auth/google/userRole',async(req:TypedRequest<any>,res)=>{
+mainRouter.post('/auth/google/userRole',async(req:TypedRequest<any>,res:TypedResponse<any>)=>{
   const {userRole} =  req.body
   await  userTempRoleModel.deleteMany()
   
