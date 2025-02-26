@@ -65,7 +65,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
             const url = new URL(`${process.env.web_base_url}account/auth`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('token',encode)
           
-            res.redirect(301,url.href)
+            res.redirect(301,'https://www.github.com/dejoen')
              return
 
 
