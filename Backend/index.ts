@@ -77,7 +77,7 @@ connectDB().then(res=>{
 console.log(
   d._id
   )*/
-    const stream = file.readFileSync(path.join(__dirname,"src",'images.jpeg'))
+   
     
    /* let buffer:any = null
   stream.on('data',(data)=>{

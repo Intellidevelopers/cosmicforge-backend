@@ -9,7 +9,6 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = __importDefault(require("socket.io"));
 const socketInitialization_1 = __importDefault(require("./src/features/io/socketInitialization"));
-const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const swaggersetup_1 = __importDefault(require("./src/config/api-docummentation/swaggersetup"));
 const databaseConfig_1 = require("./src/config/database/databaseConfig");
@@ -50,7 +49,6 @@ const PORT = process.env.PORT || 3010;
        console.log(
          d._id
          )*/
-        const stream = fs_1.default.readFileSync(path_1.default.join(__dirname, "src", 'images.jpeg'));
         /* let buffer:any = null
        stream.on('data',(data)=>{
          console.log(data.toLocaleString())
