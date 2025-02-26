@@ -58,10 +58,10 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
               secretKey
             },process.env.JWT_SECRET!!,{expiresIn:Math.floor(Date.now()/1000)+300})
                
-            console.log(process.env.JWT_SECRET)
+            console.log('redirecting mobile......')
             
             await  userTempRoleModel.deleteMany()
-            res.redirect(301,`${process.env.web_base_url}account?token=${encode}`)
+            res.redirect(308,`${process.env.web_base_url}account?token=${encode}`)
              return
 
 
@@ -82,7 +82,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
               secretKey
             },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
             await  userTempRoleModel.deleteMany()
-            res.redirect(301,`${process.env.web_base_url}account?token=${encode}`)
+            res.redirect(308,`${process.env.web_base_url}account?token=${encode}`)
         return
           }
 
@@ -109,8 +109,8 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
         secretKey
       },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
       await  userTempRoleModel.deleteMany()
-      
-      res.redirect(301,`${process.env.web_base_url}account?token=${encode}`)
+
+      res.redirect(308,`${process.env.web_base_url}account?token=${encode}`)
 
 
 
