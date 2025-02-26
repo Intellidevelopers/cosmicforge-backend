@@ -19,11 +19,11 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
    try {
     
 
-    const savedData = await userTempRoleModel.find()
+    const savedData = await userTempRoleModel.findOne()
     const salt = await hashedKey.genSalt(10)
     const secretKey = await hashedKey.hash(process.env.JWT_SECRET!!,salt)
  
-     const userRole = savedData[0].userRole
+     const userRole = savedData?.userRole
  console.log(userRole)
      if(!userRole){
       res.status(SERVER_STATUS.BAD_REQUEST).json({
@@ -60,7 +60,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
                
             console.log(process.env.JWT_SECRET)
             
-
+            await  userTempRoleModel.deleteMany()
             res.redirect(`${process.env.web_base_url}account?token=${encode}`)
              return
 
