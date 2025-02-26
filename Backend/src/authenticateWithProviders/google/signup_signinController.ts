@@ -64,6 +64,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
             const url = new URL(`${process.env.web_base_url}account`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('token',encode)
+            console.log('jjdjdjdjdjvvds')
         console.log(url.href)
             res.redirect(301,url.href)
              return
