@@ -46,7 +46,6 @@ mainRouter.get('/auth/google',passportSetup.authenticate('google',{
 
 mainRouter.post('/auth/google/userRole',async(req:TypedRequest<any>,res:TypedResponse<any>)=>{
   const {userRole} =  req.body
-  await  userTempRoleModel.deleteMany()
   
  
 

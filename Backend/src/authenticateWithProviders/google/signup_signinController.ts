@@ -16,8 +16,10 @@ interface GoogleAuthResponseProps {
 }
 
 export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:express.Response) =>   {
-   
-  const savedData = await userTempRoleModel.find()
+   try {
+    
+
+    const savedData = await userTempRoleModel.find()
     const salt = await hashedKey.genSalt(10)
     const secretKey = await hashedKey.hash(process.env.JWT_SECRET!!,salt)
  
@@ -113,6 +115,17 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
 
 
+
+   } catch (error:any) {
+    
+    res.status(SERVER_STATUS.BAD_REQUEST).json({
+      message:'Something went wrong try again.',
+      error:error.message
+    })
+
+
+   }
+ 
 
 
 
