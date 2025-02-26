@@ -64,8 +64,8 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
             const url = new URL(`${process.env.web_base_url}account`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('token',encode)
-
-            res.redirect(url.href)
+        console.log(url.href)
+            res.redirect(301,url.href)
              return
 
 
@@ -88,7 +88,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
             await  userTempRoleModel.deleteMany()
             const url = new URL(`${process.env.web_base_url}account`,req.protocol+'://'+req.get('host'))
             url.searchParams.set('token',encode)
-
+ 
             res.redirect(url.href)
         return
           }
@@ -116,7 +116,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
         secretKey
       },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
       await  userTempRoleModel.deleteMany()
-      
+
       const url = new URL(`${process.env.web_base_url}account`,req.protocol+'://'+req.get('host'))
       url.searchParams.set('token',encode)
 
