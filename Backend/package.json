@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": " ts-node index.ts",
-    "build": "tsc  ",
+    "build:asset":"copyfiles src/views build",
+    "build": "tsc  &&  cp -r src/views build/src ",
     "dev": "nodemon",
     "start:prod":"node build/index.js"
 
