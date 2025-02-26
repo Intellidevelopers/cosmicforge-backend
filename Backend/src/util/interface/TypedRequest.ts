@@ -7,6 +7,8 @@ export default interface TypedRequest<T>  extends  Request   {
 
     body:T,
     user?:AuthMiddlewareProps
+    userRole?:string,
+   
     
   
 }  

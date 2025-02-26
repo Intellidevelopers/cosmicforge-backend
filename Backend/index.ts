@@ -23,6 +23,8 @@ import { errorHandler } from './src/middleware/errorHandlerMiddleware'
 
  const server = http.createServer(app)
 
+ 
+
  const io = new socketIo.Server(server,{
   cors:{
     origin:'*',
