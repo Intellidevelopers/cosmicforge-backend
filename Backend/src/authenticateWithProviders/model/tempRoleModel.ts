@@ -5,7 +5,15 @@ import mongoose from "mongoose";
 const userTempRoleModelSchema = new mongoose.Schema({
     userRole:{
         type:mongoose.SchemaTypes.String
+    },
+    token:{
+        type:mongoose.SchemaTypes.String
+    },
+
+    userData:{
+        type:{} 
     }
+    
 })
 
 

@@ -7,12 +7,13 @@ import rateAndReviewRouter from '../features/ratings-and-reviews/routes/ratingsA
 import bookAppointmentRouter from '../features/appointment/routes/bookAppointmentRouter'
 import session from 'express-session'
 import { passportSetup } from '../authenticateWithProviders/google/signup_signin'
-import { googleSignUpSignInAuthcontroller } from '../authenticateWithProviders/google/signup_signinController'
+import { getGoogleAuthUserDetails, googleSignUpSignInAuthcontroller } from '../authenticateWithProviders/google/signup_signinController'
 import TypedRequest from '../util/interface/TypedRequest'
 import SERVER_STATUS from '../util/interface/CODE'
 import { userTempRoleModel } from '../authenticateWithProviders/model/tempRoleModel'
 import TypedResponse from '../util/interface/TypedResponse'
 const mainRouter =  express.Router()
+import {v4} from 'uuid'
 
 mainRouter.use(session({
   secret:'cosmicforge',
@@ -21,7 +22,7 @@ mainRouter.use(session({
   cookie:{
     secure:false
   },
-  store:new session.MemoryStore()
+
  }))
 
 mainRouter.use('/user',signUpRouter)
@@ -45,22 +46,29 @@ mainRouter.get('/auth/google',passportSetup.authenticate('google',{
 }))
 
 mainRouter.post('/auth/google/userRole',async(req:TypedRequest<any>,res:TypedResponse<any>)=>{
-  const {userRole} =  req.body
-  
+  const {userRole,authType} =  req.body
+   
     await userTempRoleModel.deleteMany()
  
+    const token = v4()
 
    await new userTempRoleModel({
     userRole,
+    token
+   
    }).save()
 
 
-   res.sendStatus(SERVER_STATUS.SUCCESS)
+   res.status(SERVER_STATUS.SUCCESS).json({
+    data:token
+   })
 })
 
 mainRouter.get('/auth/google/callback',passportSetup.authenticate('google',{
   
 }),googleSignUpSignInAuthcontroller)
+
+mainRouter.post('/auth/google/validate-user',getGoogleAuthUserDetails)
 
 
 export default mainRouter

@@ -6,11 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": " ts-node index.ts",
-    "build:asset":"copyfiles src/views build",
+    "build:asset": "copyfiles src/views build",
     "build": "tsc  &&  cp -r src/views build/src ",
     "dev": "nodemon",
-    "start:prod":"node build/index.js"
-
+    "start:prod": "node build/index.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +27,8 @@
   },
   "homepage": "https://github.com/Intellidevelopers/cosmicforge-backend#readme",
   "dependencies": {
+    "@types/passport": "1.0.0",
+    "@types/passport-google-oauth20": "2.0.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
@@ -44,8 +45,7 @@
     "socket.io": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "@types/passport-google-oauth20": "2.0.0",
-      "@types/passport": "1.0.0"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
