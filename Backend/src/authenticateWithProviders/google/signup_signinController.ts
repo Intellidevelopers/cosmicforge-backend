@@ -191,6 +191,10 @@ export const getGoogleAuthUserDetails = async (req:express.Request,res:TypedResp
     return
    }
 
+   await userTempRoleModel.deleteOne({
+    token
+   })
+
  res.status(SERVER_STATUS.SUCCESS).json({
   title:"Auth token validator",
   status:SERVER_STATUS.SUCCESS,
