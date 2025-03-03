@@ -27,8 +27,95 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
     const secretKey = await hashedKey.hash(process.env.JWT_SECRET!!,salt)
  
      const userRole = savedData?.userRole
+
+     const userDetails = req.user._json as GoogleAuthResponseProps
+
+     const userAccount = await  newUserModel.findOne({
+       email:userDetails.email
+     })
      
  console.log(userRole)
+
+    if(savedData?.authType === "login" && userAccount){
+
+      if(userAccount.role === USER_ROLES.CLIENT.toString()){
+             
+        const userProfile = await PatientProfileModel.findOne({
+          userId:userAccount._id
+        })
+       
+        const token = jwt.sign({
+          ...userAccount.toJSON()
+        },process.env.JWT_SECRET!!,{expiresIn:'30d'})
+
+        /*const encode = jwt.sign({
+          ...userAccount.toJSON(),
+          userProfile:userProfile?.toJSON(),
+          token,
+          secretKey
+        },process.env.JWT_SECRET!!,{expiresIn:Math.floor(Date.now()/1000)+300})*/
+           
+         await userTempRoleModel.updateOne({userData:{
+          ...userAccount.toJSON(),
+          userProfile:userProfile?.toJSON(),
+          token,
+          secretKey
+        }})
+        
+        //await  userTempRoleModel.deleteMany()
+
+       
+
+      /*  const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
+        url.searchParams.set('redirect','true')
+        url.searchParams.set('token',encode)
+      
+        res.redirect(301,url.href)*/
+       
+         
+        res.set("Location",`${process.env.web_base_url}/auth`)
+        res.status(302).send()
+         return
+
+
+      }else if(userAccount.role === USER_ROLES.DOCTOR.toString()){
+
+        const userProfile = await MedicalPersonnelProfileModel.findOne({
+          userId:userAccount._id
+        })
+       
+        const token = jwt.sign({
+          ...userAccount.toJSON()
+        },process.env.JWT_SECRET!!,{expiresIn:'30d'})
+
+       
+        
+  
+
+        await userTempRoleModel.updateOne({userData:{
+          ...userAccount.toJSON(),
+          userProfile:userProfile?.toJSON(),
+          token,
+          secretKey
+        }})
+        
+
+        res.set("Location",`${process.env.web_base_url}/auth`)
+        res.status(302).send()
+     
+    return
+      }
+      
+  return
+}
+
+
+
+
+
+
+
+
      if(!userRole){
       res.status(SERVER_STATUS.BAD_REQUEST).json({
         message:'Something went wrong try again.'
@@ -36,19 +123,10 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
       return
      }
 
-        const userDetails = req.user._json as GoogleAuthResponseProps
-
-        const userAccount = await  newUserModel.findOne({
-          email:userDetails.email
-        })
+      
 
 
-          if(savedData.authType === "login"){
-
-
-            return
-          }
-
+         
 
 
 
