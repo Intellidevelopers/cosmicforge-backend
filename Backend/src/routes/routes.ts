@@ -54,7 +54,8 @@ mainRouter.post('/auth/google/userRole',async(req:TypedRequest<any>,res:TypedRes
 
    await new userTempRoleModel({
     userRole,
-    token
+    token,
+    authType
    
    }).save()
 

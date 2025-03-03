@@ -11,6 +11,7 @@ import MedicalPersonnelProfileModel from '../../features/medicalPersonnel/profil
 import hashedKey from 'bcryptjs'
 import TypedResponse from '../../util/interface/TypedResponse'
 import { ResponseBodyProps } from '../../util/interface/ResponseBodyProps'
+import {v4} from 'uuid'
 
 interface GoogleAuthResponseProps {
   name:string,
@@ -40,6 +41,16 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
         const userAccount = await  newUserModel.findOne({
           email:userDetails.email
         })
+
+
+          if(savedData.authType === "login"){
+
+
+            return
+          }
+
+
+
 
 
         if(userAccount){
@@ -94,18 +105,21 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
               ...userAccount.toJSON()
             },process.env.JWT_SECRET!!,{expiresIn:'30d'})
 
-            const encode = jwt.sign({
+           
+            
+      
+
+            await userTempRoleModel.updateOne({userData:{
               ...userAccount.toJSON(),
               userProfile:userProfile?.toJSON(),
               token,
               secretKey
-            },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
-            await  userTempRoleModel.deleteMany()
-            const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
-            url.searchParams.set('redirect','true')
-            url.searchParams.set('token',encode)
- 
-            res.redirect(url.href)
+            }})
+            
+
+            res.set("Location",`${process.env.web_base_url}/auth`)
+            res.status(302).send()
+         
         return
           }
 
@@ -119,27 +133,25 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
         email:userDetails.email,
         fullName:userDetails.name.split(' ')[1],
         lastName:userDetails.name.split(' ')[0],
-        role:userRole
+        role:userRole === 'patient' ? 'client':userRole,
+        password:v4()
        }).save()
 
        const token = jwt.sign({
         ...newAccount.toJSON()
       },process.env.JWT_SECRET!!,{expiresIn:'30d'})
 
-      const encode = jwt.sign({
+      
+
+      await userTempRoleModel.updateOne({userData:{
         ...newAccount.toJSON(),
         token,
         secretKey
-      },process.env.JWT_SECRET!!,{expiresIn:'5mins'})
-      await  userTempRoleModel.deleteMany()
+      }})
+    
 
-      const url = new URL(`${process.env.web_base_url}/auth`,req.protocol+'://'+req.get('host'))
-      url.searchParams.set('redirect','true')
-      url.searchParams.set('token',encode)
-
-      res.redirect(url.href)
-
-
+      res.set("Location",`${process.env.web_base_url}/auth`)
+      res.status(302).send()
 
 
 

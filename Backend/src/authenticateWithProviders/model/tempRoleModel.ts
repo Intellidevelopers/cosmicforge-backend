@@ -9,6 +9,9 @@ const userTempRoleModelSchema = new mongoose.Schema({
     token:{
         type:mongoose.SchemaTypes.String
     },
+    authType:{
+        type:mongoose.SchemaTypes.String
+    },
 
     userData:{
         type:{} 

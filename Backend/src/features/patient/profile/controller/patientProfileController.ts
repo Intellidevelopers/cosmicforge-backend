@@ -333,8 +333,10 @@ export const updateVitalSigns = async (req:TypedRequest<PatientVitalSignsProps>,
             return
         }
 
-        let userProfile = await PatientProfileModel.findOne({userId:user._id})
         const userAccount = await newUserModel.findOne({_id:user._id})
+
+        let userProfile = await PatientProfileModel.findOne({userId:userAccount?._id})
+        
 
         if(userProfile){
         
@@ -350,6 +352,7 @@ export const updateVitalSigns = async (req:TypedRequest<PatientVitalSignsProps>,
         profileType},{
             new:true
         })
+
         userProfile = await PatientProfileModel.findOne({userId:user._id})
 
         res.status(SERVER_STATUS.SUCCESS).json({
@@ -377,7 +380,9 @@ export const updateVitalSigns = async (req:TypedRequest<PatientVitalSignsProps>,
                 gender,
                 dateOfBirth
             },
-            profileType
+            profileType,
+            userId:user._id
+            
         })
 
         await newProfile.save()
