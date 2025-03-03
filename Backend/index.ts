@@ -15,6 +15,7 @@ import { connectDB } from './src/config/database/databaseConfig'
 import cors from 'cors'
 import mainRouter from './src/routes/routes'
 import { errorHandler } from './src/middleware/errorHandlerMiddleware'
+import diagnosisController from './src/features/ai/diagnosis/diagnosisController'
 
  dotenv.config()
 
@@ -125,6 +126,9 @@ console.log(
  }).catch(err=>{
    console.log(err)
  })*/
+
+
+   //diagnosisController()
  })
 }).catch(err=>{
   console.log(err)

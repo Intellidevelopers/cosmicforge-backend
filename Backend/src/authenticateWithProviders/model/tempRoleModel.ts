@@ -13,6 +13,11 @@ const userTempRoleModelSchema = new mongoose.Schema({
         type:mongoose.SchemaTypes.String
     },
 
+    newAccount:{
+        type:mongoose.SchemaTypes.Boolean,
+        default:false
+    },
+
     userData:{
         type:{} 
     }
