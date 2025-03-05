@@ -14,6 +14,7 @@ import { userTempRoleModel } from '../authenticateWithProviders/model/tempRoleMo
 import TypedResponse from '../util/interface/TypedResponse'
 const mainRouter =  express.Router()
 import {v4} from 'uuid'
+import { validateUserSession } from '../features/login/controller/login'
 
 mainRouter.use(session({
   secret:'cosmicforge',
@@ -70,6 +71,9 @@ mainRouter.get('/auth/google/callback',passportSetup.authenticate('google',{
 }),googleSignUpSignInAuthcontroller)
 
 mainRouter.post('/auth/google/validate-user',getGoogleAuthUserDetails)
+
+
+mainRouter.post('/validate-user-session',validateUserSession)
 
 
 export default mainRouter

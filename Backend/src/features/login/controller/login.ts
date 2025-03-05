@@ -2,7 +2,6 @@ import SERVER_STATUS from "../../../util/interface/CODE"
 import { ResponseBodyProps } from "../../../util/interface/ResponseBodyProps"
 import TypedRequest from "../../../util/interface/TypedRequest"
 import TypedResponse from "../../../util/interface/TypedResponse"
-import jwt from 'jsonwebtoken'
 import passwordChecker from 'bcryptjs'
 import sendMail from "../../../config/mail/nodeMailer"
 import newUserModel from "../../newUser/model/newUserModel"
@@ -12,6 +11,8 @@ import passwordHasher from 'bcryptjs'
 import { USER_ROLES } from "../../../util/interface/UserRole"
 import PatientProfileModel from "../../patient/profile/model/patientProfileModel"
 import MedicalPersonnelProfileModel from "../../medicalPersonnel/profile/model/profileModel"
+import jwt from 'jsonwebtoken'
+import { AuthMiddlewareProps } from "../../../middleware/userAuthenticationMiddleware"
 
 export interface LoginRequestBodyProps {
     email: string,
@@ -533,6 +534,122 @@ export const resetPassword = async (req: TypedRequest<ResetPasswordProps>, res: 
         })
 
     }
+
+}
+
+
+  export const  validateUserSession = async (req: TypedRequest<{isKeepMeSignedIn:boolean,token:string}>, res: TypedResponse<ResponseBodyProps>) =>{
+
+  const {isKeepMeSignedIn, token} = req.body
+
+   if(isKeepMeSignedIn === undefined || !token){
+
+    res.status(SERVER_STATUS.BAD_REQUEST).json({
+        title: 'Session Authentication Message',
+        successful: false,
+        status: SERVER_STATUS.BAD_REQUEST,
+        message: "isKeepMeSignedIn and token fields are required to continue.",
+
+ })
+    return
+   }
+
+    try {
+
+      const user =  jwt.verify(token,process?.env?.JWT_SECRET!!) as AuthMiddlewareProps
+
+      const isUserValid = await newUserModel.findOne({
+        _id:user._id
+    })
+
+    if(isUserValid){
+
+
+        res.status(SERVER_STATUS.SUCCESS).json({
+            title: 'Session Authentication Message',
+            successful: true,
+            status: SERVER_STATUS.SUCCESS,
+            message: "validated successfully.",
+          
+    
+     })
+        return
+
+
+    }
+
+    res.status(SERVER_STATUS.Forbidden).json({
+        title: 'Session Authentication Message',
+        successful: false,
+        status: SERVER_STATUS.Forbidden,
+        message: "you are forbidden to continue.",
+       
+
+ })
+
+        
+    } catch  (error:any) {
+     
+         if(error.name === "TokenExpiredError" && isKeepMeSignedIn){
+           
+            const user = jwt.decode(token) as AuthMiddlewareProps
+
+            const isUserValid = await newUserModel.findOne({
+                _id:user._id
+            })
+
+            if(isUserValid){
+
+                const newToken = jwt.sign({
+                    user
+                },process?.env?.JWT_SECRET!!,{expiresIn:'30d'})
+
+
+                res.status(SERVER_STATUS.SUCCESS).json({
+                    title: 'Session Authentication Message',
+                    successful: true,
+                    status: SERVER_STATUS.SUCCESS,
+                    message: "validated successfully.",
+                    token:newToken
+            
+             })
+                return
+
+
+            }
+
+
+            res.status(SERVER_STATUS.Forbidden).json({
+                title: 'Session Authentication Message',
+                successful: false,
+                status: SERVER_STATUS.Forbidden,
+                message: "you are forbidden to continue.",
+               
+        
+         })
+
+
+            
+
+            return
+         }
+
+
+
+         res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
+            title: 'Session Authentication Message',
+            successful: false,
+            status: SERVER_STATUS.INTERNAL_SERVER_ERROR,
+            message: "error occurred.",
+            error:error.message
+           
+    
+     })
+
+        
+    }
+
+
 
 }
 
