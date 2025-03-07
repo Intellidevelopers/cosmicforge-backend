@@ -44,18 +44,21 @@ const getDiagnosis = async (taskId:string) =>{
  return "time out"
 }
 
-export default  async () =>{
+export default  async (symptoms:string) =>{
     try {
 
-        const result = await requestDiagnosis("i have swollen legs")
+        const result = await requestDiagnosis(symptoms)
            if(result.task_id){
             const diagnosis = await getDiagnosis(result.task_id)
-            console.log(diagnosis)
+           // console.log(diagnosis)
+            return diagnosis
            }else{
-            console.log(result)
+            return ''
+           // console.log(result)
            }
         
-    } catch (error) {
+    } catch (error:any) {
+        throw Error(error.message)
         console.log(error)
     }
 }

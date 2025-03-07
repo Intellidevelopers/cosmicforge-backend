@@ -57,7 +57,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
            
          await userTempRoleModel.updateOne({userData:{
           ...userAccount.toJSON(),
-          userProfile:userProfile?.toJSON(),
+          profile:userProfile?.toJSON(),
           token,
           secretKey
         }})
@@ -85,7 +85,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
         await userTempRoleModel.updateOne({userData:{
           ...userAccount.toJSON(),
-          userProfile:userProfile?.toJSON(),
+          profile:userProfile?.toJSON(),
           token,
           secretKey
         }})
@@ -143,7 +143,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
                
              await userTempRoleModel.updateOne({userData:{
               ...userAccount.toJSON(),
-              userProfile:userProfile?.toJSON(),
+              profile:userProfile?.toJSON(),
               token,
               secretKey
             }})
@@ -180,7 +180,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
             await userTempRoleModel.updateOne({userData:{
               ...userAccount.toJSON(),
-              userProfile:userProfile?.toJSON(),
+              profile:userProfile?.toJSON(),
               token,
               secretKey
             }})

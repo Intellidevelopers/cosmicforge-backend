@@ -6,6 +6,7 @@ import  Socket from 'socket.io';
 import { TypedSocket } from '../../util/interface/TypedSocket';
 import newUserModel from '../newUser/model/newUserModel';
 import UserConnectionsModel from './model/UserConnections';
+import diagnosisSocketIO from '../ai/diagnosis/diagnosisSocketIO';
 
 export default  (socketIO:Socket.Server) =>{
 
@@ -13,7 +14,10 @@ export default  (socketIO:Socket.Server) =>{
           const authorization:string =  socket.handshake.headers.authorization || socket.handshake.auth.token
 
           if(!authorization){
-            next(Error('you are not authorized to continue.'))
+            next(Error(JSON.stringify({ 
+              errorFrom:"Cosmic Forge",
+              message:'you are not authorized to continue.'
+            }as {errorFrom:string,message:string})))
             return
           }
 
@@ -28,7 +32,10 @@ export default  (socketIO:Socket.Server) =>{
                const user = await newUserModel.findOne({_id:validatedToken._id})
 
                if(!user){
-                next(Error('you are not authorized to continue.'))
+                next(Error(JSON.stringify({ 
+                  errorFrom:"Cosmic Forge",
+                  message:'you are not authorized to continue.'
+                }as {errorFrom:string,message:string})))
                 return
                }
 
@@ -47,7 +54,9 @@ export default  (socketIO:Socket.Server) =>{
     }).on('connection',async(socket:TypedSocket<AuthMiddlewareProps>)=>{
 
       
-    
+      socket.on('hello',(d)=>{
+        console.log(d)
+      })
 
        let userConnection =  await UserConnectionsModel.findOne({userId:socket.user?._id})
 
@@ -67,6 +76,8 @@ export default  (socketIO:Socket.Server) =>{
 
        }
 
+
+
       await userConnection.updateOne({
         connectionId:socket.id,
 
@@ -77,6 +88,8 @@ export default  (socketIO:Socket.Server) =>{
        })
 
        userConnection = await UserConnectionsModel.findOne({userId:socket.user?._id})
+        
+       diagnosisSocketIO(socketIO,socket)
       console.log('updating....')
       console.log(socket.id)
        socket.emit('message',JSON.stringify(userConnection))
