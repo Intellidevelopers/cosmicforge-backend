@@ -120,9 +120,8 @@ const medicalPersonnelProfileSchema = new mongoose.Schema({
      workTime:workingHourSchema,
 
      pricing:{
-        type:mongoose.SchemaTypes.BigInt,
-        default:0,
-        min:[0,'pricing can not be less than zero.']
+        type:mongoose.SchemaTypes.String,
+        
      },
      earlistAvailability:{
         type:mongoose.SchemaTypes.Date

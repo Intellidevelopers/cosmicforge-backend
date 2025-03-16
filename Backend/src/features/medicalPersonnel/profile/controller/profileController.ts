@@ -18,6 +18,9 @@ export interface MedicalPersonnelRequestProps {
     department?: string,
     location?: string,
     profilePicture?: string,
+    pricing:number,
+    fullName:string,
+    lastName:string
 
 }
 
@@ -50,24 +53,49 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         }
 
 
-        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture } = req.body
+        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture,pricing,fullName,lastName } = req.body
 
-        if (!email && !mobileNo && !professionalTitle && !specialization && !currentClinic && !location && !profilePicture && !department) {
+        if (!email && !mobileNo && !professionalTitle && !specialization && !currentClinic && !location && !profilePicture && !department && !pricing && !fullName && !lastName ) {
 
             res.status(SERVER_STATUS.BAD_REQUEST).json({
                 title: 'Update Profile Message',
                 status: SERVER_STATUS.BAD_REQUEST,
                 successful: false,
-                message: 'Either email,mobileNo,professionalTitle,specialization,currentClinic,department,location,profilePicture field is needed to continue.'
+                message: 'Either email,mobileNo,professionalTitle,specialization,currentClinic,department,location,profilePicture,pricing, fullName,lastName field is needed to continue.'
             })
 
             return
         }
 
+
+        let userAccount = await newUserModel.findOne({ _id: user._id })
+
         //update token if email is channged
         let token = null
 
-        
+        if(fullName || lastName){
+
+             if(userAccount?.fullName!==fullName || userAccount?.lastName!==lastName){
+            await userAccount?.updateOne({
+                fullName:fullName ?? userAccount.fullName,
+                lastName:lastName ?? userAccount.fullName
+              })
+
+              const updatedTokenObject = {
+                _id: user._id,
+                email:user.email,
+                password: user.password,
+                fullName:fullName,
+                lastName:lastName,
+                role: user.role
+
+
+            }
+
+            token = jwt.sign(updatedTokenObject, process.env?.JWT_SECRET!!, { expiresIn: '30d' })
+        }
+
+        }
 
         if (email && email !== user.email) {
             await newUserModel.findOneAndUpdate({ _id: user._id }, {
@@ -90,13 +118,12 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
 
         }
 
-        let userProfile = await MedicalPersonnelProfileModel.findOne({ _id: user._id })
-        const userAccount = await newUserModel.findOne({ _id: user._id })
-
+        let userProfile = await MedicalPersonnelProfileModel.findOne({ userId: user._id })
+      
 
         if(profilePicture){
 
-            const regex = /^data:image\/(png|jpg|jpeg|gif);base64,/i;
+            const regex = /^data:image\/(png|jpg|jpeg|gif|svg);base64,/i;
         
              if(!regex.test(profilePicture)){
         
@@ -115,6 +142,15 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
              
         
                 }
+
+
+
+
+
+
+
+
+
 
         if (userProfile) {
 
@@ -138,6 +174,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                 })
             }
 
+        
            await userProfile.updateOne({
                 profilePicture: profileUrl ?? userProfile.profilePicture,
                 professionalTitle: professionalTitle ?? userProfile.professionalTitle,
@@ -145,20 +182,22 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                 specializationTitle: specialization ?? userProfile.specializationTitle,
                 currentClinic: currentClinic ?? userProfile.currentClinic,
                 department: department ?? userProfile.department,
-                location: location ?? userProfile.location
+                location: location ?? userProfile.location,
+                pricing:pricing?? userProfile.pricing
 
             }, {
                 returnOriginal: false
             })
 
 
-            userProfile = await MedicalPersonnelProfileModel.findOne({ _id: user._id })
+            userProfile = await MedicalPersonnelProfileModel.findOne({ userId: user._id })
+            userAccount = await newUserModel.findOne({ _id: user._id })
 
             if (token) {
 
                 const updatedProfile = {
-                    ...userAccount,
-                    profile: userProfile,
+                    ...userAccount?.toObject(),
+                    profile: userProfile?.toObject(),
                     token
                 }
 
@@ -176,6 +215,9 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
 
 
             }
+
+
+
 
 
             const convertToObject = userProfile?.toObject()
@@ -202,6 +244,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             return
         }
 
+
+
         let profileUrl:string | null = null
 
         if(profilePicture){
@@ -223,6 +267,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
 
 
         }
+
+
         let createProfileforUser = new MedicalPersonnelProfileModel({
             userId: user._id,
             profilePicture:profileUrl,
@@ -231,17 +277,18 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             specialization,
             currentClinic,
             department,
-            location
+            location,
+            pricing
 
         })
 
         await createProfileforUser.save()
 
         if (token) {
-
+            
             const updatedProfile = {
-                ...userAccount,
-                profile: createProfileforUser,
+                ...userAccount?.toObject(),
+                profile: createProfileforUser.toObject(),
                 token
             }
 
@@ -265,11 +312,13 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
 
         const updatedProfile = {
             ...userAccount?.toObject(),
-            profile: createProfileforUser
+            profile: createProfileforUser.toObject()
 
 
 
         }
+
+
 
         res.status(SERVER_STATUS.SUCCESS).json({
             title: 'Update Profile Message',

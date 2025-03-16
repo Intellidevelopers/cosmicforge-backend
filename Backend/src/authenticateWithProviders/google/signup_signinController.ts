@@ -24,6 +24,7 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
     const savedData = await userTempRoleModel.findOne()
     const salt = await hashedKey.genSalt(10)
+    
     const secretKey = await hashedKey.hash(process.env.JWT_SECRET!!,salt)
  
      const userRole = savedData?.userRole
@@ -108,9 +109,8 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
 
      if(!userRole){
-      res.status(SERVER_STATUS.BAD_REQUEST).json({
-        message:'Something went wrong try again.'
-      })
+      res.set("Location",`${process.env.web_base_url}/auth`)
+      res.status(302).send()
       return
      }
 
@@ -200,8 +200,8 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
        const newAccount =  await  new newUserModel({
         email:userDetails.email,
-        fullName:userDetails.name.split(' ')[1],
-        lastName:userDetails.name.split(' ')[0],
+        fullName:userDetails.name.split(' ')[1] ?? 'user',
+        lastName:userDetails.name.split(' ')[0] ?? 'nil',
         role:userRole === 'patient' ? 'client':userRole,
         password:v4()
        }).save()
@@ -226,10 +226,9 @@ export const googleSignUpSignInAuthcontroller = async (req:express.Request,res:e
 
    } catch (error:any) {
     
-    res.status(SERVER_STATUS.BAD_REQUEST).json({
-      message:'Something went wrong try again.',
-      error:error.message
-    })
+    res.set("Location",`${process.env.web_base_url}/auth`)
+    res.status(302).send()
+    
 
 
    }
