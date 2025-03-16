@@ -15,6 +15,7 @@ import TypedResponse from '../util/interface/TypedResponse'
 const mainRouter =  express.Router()
 import {v4} from 'uuid'
 import { validateUserSession } from '../features/login/controller/login'
+import doctorDepartmentRouter from '../features/medicalPersonnel/department/routes/doctorDepartmentRoute'
 
 mainRouter.use(session({
   secret:'cosmicforge',
@@ -37,6 +38,13 @@ mainRouter.use('/user/patient',patientProfileRouter)
 mainRouter.use('/user/patient',rateAndReviewRouter)
 
 mainRouter.use('/user',bookAppointmentRouter)
+
+mainRouter.use('/medics/',doctorDepartmentRouter)
+
+
+
+
+
 
 mainRouter.use(passportSetup.initialize())
 mainRouter.use(passportSetup.session())

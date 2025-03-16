@@ -26,6 +26,35 @@ enum workingDays  {
 
 }
 
+enum  department{
+      "General Medicine",
+     "Emergency Medicine",
+        "Cardiology",
+        "Pediatrics",
+         "Nuerology",
+         "OB-GYN",
+         "Dentistry",
+         "Otolarygngology",
+          "Pschiatry",
+         "Radiology",
+         "Dermatology",
+           "Pathology",
+         "Oncology",
+          "Ophthalmology",
+         "Urology",
+         "Physical Therapy",
+          "Rheumatology",
+           "Grastro Enterology",
+          "Orthopedics",
+          "Neonatology",
+          "Nephrology",
+          "Pulmonology",
+          "Geonomics",
+           "Hematology",
+      
+      
+}
+
 const workingHourSchema =  new mongoose.Schema({
     workingDays:{type:mongoose.SchemaTypes.String,
         enum:workingDays
