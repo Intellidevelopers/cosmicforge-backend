@@ -3,6 +3,7 @@ import SERVER_STATUS from "../../../../util/interface/CODE"
 import { ResponseBodyProps } from "../../../../util/interface/ResponseBodyProps"
 import TypedRequest from "../../../../util/interface/TypedRequest"
 import TypedResponse from "../../../../util/interface/TypedResponse"
+import MedicalPersonnelProfileModel from "../../profile/model/profileModel"
 import DoctorDepartmentModel from "../model/model"
 
 
@@ -116,5 +117,72 @@ export const getDepartmentsForLadingPage =  async (req:TypedRequest<any>,res:Typ
             message:"Internal server error"
         })
     }
+
+}
+
+export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{department:string}>,res:TypedResponse<ResponseBodyProps>) =>{
+
+     const {department} = req.body
+
+     try {
+
+        const user = req.user
+
+        if(!user){
+            res.status(SERVER_STATUS.UNAUTHORIZED).json({
+                title:'Get doctors by departments',
+                status:SERVER_STATUS.UNAUTHORIZED,
+                successful:false,
+                message:'not authorized.'
+            })
+            return  
+        }
+
+        if(user.role !== 'client'){
+            res.status(SERVER_STATUS.Forbidden).json({
+                title:'Get doctors by departments',
+                status:SERVER_STATUS.Forbidden,
+                successful:false,
+                message:'forbidden.'
+            })
+            return  
+        }
+
+        if(!department){
+
+            res.status(SERVER_STATUS.BAD_REQUEST).json({
+                title:'Get doctors by departments',
+                status:SERVER_STATUS.BAD_REQUEST,
+                successful:false,
+                message:'department field is needed to continue.'
+            })
+
+            return
+        }
+
+
+        let doctors = await MedicalPersonnelProfileModel.find({
+            department
+        }).populate('userId')
+
+
+
+        res.status(SERVER_STATUS.SUCCESS).json({
+            title:'Get doctors by departments',
+            status:SERVER_STATUS.SUCCESS,
+            successful:true,
+            message:'successfully fetched.',
+            data:doctors
+        })
+        
+     } catch (error:any) {
+        res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
+            title:'Get doctors by departments',
+            status:SERVER_STATUS.INTERNAL_SERVER_ERROR,
+            successful:false,
+            message:'An error occured.',
+            error:error.message
+        }) 
+     }
 
 }

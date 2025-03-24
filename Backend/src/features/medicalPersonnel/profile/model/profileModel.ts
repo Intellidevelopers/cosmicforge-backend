@@ -56,10 +56,10 @@ enum  department{
 }
 
 const workingHourSchema =  new mongoose.Schema({
-    workingDays:{type:mongoose.SchemaTypes.String,
+    day:{type:mongoose.SchemaTypes.String,
         enum:workingDays
     },
-    workingTime:{type:mongoose.SchemaTypes.String}
+   time:{type:mongoose.SchemaTypes.String}
 })
 
 const experienceSchema = new mongoose.Schema({

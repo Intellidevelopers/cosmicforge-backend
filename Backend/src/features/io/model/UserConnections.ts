@@ -10,6 +10,11 @@ const UserConnectionsSchema =  new   mongoose.Schema({
     
     connectionId:{
         type:mongoose.SchemaTypes.String
+    },
+
+    presence:{
+        type:mongoose.SchemaTypes.String,
+        enum:['online','offline']
     }
 
 

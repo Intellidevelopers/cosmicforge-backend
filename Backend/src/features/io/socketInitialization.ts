@@ -7,6 +7,7 @@ import { TypedSocket } from '../../util/interface/TypedSocket';
 import newUserModel from '../newUser/model/newUserModel';
 import UserConnectionsModel from './model/UserConnections';
 import diagnosisSocketIO from '../ai/diagnosis/diagnosisSocketIO';
+import { Call_USER } from './call/controller/callController';
 
 export default  (socketIO:Socket.Server) =>{
 
@@ -54,6 +55,8 @@ export default  (socketIO:Socket.Server) =>{
     }).on('connection',async(socket:TypedSocket<AuthMiddlewareProps>)=>{
 
       
+
+
       socket.on('hello',(d)=>{
         console.log(d)
       })
@@ -91,9 +94,11 @@ export default  (socketIO:Socket.Server) =>{
         
        diagnosisSocketIO(socketIO,socket)
       console.log('updating....')
+      console.log(userConnection?.userId)
       console.log(socket.id)
        socket.emit('message',JSON.stringify(userConnection))
 
+          Call_USER(socketIO,socket)
 
     })
 

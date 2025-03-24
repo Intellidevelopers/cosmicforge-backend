@@ -20,7 +20,9 @@ export interface MedicalPersonnelRequestProps {
     profilePicture?: string,
     pricing:number,
     fullName:string,
-    lastName:string
+    lastName:string,
+    experience:{},
+    workingHours:{}
 
 }
 
@@ -53,7 +55,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         }
 
 
-        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture,pricing,fullName,lastName } = req.body
+        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture,pricing,fullName,lastName, workingHours,experience } = req.body
 
         if (!email && !mobileNo && !professionalTitle && !specialization && !currentClinic && !location && !profilePicture && !department && !pricing && !fullName && !lastName ) {
 
@@ -183,7 +185,11 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                 currentClinic: currentClinic ?? userProfile.currentClinic,
                 department: department ?? userProfile.department,
                 location: location ?? userProfile.location,
-                pricing:pricing?? userProfile.pricing
+                pricing:pricing?? userProfile.pricing,
+                experience,
+                workTime: workingHours
+
+                
 
             }, {
                 returnOriginal: false
