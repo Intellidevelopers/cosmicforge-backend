@@ -148,13 +148,93 @@ export const Call_USER =  (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlew
       })
 
 
+         
+        socket.on('on_call_ended',async(data:{remoteId:string})=>{
+             const userToCallSocketID = await UserConnectionsModel.findOne({
+          userId:data.remoteId
+         })
+      
+         if(!userToCallSocketID){
+          socket.emit('call-failed',{
+            message:'failed to initialize call.',
+            error:'invalid connectionId'
+          })
+      
+          return 
+         }
+        
+    socketIO.to(userToCallSocketID.connectionId!!).emit('on_call_ended',data)
+
+      })
+
+
+      socket.on('connected',async(data:{remoteId:string})=>{
+        const userToCallSocketID = await UserConnectionsModel.findOne({
+     userId:data.remoteId
+    })
+ 
+    if(!userToCallSocketID){
+     socket.emit('call-failed',{
+       message:'failed to initialize call.',
+       error:'invalid connectionId'
+     })
+ 
+     return 
+    }
+   
+socketIO.to(userToCallSocketID.connectionId!!).emit('on_connected',data)
+
+ })
+
+
+ socket.on('request_to_switch_call_mode',async(data:{remoteId:string})=>{
+  const userToCallSocketID = await UserConnectionsModel.findOne({
+userId:data.remoteId
+})
+
+if(!userToCallSocketID){
+socket.emit('call-failed',{
+ message:'failed to initialize call.',
+ error:'invalid connectionId'
+})
+
+return 
+}
+
+socketIO.to(userToCallSocketID.connectionId!!).emit('on_request_to_switch_call_mode',data)
+
+})
+
+
+
+
+socket.on('accept_request_to_switch_call_mode',async(data:{remoteId:string,userAccepted:boolean})=>{
+  const userToCallSocketID = await UserConnectionsModel.findOne({
+userId:data.remoteId
+})
+
+if(!userToCallSocketID){
+socket.emit('call-failed',{
+ message:'failed to initialize call.',
+ error:'invalid connectionId'
+})
+
+return 
+}
+
+socketIO.to(userToCallSocketID.connectionId!!).emit('on_accept_request_to_switch_call_mode',data)
+
+})
+
+
+
 }
 
 
 const userCalling = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlewareProps>,data:{userToCall:string, userCallingDetails:{
   name:string,
   profilePicture:string
-}}) =>{
+},callMode:'audio' | 'video'}) =>{
 
    console.log('calling') 
 console.log(data.userToCall)
@@ -196,7 +276,8 @@ console.log(data.userToCall)
 
    socketIO.to(userToCallSocketID?.connectionId!!).emit('incoming-call',{
     caller:socket.user,
-    userCallingDetails:data.userCallingDetails
+    userCallingDetails:data.userCallingDetails,
+  callMode:data.callMode
    })
 
 
