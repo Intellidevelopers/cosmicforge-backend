@@ -16,6 +16,7 @@ const mainRouter =  express.Router()
 import {v4} from 'uuid'
 import { validateUserSession } from '../features/login/controller/login'
 import doctorDepartmentRouter from '../features/medicalPersonnel/department/routes/doctorDepartmentRoute'
+import chatRouter from '../features/io/chat/routes/chatRoute'
 
 mainRouter.use(session({
   secret:'cosmicforge',
@@ -40,6 +41,8 @@ mainRouter.use('/user/patient',rateAndReviewRouter)
 mainRouter.use('/user',bookAppointmentRouter)
 
 mainRouter.use('/medics/',doctorDepartmentRouter)
+
+mainRouter.use('/user/chat/',chatRouter)
 
 
 

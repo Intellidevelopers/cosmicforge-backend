@@ -8,6 +8,7 @@ import newUserModel from '../newUser/model/newUserModel';
 import UserConnectionsModel from './model/UserConnections';
 import diagnosisSocketIO from '../ai/diagnosis/diagnosisSocketIO';
 import { Call_USER } from './call/controller/callController';
+import { USER_CHAT } from './chat/controller/chatController';
 
 export default  (socketIO:Socket.Server) =>{
 
@@ -99,6 +100,8 @@ export default  (socketIO:Socket.Server) =>{
        socket.emit('message',JSON.stringify(userConnection))
 
           Call_USER(socketIO,socket)
+
+          USER_CHAT(socketIO,socket)
 
     })
 

@@ -149,7 +149,7 @@ export const Call_USER =  (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlew
 
 
          
-        socket.on('on_call_ended',async(data:{remoteId:string})=>{
+        socket.on('call_ended',async(data:{remoteId:string})=>{
              const userToCallSocketID = await UserConnectionsModel.findOne({
           userId:data.remoteId
          })
@@ -187,7 +187,8 @@ socketIO.to(userToCallSocketID.connectionId!!).emit('on_connected',data)
  })
 
 
- socket.on('request_to_switch_call_mode',async(data:{remoteId:string})=>{
+ socket.on('request_to_switch_call_mode',async(data:{remoteId:string,callMode:string})=>{
+ console.log('requesting call mode')
   const userToCallSocketID = await UserConnectionsModel.findOne({
 userId:data.remoteId
 })
@@ -201,14 +202,19 @@ socket.emit('call-failed',{
 return 
 }
 
-socketIO.to(userToCallSocketID.connectionId!!).emit('on_request_to_switch_call_mode',data)
+
+
+socketIO.to(userToCallSocketID.connectionId!!).emit('request_to_switch_call_mode',data)
+
+
+
 
 })
 
 
 
 
-socket.on('accept_request_to_switch_call_mode',async(data:{remoteId:string,userAccepted:boolean})=>{
+socket.on('accept_request_to_switch_call_mode',async(data:{remoteId:string,userAccepted:boolean,callMode:string})=>{
   const userToCallSocketID = await UserConnectionsModel.findOne({
 userId:data.remoteId
 })
@@ -222,7 +228,7 @@ socket.emit('call-failed',{
 return 
 }
 
-socketIO.to(userToCallSocketID.connectionId!!).emit('on_accept_request_to_switch_call_mode',data)
+socketIO.to(userToCallSocketID.connectionId!!).emit('accept_request_to_switch_call_mode',data)
 
 })
 
