@@ -18,7 +18,7 @@ export const USER_CHAT = async (socketIO:Socket.Server,socket:TypedSocket<AuthMi
         message:string,
         timeStamp:string
     })=>{
- console.log(data)
+ 
          sendMessage(socketIO,socket,data)
     })
 
@@ -75,18 +75,21 @@ const sendMessage = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlew
         if(chats){
 
             const oldChats = chats.messages
-             console.log('old chat')  
+            
             if(oldChats){
                let updateChat = oldChats
                updateChat.push({messageType:data.messageType,message:data.message,
-                    timestamp:data.timeStamp,
+                    timeStamp:data.timeStamp,
                     sender:data.senderId,
-                    reciever:data.receiverId
+                    receiver:data.receiverId
                 })
 
                 await chats.updateOne({
                     messages:updateChat
                 })
+
+
+                
 
                 const newChats =   await ChatModel.findOne({
             $or:[
@@ -99,14 +102,19 @@ const sendMessage = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlew
             ]
         })
 
+        
+
             const receiverSocket = await UserConnectionsModel.findOne({
                 userId:data.receiverId
             })
 
 
 
-             socket.emit('message_sent',newChats)
-            socketIO.to(receiverSocket?.connectionId!!).emit('new_message',newChats)
+             socket.emit('update_chat',newChats)
+             
+            socketIO.to(receiverSocket?.connectionId!!).emit('update_chat',newChats)
+
+           
 
 
             }
@@ -149,16 +157,16 @@ const sendMessage = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlew
                 chatID:data.senderId.concat(data.receiverId),
                 userOneID:{
                     userId:data.senderId,
-                    userName:isSenderValid.lastName.concat('').concat(isSenderValid.fullName),
+                    userName:isSenderValid.lastName.concat(' ').concat(isSenderValid.fullName),
                     userProfile:senderProfile
                 },
                 userTwoID:{
                     userId:data.receiverId,
-                    userName:isReceiverValid.lastName.concat('').concat(isReceiverValid.fullName),
+                    userName:isReceiverValid.lastName.concat(' ').concat(isReceiverValid.fullName),
                     userProfile:receiverProfile
                 },
                 messages:[{messageType:data.messageType,message:data.message,
-                    timestamp:data.timeStamp,
+                    timeStamp:data.timeStamp,
                     sender:data.senderId,
                     receiver:data.receiverId
                 }]
@@ -172,7 +180,7 @@ const sendMessage = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlew
 
 
 
-             socket.emit('message_sent',newChat)
+             socket.emit('new_message',newChat)
             socketIO.to(receiverSocket?.connectionId!!).emit('new_message',newChat)
         }
 
