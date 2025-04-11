@@ -241,6 +241,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                    }
                 }
 
+
+
                 res.status(SERVER_STATUS.SUCCESS).json({
                     title: 'Update Profile Message',
                     status: SERVER_STATUS.SUCCESS,
@@ -284,12 +286,12 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                     ]
              })
 
-             console.log(messageProfile)
+       
 
              if(messageProfile && messageProfile.length>0){
 
 
-                console.log(messageProfile)
+          
 
                   messageProfile.forEach( async data=>{
 
@@ -334,6 +336,11 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
 
             return
         }
+
+
+
+
+
 
 
 
@@ -396,12 +403,12 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
              })
 
 
- console.log(messageProfile)
- 
+
+
              if(messageProfile && messageProfile.length>0){
 
 
-                console.log(messageProfile)
+              
 
                   messageProfile.forEach( async data=>{
 
@@ -473,7 +480,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
          if(messageProfile && messageProfile.length>0){
 
 
-            console.log(messageProfile)
+       
 
               messageProfile.forEach( async data=>{
 

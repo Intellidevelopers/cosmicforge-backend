@@ -42,7 +42,7 @@ mainRouter.use('/user',bookAppointmentRouter)
 
 mainRouter.use('/medics/',doctorDepartmentRouter)
 
-mainRouter.use('/user/chat/',chatRouter)
+mainRouter.use('/user/chat',chatRouter)
 
 
 
