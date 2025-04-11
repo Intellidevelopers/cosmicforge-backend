@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken'
 import newUserModel from "../../../newUser/model/newUserModel";
 import PatientProfileModel from "../model/patientProfileModel";
 import uploader from "../../../../config/cloudinary/cloudinary";
+import ChatModel from "../../../io/chat/model/chatModel";
 
 enum profileType {
     personal, family
@@ -164,6 +165,47 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
                     token
                 }
 
+                const messageProfile =  await ChatModel.findOne({
+                    $or:[
+                     {
+                         "userOneID.userId":user._id
+                     },
+                     {
+                         "userTwoID.userId":user._id
+                     }
+                    ] 
+                 })
+ 
+                 if(messageProfile){
+                    if( messageProfile.userOneID?.userId === user._id){
+ 
+                      await  messageProfile.updateOne({
+                             userOneID:{
+                                userId:user._id,
+                     userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                     userProfile:userProfile
+                             }
+                        })
+ 
+ 
+                    }else if (messageProfile.userTwoID?.userId === user._id){
+                     
+                     await  messageProfile.updateOne({
+                         userTwoID:{
+                            userId:user._id,
+                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                 userProfile:userProfile
+                         }
+                    })
+                    }
+                 }
+
+
+
+
+
+
+
                 res.status(SERVER_STATUS.SUCCESS).json({
                     title: 'Update Profile Message',
                     status: SERVER_STATUS.SUCCESS,
@@ -189,6 +231,43 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
 
 
             }
+
+
+
+            const messageProfile =  await ChatModel.findOne({
+                $or:[
+                 {
+                     "userOneID.userId":user._id
+                 },
+                 {
+                     "userTwoID.userId":user._id
+                 }
+                ] 
+             })
+
+             if(messageProfile){
+                if( messageProfile.userOneID?.userId === user._id){
+
+                  await  messageProfile.updateOne({
+                         userOneID:{
+                            userId:user._id,
+                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                 userProfile:userProfile
+                         }
+                    })
+
+
+                }else if (messageProfile.userTwoID?.userId === user._id){
+                 
+                 await  messageProfile.updateOne({
+                     userTwoID:{
+                        userId:user._id,
+             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+             userProfile:userProfile
+                     }
+                })
+                }
+             }
 
             res.status(SERVER_STATUS.SUCCESS).json({
                 title: 'Update Profile Message',
@@ -248,6 +327,42 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
                 token
             }
 
+
+            const messageProfile =  await ChatModel.findOne({
+                $or:[
+                 {
+                     "userOneID.userId":user._id
+                 },
+                 {
+                     "userTwoID.userId":user._id
+                 }
+                ] 
+             })
+
+             if(messageProfile){
+                if( messageProfile.userOneID?.userId === user._id){
+
+                  await  messageProfile.updateOne({
+                         userOneID:{
+                  userId:user._id,
+                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                 userProfile:userProfile
+                         }
+                    })
+
+
+                }else if (messageProfile.userTwoID?.userId === user._id){
+                 
+                 await  messageProfile.updateOne({
+                     userTwoID:{
+                        userId:user._id,
+             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+             userProfile:userProfile
+                     }
+                })
+                }
+             }
+
             res.status(SERVER_STATUS.SUCCESS).json({
                 title: 'Update Profile Message',
                 status: SERVER_STATUS.SUCCESS,
@@ -273,6 +388,43 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
 
 
         }
+
+
+
+        const messageProfile =  await ChatModel.findOne({
+            $or:[
+             {
+                 "userOneID.userId":user._id
+             },
+             {
+                 "userTwoID.userId":user._id
+             }
+            ] 
+         })
+
+         if(messageProfile){
+            if( messageProfile.userOneID?.userId === user._id){
+
+              await  messageProfile.updateOne({
+                     userOneID:{
+                        userId:user._id,
+             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+             userProfile:userProfile
+                     }
+                })
+
+
+            }else if (messageProfile.userTwoID?.userId === user._id){
+             
+             await  messageProfile.updateOne({
+                 userTwoID:{
+                    userId:user._id,
+         userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+         userProfile:userProfile
+                 }
+            })
+            }
+         }
 
         res.status(SERVER_STATUS.SUCCESS).json({
             title: 'Update Profile Message',

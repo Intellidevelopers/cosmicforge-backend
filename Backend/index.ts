@@ -18,6 +18,7 @@ import { errorHandler } from './src/middleware/errorHandlerMiddleware'
 import diagnosisController from './src/features/ai/diagnosis/diagnosisController'
 import uploader from './src/config/cloudinary/cloudinary'
 import DoctorDepartmentModel from './src/features/medicalPersonnel/department/model/model'
+import { testFlow } from './src/features/wallet/controller/walletController'
 
  dotenv.config()
 
@@ -67,6 +68,8 @@ const PORT = process.env.PORT || 3010
 connectDB().then(res=>{
   server.listen(PORT,()=>{
     console.log('on port 3010 h gg dgdg gg hhh')
+
+       testFlow()
 
     interface  AuthMiddlewareProps{
       _id:string

@@ -14,3 +14,4 @@ export  const  encryptAES256 = async (paymentData:any) => {
     
     return `${ivToHex}:${encryptedToHex}:${cipher.getAuthTag().toString('hex')}`;
 }
+
