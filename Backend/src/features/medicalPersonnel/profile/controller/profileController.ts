@@ -271,39 +271,53 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             }
 
 
-            const messageProfile =  await ChatModel.findOne({
+            const messageProfile =  await ChatModel.find({
                 $or:[
-                 {
-                     "userOneID.userId":user._id
-                 },
-                 {
-                     "userTwoID.userId":user._id
-                 }
-                ] 
+                    {
+                        'userOneID.userId':user._id
+                       } 
+                       ,
+                       {
+                        'userTwoID.userId':user._id
+                       } 
+
+                    ]
              })
 
-             if(messageProfile){
-                if( messageProfile.userOneID?.userId === user._id){
+             console.log(messageProfile)
 
-                  await  messageProfile.updateOne({
-                         userOneID:{
-                            userId:user._id,
-                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-                 userProfile:userProfile
-                         }
-                    })
+             if(messageProfile && messageProfile.length>0){
 
 
-                }else if (messageProfile.userTwoID?.userId === user._id){
-                 
-                 await  messageProfile.updateOne({
-                     userOneID:{
-                        userId:user._id,
-             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-             userProfile:userProfile
-                     }
-                })
-                }
+                console.log(messageProfile)
+
+                  messageProfile.forEach( async data=>{
+
+                    if( data.userOneID?.userId === user._id){
+
+                        await  data.updateOne({
+                               userOneID:{
+                                  userId:user._id,
+                       userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                       userProfile:userProfile
+                               }
+                          })
+      
+      
+                      } else if (data.userTwoID?.userId === user._id){
+                       
+                       await  data.updateOne({
+                           userTwoID:{
+                              userId:user._id,
+                   userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                   userProfile:userProfile
+                           }
+                      })
+                      }
+
+                  })
+
+               
              }
 
 
@@ -370,7 +384,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             }
 
 
-            const messageProfile =  await ChatModel.findOne({
+            const messageProfile =  await ChatModel.find({
                 $or:[
                  {
                      "userOneID.userId":user._id
@@ -381,28 +395,41 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                 ] 
              })
 
-             if(messageProfile){
-                if( messageProfile.userOneID?.userId === user._id){
 
-                  await  messageProfile.updateOne({
-                         userOneID:{
-                            userId:user._id,
-                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-                 userProfile:userProfile
-                         }
-                    })
+ console.log(messageProfile)
+ 
+             if(messageProfile && messageProfile.length>0){
 
 
-                }else if (messageProfile.userTwoID?.userId === user._id){
-                 
-                 await  messageProfile.updateOne({
-                     userOneID:{
-                        userId:user._id,
-             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-             userProfile:userProfile
-                     }
-                })
-                }
+                console.log(messageProfile)
+
+                  messageProfile.forEach( async data=>{
+
+                    if( data.userOneID?.userId === user._id){
+
+                        await  data.updateOne({
+                               userOneID:{
+                                  userId:user._id,
+                       userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                       userProfile:userProfile
+                               }
+                          })
+      
+      
+                      } else if (data.userTwoID?.userId === user._id){
+                       
+                       await  data.updateOne({
+                           userTwoID:{
+                              userId:user._id,
+                   userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                   userProfile:userProfile
+                           }
+                      })
+                      }
+
+                  })
+
+               
              }
 
             res.status(SERVER_STATUS.SUCCESS).json({
@@ -432,7 +459,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         }
 
 
-        const messageProfile =  await ChatModel.findOne({
+        const messageProfile =  await ChatModel.find({
             $or:[
              {
                  "userOneID.userId":user._id
@@ -443,28 +470,38 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             ] 
          })
 
-         if(messageProfile){
-            if( messageProfile.userOneID?.userId === user._id){
-
-              await  messageProfile.updateOne({
-                     userOneID:{
-                        userId:user._id,
-             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-             userProfile:userProfile
-                     }
-                })
+         if(messageProfile && messageProfile.length>0){
 
 
-            }else if (messageProfile.userTwoID?.userId === user._id){
-             
-             await  messageProfile.updateOne({
-                 userOneID:{
-                    userId:user._id,
-         userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-         userProfile:userProfile
-                 }
-            })
-            }
+            console.log(messageProfile)
+
+              messageProfile.forEach( async data=>{
+
+                if( data.userOneID?.userId === user._id){
+
+                    await  data.updateOne({
+                           userOneID:{
+                              userId:user._id,
+                   userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                   userProfile:userProfile
+                           }
+                      })
+  
+  
+                  } else if (data.userTwoID?.userId === user._id){
+                   
+                   await  data.updateOne({
+                       userTwoID:{
+                          userId:user._id,
+               userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+               userProfile:userProfile
+                       }
+                  })
+                  }
+
+              })
+
+           
          }
 
 

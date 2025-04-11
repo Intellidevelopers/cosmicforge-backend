@@ -165,7 +165,8 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
                     token
                 }
 
-                const messageProfile =  await ChatModel.findOne({
+            
+                const messageProfile =  await ChatModel.find({
                     $or:[
                      {
                          "userOneID.userId":user._id
@@ -175,29 +176,39 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
                      }
                     ] 
                  })
- 
-                 if(messageProfile){
-                    if( messageProfile.userOneID?.userId === user._id){
- 
-                      await  messageProfile.updateOne({
-                             userOneID:{
-                                userId:user._id,
-                     userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-                     userProfile:userProfile
-                             }
-                        })
- 
- 
-                    }else if (messageProfile.userTwoID?.userId === user._id){
-                     
-                     await  messageProfile.updateOne({
-                         userTwoID:{
-                            userId:user._id,
-                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-                 userProfile:userProfile
-                         }
-                    })
-                    }
+        
+                 if(messageProfile && messageProfile.length>0){
+        
+        
+               
+        
+                      messageProfile.forEach( async data=>{
+        
+                        if( data.userOneID?.userId === user._id){
+        
+                            await  data.updateOne({
+                                   userOneID:{
+                                      userId:user._id,
+                           userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                           userProfile:userProfile
+                                   }
+                              })
+          
+          
+                          } else if (data.userTwoID?.userId === user._id){
+                           
+                           await  data.updateOne({
+                               userTwoID:{
+                                  userId:user._id,
+                       userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                       userProfile:userProfile
+                               }
+                          })
+                          }
+        
+                      })
+        
+                   
                  }
 
 
@@ -234,7 +245,8 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
 
 
 
-            const messageProfile =  await ChatModel.findOne({
+          
+            const messageProfile =  await ChatModel.find({
                 $or:[
                  {
                      "userOneID.userId":user._id
@@ -244,29 +256,39 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
                  }
                 ] 
              })
-
-             if(messageProfile){
-                if( messageProfile.userOneID?.userId === user._id){
-
-                  await  messageProfile.updateOne({
-                         userOneID:{
-                            userId:user._id,
-                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-                 userProfile:userProfile
-                         }
-                    })
-
-
-                }else if (messageProfile.userTwoID?.userId === user._id){
-                 
-                 await  messageProfile.updateOne({
-                     userTwoID:{
-                        userId:user._id,
-             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-             userProfile:userProfile
-                     }
-                })
-                }
+    
+             if(messageProfile && messageProfile.length>0){
+    
+    
+           
+    
+                  messageProfile.forEach( async data=>{
+    
+                    if( data.userOneID?.userId === user._id){
+    
+                        await  data.updateOne({
+                               userOneID:{
+                                  userId:user._id,
+                       userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                       userProfile:userProfile
+                               }
+                          })
+      
+      
+                      } else if (data.userTwoID?.userId === user._id){
+                       
+                       await  data.updateOne({
+                           userTwoID:{
+                              userId:user._id,
+                   userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                   userProfile:userProfile
+                           }
+                      })
+                      }
+    
+                  })
+    
+               
              }
 
             res.status(SERVER_STATUS.SUCCESS).json({
@@ -328,7 +350,8 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
             }
 
 
-            const messageProfile =  await ChatModel.findOne({
+           
+            const messageProfile =  await ChatModel.find({
                 $or:[
                  {
                      "userOneID.userId":user._id
@@ -338,29 +361,39 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
                  }
                 ] 
              })
-
-             if(messageProfile){
-                if( messageProfile.userOneID?.userId === user._id){
-
-                  await  messageProfile.updateOne({
-                         userOneID:{
-                  userId:user._id,
-                 userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-                 userProfile:userProfile
-                         }
-                    })
-
-
-                }else if (messageProfile.userTwoID?.userId === user._id){
-                 
-                 await  messageProfile.updateOne({
-                     userTwoID:{
-                        userId:user._id,
-             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-             userProfile:userProfile
-                     }
-                })
-                }
+    
+             if(messageProfile && messageProfile.length>0){
+    
+    
+           
+    
+                  messageProfile.forEach( async data=>{
+    
+                    if( data.userOneID?.userId === user._id){
+    
+                        await  data.updateOne({
+                               userOneID:{
+                                  userId:user._id,
+                       userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                       userProfile:userProfile
+                               }
+                          })
+      
+      
+                      } else if (data.userTwoID?.userId === user._id){
+                       
+                       await  data.updateOne({
+                           userTwoID:{
+                              userId:user._id,
+                   userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                   userProfile:userProfile
+                           }
+                      })
+                      }
+    
+                  })
+    
+               
              }
 
             res.status(SERVER_STATUS.SUCCESS).json({
@@ -390,8 +423,7 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
         }
 
 
-
-        const messageProfile =  await ChatModel.findOne({
+        const messageProfile =  await ChatModel.find({
             $or:[
              {
                  "userOneID.userId":user._id
@@ -402,28 +434,38 @@ export const updatePatientProfile = async (req: TypedRequest<PatientProfileReque
             ] 
          })
 
-         if(messageProfile){
-            if( messageProfile.userOneID?.userId === user._id){
-
-              await  messageProfile.updateOne({
-                     userOneID:{
-                        userId:user._id,
-             userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-             userProfile:userProfile
-                     }
-                })
+         if(messageProfile && messageProfile.length>0){
 
 
-            }else if (messageProfile.userTwoID?.userId === user._id){
-             
-             await  messageProfile.updateOne({
-                 userTwoID:{
-                    userId:user._id,
-         userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
-         userProfile:userProfile
-                 }
-            })
-            }
+       
+
+              messageProfile.forEach( async data=>{
+
+                if( data.userOneID?.userId === user._id){
+
+                    await  data.updateOne({
+                           userOneID:{
+                              userId:user._id,
+                   userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+                   userProfile:userProfile
+                           }
+                      })
+  
+  
+                  } else if (data.userTwoID?.userId === user._id){
+                   
+                   await  data.updateOne({
+                       userTwoID:{
+                          userId:user._id,
+               userName:userAccount?.lastName.concat(' ').concat(userAccount.fullName),
+               userProfile:userProfile
+                       }
+                  })
+                  }
+
+              })
+
+           
          }
 
         res.status(SERVER_STATUS.SUCCESS).json({
