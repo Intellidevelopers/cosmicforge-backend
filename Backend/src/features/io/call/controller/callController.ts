@@ -167,6 +167,28 @@ export const Call_USER =  (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlew
 
       })
 
+      
+
+
+      socket.on('ringing',async(data:{remoteId:string})=>{
+        const userToCallSocketID = await UserConnectionsModel.findOne({
+     userId:data.remoteId
+    })
+ 
+    console.log('ring.........')
+    if(!userToCallSocketID){
+     socket.emit('call-failed',{
+       message:'failed to initialize call.',
+       error:'invalid connectionId'
+     })
+ 
+     return 
+    }
+   
+socketIO.to(userToCallSocketID.connectionId!!).emit('ringing',data)
+
+ })
+
 
       socket.on('connected',async(data:{remoteId:string})=>{
         const userToCallSocketID = await UserConnectionsModel.findOne({

@@ -79,6 +79,8 @@ const makePaymentWithCard = async (req:TypedRequest<CardPaymentInterface>,res:Ty
 export const testFlow  = async () =>{
      const url = "https://api.korapay.com/merchant/api/v1/charges/card"
      
+     const paystack_url = "https://api.paystack.co/transaction/initialize"
+     
     const d = {
         "reference": "test-card-payment-1", // must be at least 8 characters
         "card": {
@@ -99,9 +101,33 @@ export const testFlow  = async () =>{
         
     }
 
+    const paystackData = {
+        amount:Number(100*100).toString(),
+        currency:"NGN",
+        channel:['card'],
+        email:'joe@gmail.com'
+    }
+
 try{
-    const data = await encryptAES256(JSON.stringify(d))
-console.log(data)
+
+
+     fetch(paystack_url,{
+        method:'Post',
+        headers:{
+            authorization:'Bearer'.concat(" ").concat(process.env. paystack_secret!!),
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(paystackData)
+     }).then((res)=>{
+        return res.json()
+     }).then((r)=>{
+        console.log(r)
+     }).catch(console.log)
+
+
+
+  //  const data = await encryptAES256(JSON.stringify(d))
+//console.log(data)
    
 /**
  *  fetch(url,{
@@ -120,7 +146,7 @@ console.log(data)
     })
  */
 
-    const curlCommand =  `  curl --request POST \   --url https://api.korapay.com/merchant/api/v1/charges/card        --header  'Authorization:  Bearer ${process.env.kora_payment_gateway_sec}' \  --data '{ 'charge_data':'${data}' }'  `
+    /*const curlCommand =  `  curl --request POST \   --url https://api.korapay.com/merchant/api/v1/charges/card        --header  'Authorization:  Bearer ${process.env.kora_payment_gateway_sec}' \  --data '{ 'charge_data':'${data}' }'  `
 
     childProcess.exec(curlCommand,(err,stdout,stderr)=>{
         if(err){
@@ -128,7 +154,7 @@ console.log(data)
             return
         }
         console.log(stdout)
-    })
+    })*/
     /**
      * curl --request POST \
      --url https://api.korapay.com/merchant/api/v1/charges/card \
@@ -136,6 +162,9 @@ console.log(data)
      --data '{
         "charge_data": c62ac600880756fa9456e812dbbaccc8:14ed28362057615390765db7eb6a9f4630f12d23c67ad462621cd7e8cc:f2197fe1911162010cefa3038a12188f}'
      */
+
+
+
 
 }catch(e){
     
