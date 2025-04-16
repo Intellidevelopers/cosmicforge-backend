@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 
     paymentType:{
         type:mongoose.Schema.Types.String, 
-        enum:['consultation-fee']
+        enum:['consultation-fee'],
+        default:'consultation-fee'
     },
     paymentMadeBy:{
         type:mongoose.Schema.Types.ObjectId, 
@@ -20,15 +21,15 @@ import mongoose from "mongoose";
     },
     paymentReferenceId:{
         type:mongoose.Schema.Types.String, 
-        enum:['consultation-fee']
-    },
-    webHookpaymentRefernceId:{
-        type:mongoose.Schema.Types.String, 
-        enum:['consultation-fee']
+        
     },
     paymentStatus:{
         type:mongoose.Schema.Types.String, 
         enum:['pending','success','failed']
+    },
+    paymentChannel:{
+        type:mongoose.Schema.Types.String, 
+       
     },
  })
 

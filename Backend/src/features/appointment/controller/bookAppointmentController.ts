@@ -6,6 +6,8 @@ import TypedResponse from "../../../util/interface/TypedResponse";
 import { USER_ROLES } from "../../../util/interface/UserRole";
 import newUserModel from "../../newUser/model/newUserModel";
 import BookAppointmentModel from "../model/bookAppointmentModel";
+import PatientProfileModel from "../../patient/profile/model/patientProfileModel";
+import MedicalPersonnelProfileModel from "../../medicalPersonnel/profile/model/profileModel";
 
 
  interface paymentProps {
@@ -13,21 +15,19 @@ import BookAppointmentModel from "../model/bookAppointmentModel";
      cardType:string
      cardFee:string
      vat:string
-     total:string
+     total:string,
+     paymentReference:string
  
  }
 
 interface bookAppointmentProps {
 
     doctorId:string,
-    day:string,
-    month:string,
-    year:string,
-    meridianType: 'am' | 'pm'
-    hour:string,
-    minutes:string,
+   date:string,
+   time:string,
     appointmentType: string
-    payment:paymentProps
+    payment:paymentProps,
+    appointmentStatus:string
 }
 
 export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res:TypedResponse<ResponseBodyProps>) => {
@@ -58,19 +58,84 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
     }
 
 
-    const {doctorId,day,month,year,meridianType,hour,minutes,appointmentType,payment} = req.body
+    const {doctorId,date,time,appointmentType,payment,appointmentStatus} = req.body
      
-      if(!doctorId || !day || !month || !month || !year || !meridianType || !hour || !minutes || !appointmentType){
+      if(!doctorId || !date || !time||  !appointmentType){
 
         res.status(SERVER_STATUS.BAD_REQUEST).json({
             title:"Book Appointment Message.",
             status:SERVER_STATUS.BAD_REQUEST,
             successful:false,
-            message:"doctorId,day,month,year,meridianType,hour,minutes and appointmentType fields are needed to continue."
+            message:"doctorId,date,time and appointmentType fields are needed to continue."
         })
         return
       }
 
+
+       const appointmentAlreadyBooked = await BookAppointmentModel.findOne({
+         $and:[
+            {
+                medicalPersonelID:doctorId
+            },
+            {
+                patientID:user._id
+            },
+            {
+                appointmentDate:date
+            },
+            {
+                appointmentTime:time
+            }
+        
+
+         ]
+       })
+
+       if(appointmentAlreadyBooked){
+       
+         await  appointmentAlreadyBooked.updateOne({
+            medicalPersonelID:doctorId,
+            patientID:user._id,
+            appointmentType:appointmentType,
+            payment,
+            appointmentDate:date,
+            appointmentTime:time,
+            appointmentStatus:appointmentStatus
+         })
+
+         const appointment = await BookAppointmentModel.findOne({
+            $and:[
+               {
+                   medicalPersonelID:doctorId
+               },
+               {
+                   patientID:user._id
+               },
+               {
+                   appointmentStatus
+               },
+               {
+                   appointmentDate:date
+               },
+               {
+                   appointmentTime:time
+               }
+           
+   
+            ]
+          })
+
+         res.status(SERVER_STATUS.SUCCESS).json({
+            title:"Book Appointment Message.",
+            status:SERVER_STATUS.SUCCESS,
+            successful:true,
+            message:"Successfully".concat(" ").concat(appointmentStatus ?? 'booked').concat(" ").concat("appoinment."),
+            data:appointment
+        
+        }) 
+
+        return
+       }
 
        const isPaymentObjectEmpty = Object.entries(payment).every(([key,value])=>{
             if(payment['consultationFee']=== ''){
@@ -110,6 +175,13 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
 
       const isDoctorRegistered = await newUserModel.findOne({_id:user._id})
 
+      const patientProfileID =  await PatientProfileModel.findOne({
+        userId:user._id
+      })
+      const doctorProfileID = await MedicalPersonnelProfileModel.findOne({
+        userId:doctorId
+      })
+
       if(!isDoctorRegistered){
         res.status(SERVER_STATUS.BAD_REQUEST).json({
             title:"Book Appointment Message.",
@@ -121,22 +193,18 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
       }
 
 
-      let createCustomDate:Date | null = null
-
-      if(meridianType === 'pm'){
-      createCustomDate=  new Date(Number(year),Number(Number(month)-1),Number(day),Number(Number(hour)+12),Number(minutes),0,0)
-
-      }else{
-        createCustomDate=  new Date(Number(year),Number(Number(month)-1),Number(day),Number(hour),Number(minutes),0,0)
-
-      }
+      
 
       const newAppointment = new  BookAppointmentModel({
         medicalPersonelID:doctorId,
         patientID:user._id,
         appointmentType:appointmentType,
-        appointmentDate:createCustomDate.getTime(),
-        payment
+        payment,
+        appointmentDate:date,
+        appointmentTime:time,
+        appointmentStatus:appointmentStatus ?? 'booked',
+        patientDetails:patientProfileID,
+        medicalPersonelDetails:doctorProfileID
 
       })
 
@@ -186,19 +254,25 @@ export const getSpecificDoctorAppointments = async (req:TypedRequest<any>,res:Ty
         return
     }
 
-    if(user.role !== USER_ROLES.DOCTOR.toString()){
+    if(user.role === USER_ROLES.DOCTOR.toString()){
 
-        res.status(SERVER_STATUS.UNAUTHORIZED).json({
+        const appointments = await BookAppointmentModel.find({medicalPersonelID:user._id}).sort('createdAt').populate([{path:'patientDetails',select:""},{path:'patientID',select:'fullName lastName'}])
+
+
+        res.status(SERVER_STATUS.SUCCESS).json({
             title:"Book Appointment Message.",
-            status:SERVER_STATUS.UNAUTHORIZED,
-            successful:false,
-            message:"you are not authorized"
+            status:SERVER_STATUS.SUCCESS,
+            successful:true,
+            message:"Successfully fetched.",
+            data:{
+                totalAppointments:appointments.length,
+                appointments
+            }
         })
         return
     }
 
-    
-    const appointments = await BookAppointmentModel.find({medicalPersonelID:user._id}).sort('-1')
+    const appointments = await BookAppointmentModel.find({patientID:user._id}).sort('-1').populate([{path:'medicalPersonelDetails',select:""},{path:'medicalPersonelID',select:'fullName lastName'}])
 
 
     res.status(SERVER_STATUS.SUCCESS).json({
@@ -211,6 +285,11 @@ export const getSpecificDoctorAppointments = async (req:TypedRequest<any>,res:Ty
             appointments
         }
     })
+
+   
+
+    
+   
 
 
 

@@ -15,7 +15,7 @@ const  paymentSchema =  new  mongoose.Schema({
     },
 
     cardFee:{
-        type:mongoose.SchemaTypes.BigInt,
+        type:mongoose.SchemaTypes.Number,
         default:0,
         min:[0,'can not be less than 0']
      },
@@ -39,7 +39,15 @@ const  paymentSchema =  new  mongoose.Schema({
         enum:['pending','success','failed'],
         default:'pending'
 
+      },
+
+      paymentReference:{
+        type:mongoose.SchemaTypes.String,
+        required:[true,'needed to continue.']
       }
+     
+      
+      
 
 
 
@@ -61,17 +69,29 @@ const BookAppointmentSchema = new mongoose.Schema({
     
     medicalPersonelID:{
         type:mongoose.SchemaTypes.ObjectId,
-        ref:'medicalPersonnelProfile',
+        ref:'users',
         required:[true,' medicalPersonelID is needed to continue.']
+    },
+    medicalPersonelDetails:{
+        type:mongoose.SchemaTypes.ObjectId,
+        ref:'medicalPersonnelProfile',
     },
     patientID:{
          type:mongoose.SchemaTypes.ObjectId,
+        ref:'users',
+        required:[true,' patientId is needed to continue.']
+    },
+    patientDetails:{
+        type:mongoose.SchemaTypes.ObjectId,
         ref:'patientProfile',
-        required:[true,' medicalPersonelID is needed to continue.']
     },
 
     appointmentDate:{
-        type:mongoose.SchemaTypes.Date
+        type:mongoose.SchemaTypes.String
+    },
+
+    appointmentTime:{
+        type:mongoose.SchemaTypes.String
     },
 
     appointmentType:{
@@ -89,6 +109,7 @@ const BookAppointmentSchema = new mongoose.Schema({
 
     createdAt:{
         type:mongoose.SchemaTypes.Date,
+        default:Date.now()
     }
 })
 

@@ -5,6 +5,8 @@ import { ResponseBodyProps } from "../../../util/interface/ResponseBodyProps"
 import SERVER_STATUS from "../../../util/interface/CODE"
 import { encryptAES256 } from "../../../util/encryptData"
 import  childProcess  from "child_process"
+import { USER_ROLES } from "../../../util/interface/UserRole"
+import WalletModel from "../model/walletModel"
 
 
 
@@ -120,8 +122,37 @@ try{
         body:JSON.stringify(paystackData)
      }).then((res)=>{
         return res.json()
-     }).then((r)=>{
-        console.log(r)
+     }).then((result:{
+        status: boolean,
+        message:string,
+  "data": {
+    "authorization_url":string,
+    "access_code":string,
+    "reference":string
+  }
+     })=>{
+       
+        if(result.status){
+
+            fetch(`https://api.paystack.co/transaction/verify/${result.data.reference}`,{
+
+                method:'get',
+                headers:{
+                    authorization:'Bearer'.concat(" ").concat(process.env. paystack_secret!!),
+                    'Content-Type':'application/json'
+                }
+
+            }).then((res)=>{
+             return   res.json()
+            }).then((r)=>{
+                console.log(r)
+
+            }).catch(console.log)
+
+
+        }
+
+        
      }).catch(console.log)
 
 
@@ -171,4 +202,40 @@ try{
 }
 
    
+}
+
+
+
+export const getWalletById = async (req:TypedRequest<{}>,res:TypedResponse<ResponseBodyProps>) =>{
+
+ try {
+
+    const user = req.user
+     if( user && user.role !== USER_ROLES.DOCTOR){
+
+        res.status(SERVER_STATUS.UNAUTHORIZED).json({
+            title:"Wallet Details",
+            successful:false,
+            status:SERVER_STATUS.UNAUTHORIZED,
+            message:'you are not authorized'
+        })
+
+        return
+      
+     }
+
+     const wallet = await WalletModel.findOne({
+        userId:user?._id
+     })
+
+
+     if(wallet){
+        
+     }
+    
+ } catch (error) {
+    
+ }
+
+
 }
