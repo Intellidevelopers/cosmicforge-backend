@@ -72,18 +72,20 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
           paymentChannel:data.channel
           }]
         })
-    
-       
-         await BookAppointmentModel.findOneAndUpdate({
-          "payment.paymentReference":data.reference
-          
-         },{
-          payment:{
-            ...appointment.payment,
-            paymentStatus:'success'
-          }
+
+     const updatePayment = {
+      ...appointment.payment,
+      paymentStatus:'success'
+     }
+         await appointment.updateOne({
+
+          payment:updatePayment
          })
 
+      
+    
+       
+      
 
        
 
@@ -103,15 +105,15 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
         paymentChannel:data.channel
         })
 
-        await BookAppointmentModel.findOneAndUpdate({
-          "payment.paymentReference":data.reference
-          
-         },{
-          payment:{
-            ...appointment.payment,
-            paymentStatus:'success'
-          }
-         })
+
+        const updatePayment = {
+          ...appointment.payment,
+          paymentStatus:'success'
+         }
+             await appointment.updateOne({
+    
+              payment:updatePayment
+             })
 
         await wallet.updateOne({
 
