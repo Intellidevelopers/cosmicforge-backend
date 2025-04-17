@@ -206,36 +206,4 @@ try{
 
 
 
-export const getWalletById = async (req:TypedRequest<{}>,res:TypedResponse<ResponseBodyProps>) =>{
 
- try {
-
-    const user = req.user
-     if( user && user.role !== USER_ROLES.DOCTOR){
-
-        res.status(SERVER_STATUS.UNAUTHORIZED).json({
-            title:"Wallet Details",
-            successful:false,
-            status:SERVER_STATUS.UNAUTHORIZED,
-            message:'you are not authorized'
-        })
-
-        return
-      
-     }
-
-     const wallet = await WalletModel.findOne({
-        userId:user?._id
-     })
-
-
-     if(wallet){
-        
-     }
-    
- } catch (error) {
-    
- }
-
-
-}

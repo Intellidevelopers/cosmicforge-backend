@@ -1,5 +1,8 @@
+import SERVER_STATUS from "../../../util/interface/CODE";
+import { ResponseBodyProps } from "../../../util/interface/ResponseBodyProps";
 import TypedRequest from "../../../util/interface/TypedRequest";
 import TypedResponse from "../../../util/interface/TypedResponse";
+import { USER_ROLES } from "../../../util/interface/UserRole";
 import BookAppointmentModel from "../../appointment/model/bookAppointmentModel";
 import WalletModel from "../model/walletModel";
 
@@ -145,3 +148,57 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
      },30000)
 
 }
+
+
+
+export const getWalletById = async (req:TypedRequest<{}>,res:TypedResponse<ResponseBodyProps>) =>{
+
+  try {
+ 
+     const user = req.user
+      if( user && user.role !== USER_ROLES.DOCTOR){
+ 
+         res.status(SERVER_STATUS.UNAUTHORIZED).json({
+             title:"Wallet Details",
+             successful:false,
+             status:SERVER_STATUS.UNAUTHORIZED,
+             message:'you are not authorized'
+         })
+ 
+         return
+       
+      }
+ 
+ 
+ 
+      const wallet = await WalletModel.findOne({
+         userId:user?._id
+      })
+      
+ 
+      res.status(SERVER_STATUS.SUCCESS).json({
+         title:"Wallet Details",
+         successful:false,
+         status:SERVER_STATUS.SUCCESS,
+         message:'successfully fetched wallet.',
+         data:wallet
+     })
+ 
+ 
+      
+     
+  } catch (error:any) {
+     
+     res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
+         title:"Wallet Details",
+         successful:false,
+         status:SERVER_STATUS.INTERNAL_SERVER_ERROR,
+         message:'internal server error',
+         error:error.message
+     })
+ 
+ 
+  }
+ 
+ 
+ }
