@@ -36,8 +36,12 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
     if(event && event === "charge.success"){
 
+      console.log(data.reference)
+
      const  appointment = await BookAppointmentModel.findOne({
-       "payment.paymentReference":data.reference
+       payment:{
+        paymentReference:data.reference
+       }
 
      })
 
