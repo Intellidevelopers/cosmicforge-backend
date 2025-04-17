@@ -75,7 +75,7 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
             paymentStatus:'success'
           }
          })
-         
+
         await newWallet.save()
       }else{
         
@@ -116,6 +116,6 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
 
 
-     },5000)
+     },30000)
 
 }
