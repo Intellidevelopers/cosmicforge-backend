@@ -33,13 +33,6 @@ const  paymentSchema =  new  mongoose.Schema({
 
      },
 
-      paymentStatus:{
-
-        type:mongoose.SchemaTypes.String,
-        enum:['pending','success','failed'],
-        default:'pending'
-
-      },
 
       paymentReference:{
         type:mongoose.SchemaTypes.String,
@@ -106,6 +99,12 @@ const BookAppointmentSchema = new mongoose.Schema({
         enum:['booked','cancelled','resheduled','completed'],
         default:'booked'
     },
+    paymentStatus:{
+      type:mongoose.SchemaTypes.String,
+        enum:['pending','success','failed'],
+        default:'pending'
+
+      },
 
     createdAt:{
         type:mongoose.SchemaTypes.Date,

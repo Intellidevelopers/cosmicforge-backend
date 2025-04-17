@@ -73,15 +73,12 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
           }]
         })
 
-     const updatePayment = {
-      ...appointment.payment,
-      paymentStatus:'success'
-     }
+   
         
    await BookAppointmentModel.findOneAndUpdate({
       "payment.paymentReference":data.reference
     },{
-      payment:updatePayment
+      paymentStatus:'success'
     })
 
     console.log(await BookAppointmentModel.findOne({
@@ -111,16 +108,13 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
         })
 
 
-        const updatePayment = {
-          ...appointment.payment,
-          paymentStatus:'success'
-         }
+        
            
 
          await BookAppointmentModel.findOneAndUpdate({
           "payment.paymentReference":data.reference
         },{
-          payment:updatePayment
+         paymentStatus:'success'
         })
     
         console.log(await BookAppointmentModel.findOne({
