@@ -32,6 +32,10 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
      setTimeout(async()=>{
 
+
+      try {
+
+
       const isValidIp = ipAddress.find(ip=>{
         return ip  === data.ip_address
     })
@@ -69,12 +73,19 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
           }]
         })
     
-        await  appointment.updateOne({
+       
+         await BookAppointmentModel.findOneAndUpdate({
+          "payment.paymentReference":data.reference
+          
+         },{
           payment:{
             ...appointment.payment,
             paymentStatus:'success'
           }
          })
+
+
+       
 
         await newWallet.save()
       }else{
@@ -92,7 +103,10 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
         paymentChannel:data.channel
         })
 
-        await  appointment.updateOne({
+        await BookAppointmentModel.findOneAndUpdate({
+          "payment.paymentReference":data.reference
+          
+         },{
           payment:{
             ...appointment.payment,
             paymentStatus:'success'
@@ -113,6 +127,10 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
 
     }
+        
+      } catch (error) {
+         console.log(error)
+      }
 
 
 
