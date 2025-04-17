@@ -19,6 +19,7 @@ import diagnosisController from './src/features/ai/diagnosis/diagnosisController
 import uploader from './src/config/cloudinary/cloudinary'
 import DoctorDepartmentModel from './src/features/medicalPersonnel/department/model/model'
 import { testFlow } from './src/features/wallet/controller/walletController'
+import BookAppointmentModel from './src/features/appointment/model/bookAppointmentModel'
 
  dotenv.config()
 
@@ -65,8 +66,8 @@ app.get('/',(req,res)=>{
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3010
-connectDB().then(res=>{
-  server.listen(PORT,()=>{
+connectDB().then( res=>{
+  server.listen(PORT,async()=>{
     console.log('on port 3010 h gg dgdg gg hhh')
 
      
@@ -252,6 +253,13 @@ connectDB().then(res=>{
     },
       
   ]
+
+
+  const result = await BookAppointmentModel.findOne({
+    "payment.paymentReference":"T544113769196696"
+  })
+
+  console.log(result)
  
    
  /*DoctorDepartmentModel.find().sort({name:'asc'}).then((res)=>{

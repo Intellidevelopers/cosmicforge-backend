@@ -30,7 +30,9 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
     
 
-    const isValidIp = ipAddress.find(ip=>{
+     setTimeout(async()=>{
+
+      const isValidIp = ipAddress.find(ip=>{
         return ip  === data.ip_address
     })
 
@@ -38,12 +40,9 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
       console.log(data.reference)
 
-     const  appointment = await BookAppointmentModel.findOne({
-       payment:{
-        paymentReference:data.reference
-       }
-
-     })
+      const appointment = await BookAppointmentModel.findOne({
+        "payment.paymentReference":data.reference
+      })
 
      console.log(appointment)
 
@@ -108,5 +107,9 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
 
     }
+
+
+
+     },5000)
 
 }
