@@ -68,11 +68,14 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
           paymentChannel:data.channel
           }]
         })
-
-       await  appointment.updateOne({
-          'payment.paymentStatus':'success'
-        })
-
+    
+        await  appointment.updateOne({
+          payment:{
+            ...appointment.payment,
+            paymentStatus:'success'
+          }
+         })
+         
         await newWallet.save()
       }else{
         
@@ -90,8 +93,11 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
         })
 
         await  appointment.updateOne({
-          'payment.paymentStatus':'success'
-        })
+          payment:{
+            ...appointment.payment,
+            paymentStatus:'success'
+          }
+         })
 
         await wallet.updateOne({
 

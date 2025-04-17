@@ -255,11 +255,8 @@ connectDB().then( res=>{
   ]
 
 
-  const result = await BookAppointmentModel.findOne({
-    "payment.paymentReference":"T544113769196696"
-  })
+ 
 
-  console.log(result)
  
    
  /*DoctorDepartmentModel.find().sort({name:'asc'}).then((res)=>{
