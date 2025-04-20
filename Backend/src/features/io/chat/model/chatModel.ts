@@ -31,7 +31,7 @@ const chatSchema = new mongoose.Schema({
     messages:[{
         messageType:{
             type:mongoose.SchemaTypes.String,
-            enum:['text','file']
+            enum:['text','file','audio']
         },
 
         message:{

@@ -20,6 +20,7 @@ import uploader from './src/config/cloudinary/cloudinary'
 import DoctorDepartmentModel from './src/features/medicalPersonnel/department/model/model'
 import { testFlow } from './src/features/wallet/controller/walletController'
 import BookAppointmentModel from './src/features/appointment/model/bookAppointmentModel'
+import appoinmentBackgroundService from './src/backgroundServices/appointmentBckgroundService'
 
  dotenv.config()
 
@@ -69,6 +70,10 @@ const PORT = process.env.PORT || 3010
 connectDB().then( res=>{
   server.listen(PORT,async()=>{
     console.log('on port 3010 h gg dgdg gg hhh')
+
+
+
+  
 
      
 

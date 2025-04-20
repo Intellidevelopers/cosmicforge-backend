@@ -9,6 +9,7 @@ import UserConnectionsModel from './model/UserConnections';
 import diagnosisSocketIO from '../ai/diagnosis/diagnosisSocketIO';
 import { Call_USER } from './call/controller/callController';
 import { USER_CHAT } from './chat/controller/chatController';
+import appoinmentBackgroundService from '../../backgroundServices/appointmentBckgroundService';
 
 export default  (socketIO:Socket.Server) =>{
 
@@ -102,6 +103,9 @@ export default  (socketIO:Socket.Server) =>{
           Call_USER(socketIO,socket)
 
           USER_CHAT(socketIO,socket)
+
+            //start appointment background service
+              appoinmentBackgroundService(socket,socketIO)
 
     })
 
