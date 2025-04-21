@@ -203,7 +203,7 @@ console.log(data.message)
  
  
  
-              socket.emit('update_chat',newChats)
+             // socket.emit('update_chat',newChats)
               
              socketIO.to(receiverSocket?.connectionId!!).emit('update_chat',newChats)
  
@@ -345,7 +345,7 @@ console.log(data.message)
              
              
              
-              socket.emit('new_message',newChat)
+             // socket.emit('new_message',newChat)
              socketIO.to(receiverSocket?.connectionId!!).emit('new_message',newChat)
 
 

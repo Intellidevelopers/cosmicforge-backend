@@ -29,7 +29,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
        
          const customDateString = dayInWeek.concat(' ').concat(monthNumber.toString().concat(getDaySuffice(monthNumber))).concat(' ').concat(monthName).concat('  ').concat(year.toString())
        
-         console.log(customDateString)
+         //console.log(customDateString)
        
         const appointmentForToday = await BookAppointmentModel.find({
            $and:[
@@ -51,17 +51,50 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
         })
        
       
-        socket.emit('hello','hrrhrh')
+        
 
         const socConnection = await UserConnectionsModel.findOne({userId:socket.user?._id})
 
         if(appointmentForToday && appointmentForToday.length>0 && socConnection){
-         socket.emit('appointmentReminder',{
+
+              appointmentForToday.map((data)=>{
+               const  time =  data.appointmentTime?.split('-')[0].charAt(0)
+               const  secondTime =  data.appointmentTime?.split('-')[1].charAt(0)
+
+               const currentHour = date.toLocaleTimeString('en-Us',{
+                hour12:true
+               }).split(':')[0]
+
+               const currentMins = date.toLocaleTimeString('en-Us',{
+                hour12:true
+               }).split(':')[1]
+
+               console.log( date.toLocaleTimeString('en-Us',{
+                hour12:true
+               }).split(':')[0])
+
+                
+
+                if(time ===  currentHour || secondTime === currentHour){
+                    socket.emit('appointmentReminder',{
+                        totalAppointmentsForToday:appointmentForToday.length
+                    })
+
+                    socketIO.to(socConnection.connectionId!!).emit('appointmentReminder',{
+                        totalAppointmentsForToday:appointmentForToday.length
+                    })
+
+
+                }
+
+              })
+            
+         /*socket.emit('appointmentReminder',{
                 totalAppointmentsForToday:appointmentForToday.length
-            })
+            })*/
         }
        
-        console.log(appointmentForToday)
+       // console.log(appointmentForToday)
        
        
        }).start()

@@ -15,12 +15,7 @@ import { connectDB } from './src/config/database/databaseConfig'
 import cors from 'cors'
 import mainRouter from './src/routes/routes'
 import { errorHandler } from './src/middleware/errorHandlerMiddleware'
-import diagnosisController from './src/features/ai/diagnosis/diagnosisController'
-import uploader from './src/config/cloudinary/cloudinary'
-import DoctorDepartmentModel from './src/features/medicalPersonnel/department/model/model'
-import { testFlow } from './src/features/wallet/controller/walletController'
-import BookAppointmentModel from './src/features/appointment/model/bookAppointmentModel'
-import appoinmentBackgroundService from './src/backgroundServices/appointmentBckgroundService'
+
 
  dotenv.config()
 
@@ -357,6 +352,8 @@ console.log(
 
 
    //diagnosisController()
+
+   
  })
 }).catch(err=>{
   console.log(err)

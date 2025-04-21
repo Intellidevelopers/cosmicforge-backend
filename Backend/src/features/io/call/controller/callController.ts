@@ -215,6 +215,11 @@ socketIO.to(userToCallSocketID.connectionId!!).emit('on_connected',data)
 userId:data.remoteId
 })
 
+
+
+
+
+
 if(!userToCallSocketID){
 socket.emit('call-failed',{
  message:'failed to initialize call.',
@@ -240,6 +245,8 @@ socket.on('accept_request_to_switch_call_mode',async(data:{remoteId:string,userA
   const userToCallSocketID = await UserConnectionsModel.findOne({
 userId:data.remoteId
 })
+
+console.log('accepting request')
 
 if(!userToCallSocketID){
 socket.emit('call-failed',{
