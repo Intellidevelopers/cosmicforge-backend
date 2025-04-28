@@ -150,89 +150,7 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
     }
 
 
-    if(event && event === "transfer.success"){
-      
-      const userWallet = await WalletModel.findOne({
-        withdrawalHistories:{
-          $elemMatch:{
-            withdrawalReferenceId:data.reference,
-            
-          }
-        }
-      })
-
-      console.log(userWallet)
-
-      if(userWallet){
-
-     
-
-        const oldBalance = userWallet.amount
-        const newBallance = oldBalance - data.amount
-
-       const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
-
-          if(history.withdrawalReferenceId=== data.reference && 
-            history.transferReferenceID === data.transfer_code){
-
-              return {
-                ...history,
-                transferStatus:'success'
-              }
-            }else{
-              return history
-            }
-        })
-
-        await  userWallet.updateOne({
-          amount:newBallance,
-          withdrawalHistories:updateHistories
-
-        })
-      }
-
-    }
-
-
-
-    if(event && event === "transfer.failed"){
-      
-      const userWallet = await WalletModel.findOne({
-        withdrawalHistories:{
-          $elemMatch:{
-            withdrawalReferenceId:data.reference,
-            transferReferenceID:data.transfer_code
-          }
-        }
-      })
-
-      if(userWallet){
-
-       
-
-       const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
-
-          if(history.withdrawalReferenceId=== data.reference && 
-            history.transferReferenceID === data.transfer_code){
-
-              return {
-                ...history,
-                transferStatus:'failed'
-              }
-            }else{
-              return history
-            }
-        })
-
-        await  userWallet.updateOne({
-         
-          withdrawalHistories:updateHistories
-
-        })
-      }
-
-    }
-
+    
 
 
 
@@ -244,6 +162,100 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
 
 
      },30000)
+
+
+
+     try {
+
+      if(event && event === "transfer.success"){
+      
+        const userWallet = await WalletModel.findOne({
+          withdrawalHistories:{
+            $elemMatch:{
+              withdrawalReferenceId:data.reference,
+              
+            }
+          }
+        })
+  
+        console.log(userWallet)
+  
+        if(userWallet){
+  
+       
+  
+          const oldBalance = userWallet.amount
+          const newBallance = oldBalance - data.amount
+  
+         const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
+  
+            if(history.withdrawalReferenceId=== data.reference && 
+              history.transferReferenceID === data.transfer_code){
+  
+                return {
+                  ...history,
+                  transferStatus:'success'
+                }
+              }else{
+                return history
+              }
+          })
+  
+          await  userWallet.updateOne({
+            amount:newBallance,
+            withdrawalHistories:updateHistories
+  
+          })
+        }
+  
+      }
+  
+  
+  
+      if(event && event === "transfer.failed"){
+
+        console.log('called.......')
+        
+        const userWallet = await WalletModel.findOne({
+          withdrawalHistories:{
+            $elemMatch:{
+              withdrawalReferenceId:data.reference,
+              transferReferenceID:data.transfer_code
+            }
+          }
+        })
+  
+        if(userWallet){
+  
+         
+  
+         const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
+  
+            if(history.withdrawalReferenceId=== data.reference && 
+              history.transferReferenceID === data.transfer_code){
+  
+                return {
+                  ...history,
+                  transferStatus:'failed'
+                }
+              }else{
+                return history
+              }
+          })
+  
+          await  userWallet.updateOne({
+           
+            withdrawalHistories:updateHistories
+  
+          })
+        }
+  
+      }
+  
+      
+     } catch (error) {
+      
+     }
 
 }
 
