@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import newUserModel from "../../../newUser/model/newUserModel";
 
 enum workingDays  {
     'mondays-only'='mondays-only',
@@ -84,6 +85,9 @@ const mapLocationSchema = new mongoose.Schema({
 })
 
 const medicalPersonnelProfileSchema = new mongoose.Schema({
+    userCosmicID:{
+        type:mongoose.SchemaTypes.String
+    },
      userId:{
         type:mongoose.SchemaTypes.ObjectId,
         ref:'users'
@@ -134,6 +138,12 @@ const medicalPersonnelProfileSchema = new mongoose.Schema({
 })
 
 
-const  MedicalPersonnelProfileModel =  mongoose.model('medicalPersonnelProfile',medicalPersonnelProfileSchema)
+const  MedicalPersonnelProfileModel =  mongoose.model('medicalPersonnelProfile',medicalPersonnelProfileSchema.pre('save',async function (next){
+     const numberOfUsers = await newUserModel.countDocuments()
+     this.userCosmicID =  'COSMIC-'.concat(numberOfUsers.toString().padStart(4,'0'))
+     next()
+}))
+
+
 
 export default  MedicalPersonnelProfileModel

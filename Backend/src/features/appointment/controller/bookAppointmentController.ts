@@ -256,7 +256,7 @@ export const getSpecificDoctorAppointments = async (req:TypedRequest<any>,res:Ty
 
     if(user.role === USER_ROLES.DOCTOR.toString()){
 
-        const appointments = await BookAppointmentModel.find({medicalPersonelID:user._id}).sort('-1').populate([{path:'patientDetails',select:""},{path:'patientID',select:'fullName lastName'}])
+        const appointments = await BookAppointmentModel.find({medicalPersonelID:user._id}).populate([{path:'patientDetails',select:""},{path:'patientID',select:'fullName lastName'}]).sort({createdAt:-1})
 
 
         res.status(SERVER_STATUS.SUCCESS).json({
@@ -272,7 +272,7 @@ export const getSpecificDoctorAppointments = async (req:TypedRequest<any>,res:Ty
         return
     }
 
-    const appointments = await BookAppointmentModel.find({patientID:user._id}).sort('createdAt').populate([{path:'medicalPersonelDetails',select:""},{path:'medicalPersonelID',select:'fullName lastName'}])
+    const appointments = await BookAppointmentModel.find({patientID:user._id}).populate([{path:'medicalPersonelDetails',select:""},{path:'medicalPersonelID',select:'fullName lastName'}]).sort({createdAt:-1})
 
 
     res.status(SERVER_STATUS.SUCCESS).json({

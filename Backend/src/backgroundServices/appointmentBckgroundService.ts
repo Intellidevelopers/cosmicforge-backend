@@ -50,14 +50,41 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
            ]
         })
        
+
+        const appointmentFor = await BookAppointmentModel.updateMany({
+          $and:[
+           {
+               appointmentDate:{$eq:customDateString},
+               createdAt:{$lt:Date.now()},
+               appointmentStatus:{$ne:'cancelled'}
+           },
+           {
+             $or:[
+               {
+                   medicalPersonelID:socket.user?._id
+               },
+               {
+                   patientID:socket.user?._id
+               }
+             ]
+           }
+
+          ]
+       },{
+        appointmentStatus:'cancelled'
+       })
       
+      console.log('hdhhdh')
+       console.log(appointmentFor)
         
 
         const socConnection = await UserConnectionsModel.findOne({userId:socket.user?._id})
 
         if(appointmentForToday && appointmentForToday.length>0 && socConnection){
 
-              appointmentForToday.map((data)=>{
+          console.log(appointmentForToday)
+
+              appointmentForToday.map(async(data)=>{
                const  time =  data.appointmentTime?.split('-')[0].charAt(0)
                const  secondTime =  data.appointmentTime?.split('-')[1].charAt(0)
 
@@ -80,9 +107,13 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
                         totalAppointmentsForToday:appointmentForToday.length
                     })
 
-                    socketIO.to(socConnection.connectionId!!).emit('appointmentReminder',{
+
+
+                   
+
+                  /*  socketIO.to(socConnection.connectionId!!).emit('appointmentReminder',{
                         totalAppointmentsForToday:appointmentForToday.length
-                    })
+                    })*/
 
 
                 }
@@ -93,10 +124,70 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
                 totalAppointmentsForToday:appointmentForToday.length
             })*/
         }
+
+
+     
+      
+
        
        // console.log(appointmentForToday)
        
        
+       }).start()
+
+
+
+       service.schedule('0 0 * * *',async ()=>{
+
+        console.log('running by 12am')
+        const date = new Date()
+         
+        const monthNumber = date.getDate()-1
+      
+        const dayInWeek =  date.toLocaleString('en-Us',{
+          weekday:'long'
+        })
+      
+        const monthName = date.toLocaleString('en-Us',{
+          month:'long'
+        })
+        const year = date.getFullYear()
+      
+      
+        const customDateString = dayInWeek.concat(' ').concat(monthNumber.toString().concat(getDaySuffice(monthNumber))).concat(' ').concat(monthName).concat('  ').concat(year.toString())
+      
+        //console.log(customDateString)
+      
+       const appointmentForYesterday = await BookAppointmentModel.find({
+          $and:[
+           {
+               appointmentDate:{$eq:customDateString}
+           },
+           {
+             $or:[
+               {
+                   medicalPersonelID:socket.user?._id
+               },
+               {
+                   patientID:socket.user?._id
+               }
+             ]
+           }
+
+          ]
+       })
+
+       if(appointmentForYesterday){
+
+        appointmentForYesterday.forEach(async appointment=>{
+
+            if(appointment.appointmentStatus !== 'completed')
+           await  appointment.updateOne({
+                appointmentStatus:'cancelled'
+           })
+        })
+       }
+      
        }).start()
 
 }

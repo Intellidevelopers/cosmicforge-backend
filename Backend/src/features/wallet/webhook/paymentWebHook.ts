@@ -9,7 +9,7 @@ import WalletModel from "../model/walletModel";
 
 
 
-export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
+export const paystackWebHookEventListener =  async (req:TypedRequest<{
    event:string,
    data:{
     reference:string,
@@ -18,7 +18,17 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
     'ip_address':string,
     currency:string,
     amount:number
-   }
+    /** 
+     * data for transfer
+     */
+    transfer_code:string,
+      details: {
+          "account_number": string,
+          "account_name": string,
+        }
+
+      }
+   
 }>,res:TypedResponse<{}>) =>{
 
     res.sendStatus(200)
@@ -138,6 +148,90 @@ export const confirmPaymentAndSettleAccount =  async (req:TypedRequest<{
 
 
     }
+
+
+    if(event && event === "transfer.success"){
+      
+      const userWallet = await WalletModel.findOne({
+        withdrawalHistories:{
+          $elemMatch:{
+            withdrawalReferenceId:data.reference,
+            transferReferenceID:data.transfer_code
+          }
+        }
+      })
+
+      if(userWallet){
+
+        const oldBalance = userWallet.amount
+        const newBallance = oldBalance - data.amount
+
+       const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
+
+          if(history.withdrawalReferenceId=== data.reference && 
+            history.transferReferenceID === data.transfer_code){
+
+              return {
+                ...history,
+                transferStatus:'success'
+              }
+            }else{
+              return history
+            }
+        })
+
+        await  userWallet.updateOne({
+          amount:newBallance,
+          withdrawalHistories:updateHistories
+
+        })
+      }
+
+    }
+
+
+
+    if(event && event === "transfer.failed"){
+      
+      const userWallet = await WalletModel.findOne({
+        withdrawalHistories:{
+          $elemMatch:{
+            withdrawalReferenceId:data.reference,
+            transferReferenceID:data.transfer_code
+          }
+        }
+      })
+
+      if(userWallet){
+
+       
+
+       const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
+
+          if(history.withdrawalReferenceId=== data.reference && 
+            history.transferReferenceID === data.transfer_code){
+
+              return {
+                ...history,
+                transferStatus:'failed'
+              }
+            }else{
+              return history
+            }
+        })
+
+        await  userWallet.updateOne({
+         
+          withdrawalHistories:updateHistories
+
+        })
+      }
+
+    }
+
+
+
+
         
       } catch (error) {
          console.log(error)
