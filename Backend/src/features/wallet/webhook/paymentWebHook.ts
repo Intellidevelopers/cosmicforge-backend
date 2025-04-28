@@ -168,16 +168,18 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
      try {
 
       if(event && event === "transfer.success"){
-      
-        const userWallet = await WalletModel.findOne({
-          withdrawalHistories:{
-            $elemMatch:{
-              withdrawalReferenceId:data.reference,
-              
+
+      const userWallet =  await WalletModel.findOne({
+          withdrawalHistories: {
+            $elemMatch: {
+            withdrawalReferenceId:data.reference,
+            
             }
           }
         })
-  
+      
+       
+  console.log(data.reference)
         console.log(userWallet)
   
         if(userWallet){

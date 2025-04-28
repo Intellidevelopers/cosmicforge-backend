@@ -73,15 +73,12 @@ const walletSchema = new mongoose.Schema({
     enum: ["NGN", "US-Dollar"]
   },
   histories: [
-    {
-      type: PaymentHistorySchema
-    }
+   PaymentHistorySchema
+    
   ],
 
-  withdrawalHistories: 
-    {
-      type: [withdrawalHistoriesSchema]
-    }
+  withdrawalHistories:[withdrawalHistoriesSchema]
+    
   
 });
 
