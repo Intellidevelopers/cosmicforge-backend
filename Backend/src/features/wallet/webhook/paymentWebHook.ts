@@ -156,12 +156,16 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
         withdrawalHistories:{
           $elemMatch:{
             withdrawalReferenceId:data.reference,
-            transferReferenceID:data.transfer_code
+            
           }
         }
       })
 
+      console.log(userWallet)
+
       if(userWallet){
+
+     
 
         const oldBalance = userWallet.amount
         const newBallance = oldBalance - data.amount
