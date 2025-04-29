@@ -289,7 +289,7 @@ export const withdrawBallance = async (
 
     const transferURL = "https://api.paystack.co/transfer";
 
-    const referencId = `CPO${v4()} `;
+    const referencId = `CPO${v4()}`;
 
     const transfer = await fetch(transferURL, {
       method: "POST",
