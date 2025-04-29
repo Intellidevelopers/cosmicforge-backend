@@ -179,7 +179,7 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
             if(history.withdrawalReferenceId === data.reference){
               
                 return {
-                  ...history,
+                  ...history.toObject(),
                   transferStatus:'success'
                 }
               }else{
