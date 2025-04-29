@@ -334,17 +334,17 @@ export const withdrawBallance = async (
           userId: user._id
         });
 
-      /*  const d = await WalletModel.findOne({
+        const d = await WalletModel.findOne({
           withdrawalHistories: {
             $elemMatch: {
               withdrawalReferenceId: referencId,
-              transferReferenceID: transferResponse.data.transfer_code
+             
             }
           }
-        });*/
+        });
 
-       // console.log("update....");
-       // console.log(d);
+       console.log("update....");
+        console.log(d);
 
         res.status(SERVER_STATUS.SUCCESS).json({
           title: "Wallet  Message",
