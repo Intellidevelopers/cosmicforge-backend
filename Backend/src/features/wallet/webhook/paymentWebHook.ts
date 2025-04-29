@@ -154,24 +154,30 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
     if(event && event === "transfer.success"){
       console.log('called.......')
         
-      const userWallet =  await WalletModel.findOne({
-          "withdrawalHistories.withdrawalReferenceId": {
-            $in:[data.reference]
-          }
+      let userWallet =  await WalletModel.find()
+
+      if(userWallet && userWallet.length>0){
+
+      const userWalletFound =  userWallet.find(wallet=>{
+        const dataAvailable = wallet.withdrawalHistories.find(item =>{
+          return item.withdrawalReferenceId === data.reference
+         })
+          if(dataAvailable){
+            return true
+          }else  return false
         })
-      
-       
+
+        if(userWalletFound){
+          
+                 
   console.log(data.reference)
-        console.log(userWallet)
-  
-        if(userWallet){
-  
-       
-  
-          const oldBalance = userWallet.amount
+  console.log(userWalletFound)
+
+
+          const oldBalance = userWalletFound .amount
           const newBallance = oldBalance - data.amount
   
-         const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
+         const updateHistories =  userWalletFound .withdrawalHistories.map((history)=>{
   
             if(history.withdrawalReferenceId=== data.reference && 
               history.transferReferenceID === data.transfer_code){
@@ -185,13 +191,19 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
               }
           })
   
-          await  userWallet.updateOne({
+          await userWalletFound.updateOne({
             amount:newBallance,
             withdrawalHistories:updateHistories
   
           })
         }
+
+
+      }
+      
+
   
+       
       }
   
   
