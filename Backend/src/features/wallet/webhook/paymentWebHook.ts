@@ -176,8 +176,7 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
   
          const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
   
-            if(history.withdrawalReferenceId=== data.reference && 
-              history.transferReferenceID === data.transfer_code){
+            if(history.withdrawalReferenceId=== data.reference){
   
                 return {
                   ...history,
