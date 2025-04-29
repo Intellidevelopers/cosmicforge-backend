@@ -152,19 +152,27 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
 
 
     if(event && event === "transfer.success"){
-      console.log('called.......')
+     
         
       let userWallet =  await WalletModel.find()
 
       if(userWallet && userWallet.length>0){
 
+        console.log('called.......')
+
       const userWalletFound =  userWallet.find(wallet=>{
+
         const dataAvailable = wallet.withdrawalHistories.find(item =>{
           return item.withdrawalReferenceId === data.reference
          })
-          if(dataAvailable){
+         console.log('finding....')
+         console.log(dataAvailable)
+         
+         if(dataAvailable){
             return true
           }else  return false
+
+
         })
 
         if(userWalletFound){
