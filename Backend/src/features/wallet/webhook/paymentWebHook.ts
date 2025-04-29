@@ -155,11 +155,8 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
       console.log('called.......')
         
       const userWallet =  await WalletModel.findOne({
-          withdrawalHistories: {
-            $elemMatch: {
-            withdrawalReferenceId:data.reference,
-            
-            }
+          "withdrawalHistories.withdrawalReferenceId": {
+            $in:[data.reference]
           }
         })
       
