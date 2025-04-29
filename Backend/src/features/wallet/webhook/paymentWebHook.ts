@@ -165,7 +165,7 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
       
        
   console.log(data.reference)
-        console.log(userWallet)
+     
   
         if(userWallet){
   
@@ -176,8 +176,8 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
   
          const updateHistories =  userWallet.withdrawalHistories.map((history)=>{
   
-            if(history.withdrawalReferenceId=== data.reference){
-  
+            if(history.withdrawalReferenceId === data.reference){
+              
                 return {
                   ...history,
                   transferStatus:'success'
@@ -186,6 +186,9 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
                 return history
               }
           })
+
+          console.log('updatedHistory')
+          console.log(updateHistories)
   
           await  userWallet.updateOne({
             amount:newBallance,
