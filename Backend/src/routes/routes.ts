@@ -18,6 +18,7 @@ import { validateUserSession } from '../features/login/controller/login'
 import doctorDepartmentRouter from '../features/medicalPersonnel/department/routes/doctorDepartmentRoute'
 import chatRouter from '../features/io/chat/routes/chatRoute'
 import settleAccountRoute from '../features/wallet/routes/hookRoutes'
+import medicalPersonnelCertificationAndUploadRouter from '../features/medicalPersonnel/certification/routes/MedicalCertAndLicenceUploadRoute'
 
 mainRouter.use(session({
   secret:'cosmicforge',
@@ -35,6 +36,7 @@ mainRouter.use('/user',loginRouter)
 
 mainRouter.use('/user/medics',medicalPersonnelProfileRouter)
 
+mainRouter.use('/user/medics/certification',medicalPersonnelCertificationAndUploadRouter)
 mainRouter.use('/user/patient',patientProfileRouter)
 
 mainRouter.use('/user/patient',rateAndReviewRouter)
