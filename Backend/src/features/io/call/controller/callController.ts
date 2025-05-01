@@ -3,6 +3,8 @@ import { AuthMiddlewareProps } from "../../../../middleware/userAuthenticationMi
 import { TypedSocket } from "../../../../util/interface/TypedSocket";
 import  Socket from 'socket.io';
 import UserConnectionsModel from "../../model/UserConnections";
+import CallModel from "../model/callModel";
+import BookAppointmentModel from "../../../appointment/model/bookAppointmentModel";
 
 export const Call_USER =  (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlewareProps>) =>{
 
@@ -261,6 +263,118 @@ socketIO.to(userToCallSocketID.connectionId!!).emit('accept_request_to_switch_ca
 
 })
 
+
+
+socket.on('appointmentSessionStarted',async(data:{doctorID:string,patientID:string,startTime:string,caller:'patient'|'doctor'})=>{
+
+
+   const appointmentID = await  BookAppointmentModel.findOne({
+      patientID:data.patientID,
+      medicalPersonelID:data.doctorID
+     })
+
+  const newAppointmentSession =  new CallModel({
+    appointmentId:appointmentID?._id,
+    peers:[data.doctorID,data.patientID],
+    session:{
+      start:data.startTime,
+      
+    }
+  })
+
+ await newAppointmentSession.save()
+
+
+
+ if(data.caller === 'doctor'){
+
+ const userToCallSocketID = await UserConnectionsModel.findOne({
+userId:data.patientID
+})
+
+
+
+if(!userToCallSocketID){
+socket.emit('call-failed',{
+ message:'failed to initialize call.',
+ error:'invalid connectionId'
+})
+
+return 
+}
+socketIO.to(userToCallSocketID.connectionId!!).emit('sessionID',{
+  sessionID:newAppointmentSession._id
+ })
+
+ socket.emit('sessionID',{
+  sessionID:newAppointmentSession._id
+ })
+
+
+ }else{
+
+
+
+  const userToCallSocketID = await UserConnectionsModel.findOne({
+userId:data.doctorID
+})
+
+
+
+if(!userToCallSocketID){
+socket.emit('call-failed',{
+ message:'failed to initialize call.',
+ error:'invalid connectionId'
+})
+
+return 
+}
+socketIO.to(userToCallSocketID.connectionId!!).emit('sessionID',{
+  sessionID:newAppointmentSession._id
+ })
+
+ socket.emit('sessionID',{
+  sessionID:newAppointmentSession._id
+ })
+  
+ }
+  
+
+ 
+
+
+
+
+
+})
+
+
+socket.on('appointmentSessionEnded',async(data:{doctorID:string,patientID:string,endTime:string,caller:'patient'|'doctor',sessionID:string,duration:string})=>{
+
+
+  const appointmentID = await  BookAppointmentModel.findOne({
+     patientID:data.patientID,
+     medicalPersonelID:data.doctorID
+    })
+
+    await appointmentID?.updateOne({appointmentStatus:'completed'})
+
+     
+ const sessionData =await CallModel.findOne({
+  _id:data.sessionID
+ })
+
+ if(sessionData){
+  await sessionData.updateOne({
+    session:{
+      start:sessionData.session?.start,
+      end:data.endTime,
+      durationOfCall:data.duration
+    }
+   })
+ }
+
+})
 
 
 }

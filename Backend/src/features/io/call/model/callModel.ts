@@ -18,11 +18,14 @@ const  CallModelSchema = new mongoose.Schema({
         type:SessionSchema
     },
 
-    peers:[{
-            type:{
-                type:mongoose.SchemaTypes.ObjectId
-            }
-        }]
+    peers:{
+            type:[]
+
+        },
+
+        appointmentId:{
+            type:mongoose.SchemaTypes.ObjectId
+        }
 
    
 })
