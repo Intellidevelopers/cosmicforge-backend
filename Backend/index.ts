@@ -16,7 +16,7 @@ import cors from 'cors'
 import mainRouter from './src/routes/routes'
 import { errorHandler } from './src/middleware/errorHandlerMiddleware'
 import { withdrawBallance } from './src/features/wallet/controller/walletController'
-import { adminAuthRoute } from '../Backend/src/features/admin/routes/adminAuthRoute'
+import adminAuthRoute from '../Backend/src/features/admin/routes/adminAuthRoute'
 
  dotenv.config()
 
@@ -46,6 +46,7 @@ app.use(express.json({limit:'50mb'}));
 app.use(express.urlencoded({ extended: true,limit:'50mb' }));
 
 app.use('/api/v1/cosmicforge/',mainRouter)
+app.use('/api/auth/v1/cosmicforge/admin', adminAuthRoute)
 
 
 
