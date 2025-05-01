@@ -2,17 +2,12 @@ import SERVER_STATUS from "../../../util/interface/CODE"
 import { ResponseBodyProps } from "../../../util/interface/ResponseBodyProps"
 import TypedRequest from "../../../util/interface/TypedRequest"
 import TypedResponse from "../../../util/interface/TypedResponse"
-
-
-
 import UsersModel from '../../../features/newUser/model/newUserModel'
 import OTPModel from '../model/otpVerificationModel'
 import generateOTP from "../../../util/otpGenerator"
 import sendMail from "../../../config/mail/nodeMailer"
 import passwordHasher from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-
-
 
 export interface RequestBodyProps {
     email: string
@@ -33,16 +28,10 @@ export interface CompleteRegistrationRequestProps {
 
 export const registerNewUser = async (req: TypedRequest<RequestBodyProps>, res: TypedResponse<ResponseBodyProps>) => {
 
-
-
-
     try {
 
 
         const { email } = req.body
-
-        
-
         if (!email) {
             return res.status(SERVER_STATUS.BAD_REQUEST).json({
                 title: "Register User Message",
@@ -155,9 +144,6 @@ export const resendOTP = async (req: TypedRequest<RequestBodyProps>, res: TypedR
                 successful: false,
                 status: SERVER_STATUS.BAD_REQUEST,
                 message: "No otp sent to user.",
-
-
-
             })
 
             return
@@ -171,8 +157,6 @@ export const resendOTP = async (req: TypedRequest<RequestBodyProps>, res: TypedR
                 successful: false,
                 status: SERVER_STATUS.BAD_REQUEST,
                 message: "Otp already sent to this user and will expire in th next 5mins.",
-
-
 
 
             })
@@ -240,8 +224,6 @@ export const resendOTP = async (req: TypedRequest<RequestBodyProps>, res: TypedR
 
 export const validateOTP = async (req: TypedRequest<ValidateOTPRequestProps>, res: TypedResponse<ResponseBodyProps>) => {
 
-
-
     try {
 
         const { email, otp } = req.body
@@ -255,8 +237,6 @@ export const validateOTP = async (req: TypedRequest<ValidateOTPRequestProps>, re
                 successful: false,
                 status: SERVER_STATUS.BAD_REQUEST,
                 message: "No otp sent to user.",
-
-
 
             })
 

@@ -1,6 +1,4 @@
-
-
- const interactWithChatBot = () =>{
+const interactWithChatBot = () =>{
 
     
  }

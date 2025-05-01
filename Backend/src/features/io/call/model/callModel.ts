@@ -24,10 +24,8 @@ const  CallModelSchema = new mongoose.Schema({
             }
         }]
 
-   
 })
 
 const CallModel = mongoose.model('call_session',CallModelSchema)
-
 
 export default  CallModel

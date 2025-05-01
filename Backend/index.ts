@@ -16,7 +16,7 @@ import cors from 'cors'
 import mainRouter from './src/routes/routes'
 import { errorHandler } from './src/middleware/errorHandlerMiddleware'
 import { withdrawBallance } from './src/features/wallet/controller/walletController'
-
+import { adminAuthRoute } from '../Backend/src/features/admin/routes/adminAuthRoute'
 
  dotenv.config()
 
