@@ -5,9 +5,6 @@ import SERVER_STATUS from '../util/interface/CODE'
 
 
  export const errorHandler = (err:Error,req:express.Request,res:TypedResponse<ResponseBodyProps>,next:express.NextFunction) =>{
-
-
-
     res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
         title:"Server Error",
         status:SERVER_STATUS.INTERNAL_SERVER_ERROR,
@@ -16,7 +13,5 @@ import SERVER_STATUS from '../util/interface/CODE'
         error:err.message
     })
 
-     next()
-     
-    
+  next()  
 }

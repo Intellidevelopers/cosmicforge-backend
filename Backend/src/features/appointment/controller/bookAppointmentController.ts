@@ -191,10 +191,7 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
         })
         return
       }
-
-
       
-
       const newAppointment = new  BookAppointmentModel({
         medicalPersonelID:doctorId,
         patientID:user._id,
@@ -210,8 +207,6 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
 
       await newAppointment.save()
 
-     
-      
       res.status(SERVER_STATUS.SUCCESS).json({
         title:"Book Appointment Message.",
         status:SERVER_STATUS.SUCCESS,
@@ -230,11 +225,6 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
         error:error.message
     }) 
   }
-
-         
-
-
-
 }
 
 
@@ -286,14 +276,6 @@ export const getSpecificDoctorAppointments = async (req:TypedRequest<any>,res:Ty
         }
     })
 
-   
-
-    
-   
-
-
-
-    
    } catch (error:any) {
 
     res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
