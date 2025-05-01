@@ -136,5 +136,3 @@ bookAppointmentRouter.get('/medics/appointments',userAuthenticationMiddleware,ge
 
 
 export default bookAppointmentRouter
-
-

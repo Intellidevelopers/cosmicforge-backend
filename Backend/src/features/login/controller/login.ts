@@ -222,6 +222,8 @@ export const sendOtpToResetPassword = async (req: TypedRequest<ResetPasswordProp
         })
 
 
+
+
     } catch (error: any) {
         res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
             title: 'Reset Password  Message',

@@ -14,6 +14,8 @@ const  addNewDepartment = async(req:TypedRequest<{departmentName:string,departme
    // const  user =  req.user
 
    // if(!us)
+
+
    try {
 
      const {departmentName,departmentImage} = req.body
@@ -93,6 +95,8 @@ export const getDepartmentsForLadingPage =  async (req:TypedRequest<any>,res:Typ
 
     try {
         
+        
+
         const departments = await DoctorDepartmentModel.find().sort({name:'asc'})
 
 

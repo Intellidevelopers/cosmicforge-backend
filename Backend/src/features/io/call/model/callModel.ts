@@ -27,8 +27,10 @@ const  CallModelSchema = new mongoose.Schema({
             type:mongoose.SchemaTypes.ObjectId
         }
 
+   
 })
 
 const CallModel = mongoose.model('call_session',CallModelSchema)
+
 
 export default  CallModel
