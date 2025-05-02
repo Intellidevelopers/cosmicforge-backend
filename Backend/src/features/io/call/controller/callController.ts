@@ -268,13 +268,13 @@ socketIO.to(userToCallSocketID.connectionId!!).emit('accept_request_to_switch_ca
 socket.on('appointmentSessionStarted',async(data:{doctorID:string,patientID:string,startTime:string,caller:'patient'|'doctor'})=>{
 
 
-   const appointmentID = await  BookAppointmentModel.findOne({
+  /* const appointmentID = await  BookAppointmentModel.findOne({
       patientID:data.patientID,
       medicalPersonelID:data.doctorID
-     })
+     })*/
 
   const newAppointmentSession =  new CallModel({
-    appointmentId:appointmentID?._id,
+   // appointmentId:appointmentID?._id,
     peers:[data.doctorID,data.patientID],
     session:{
       start:data.startTime,

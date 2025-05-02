@@ -75,7 +75,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
        })
       
       console.log('hdhhdh')
-       console.log(appointmentFor)
+    //console.log(appointmentFor)
         
 
         const socConnection = await UserConnectionsModel.findOne({userId:socket.user?._id})

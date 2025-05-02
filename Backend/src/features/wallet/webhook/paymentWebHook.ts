@@ -4,6 +4,8 @@ import TypedRequest from "../../../util/interface/TypedRequest";
 import TypedResponse from "../../../util/interface/TypedResponse";
 import { USER_ROLES } from "../../../util/interface/UserRole";
 import BookAppointmentModel from "../../appointment/model/bookAppointmentModel";
+import SubscriptionDtailsModel from "../../subscription/model/SubscriptionDtailsModel";
+import SubscriptionModel from "../../subscription/model/SubscriptionModel";
 import WalletModel from "../model/walletModel";
 
 
@@ -55,26 +57,48 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
 
     if(event && event === "charge.success"){
 
-      console.log(data.reference)
+    
 
       const appointment = await BookAppointmentModel.findOne({
         "payment.paymentReference":data.reference
       })
 
-     console.log(appointment)
+     
 
      if(appointment){
 
+      //check subscriptionPlan and deduct money
+      const plan = await SubscriptionModel.findOne({
+        userId:appointment.medicalPersonelID
+      })
+
+      
+      const commissionDetails =  await SubscriptionDtailsModel.find()
+      
       //check if wallet already created 
       const wallet = await WalletModel.findOne({
         userId:appointment.medicalPersonelID
       })
 
       if(!wallet){
+
+        let amountAfterCommission = 0
+
+        if(commissionDetails){
+
+          const commissionData = commissionDetails[0].doctor.find((data)=>{
+             return data.name === plan?.planName
+          })
+
+
+          amountAfterCommission = data.amount - (data.amount * Number(commissionData?.commission?.replace('/,[a-z,A-Z]/g',''))/100)
+
+
+        }
         
         const newWallet = new WalletModel({
           userId:appointment.medicalPersonelID,
-          amount:data.amount,
+          amount:amountAfterCommission ?? data.amount,
           currency:data.currency,
           histories:[{
             paymentMadeBy:appointment.patientID,
@@ -106,8 +130,30 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
 
         await newWallet.save()
       }else{
+
+          //check subscriptionPlan and deduct money
+      const plan = await SubscriptionModel.findOne({
+        userId:appointment.medicalPersonelID
+      })
+
+      
+      const commissionDetails =  await SubscriptionDtailsModel.find()
+
+      let amountAfterCommission = 0
+
+      if(commissionDetails){
+
+        const commissionData = commissionDetails[0].doctor.find((data)=>{
+           return data.name === plan?.planName
+        })
+
+
+        amountAfterCommission = data.amount - (data.amount * Number(commissionData?.commission?.replace('/,[a-z,A-Z]/g',''))/100)
+
+
+      }
         
-        const topUpBalance = wallet.amount + data.amount
+        const topUpBalance = wallet.amount + (amountAfterCommission ?? data.amount)
 
         const updatehistories = wallet.histories ?? []
 
@@ -144,6 +190,29 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
          
       }
         
+     }else{
+      
+
+      const subscription =  await SubscriptionModel.findOne({paymentHistory:{
+        $elemMatch:{
+
+        paymentReferenceId:data.reference
+        }
+      }})
+
+       if(subscription){
+
+         const  planData =  subscription.paymentHistory.find((history)=>{
+           return history.paymentReferenceId === data.reference
+         })
+
+         subscription.updateOne({
+          planName:planData?.subscriptionPlan
+         })
+
+       }
+      
+
      }
 
 
@@ -152,8 +221,7 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
 
 
     if(event && event === "transfer.success"){
- console.log('called.......')
-        
+
       const userWallet =  await WalletModel.findOne({
           withdrawalHistories: {
             $elemMatch: {

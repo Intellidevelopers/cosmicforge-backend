@@ -1,4 +1,5 @@
 import mongoose, { model } from "mongoose";
+import SubscriptionModel from "../../subscription/model/SubscriptionModel";
 
 enum UserRoleProps {
     client,doctor,admin
@@ -43,4 +44,17 @@ enum UserRoleProps {
  })
 
 
- export default model('users',UserSchema)
+ export default model('users',UserSchema.pre('save',async function(next){
+
+   try {
+    
+    await new SubscriptionModel({
+        userId:this._id
+    }).save()
+
+    next()
+   } catch (error:any) {
+      next(new Error(error.message))
+   }
+
+ }))

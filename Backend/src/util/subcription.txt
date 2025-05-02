@@ -1,0 +1,276 @@
+{
+
+  
+}
+
+  const data = [
+    {
+      name:'General Medicine',
+      path:'./src/images/images/specialist-general-med-image.svg',
+      bgImage:'./src/images/genMed.svg',
+      bodyText:'General Medicine focuses on the comprehensive diagnosis, treatment, and prevention of a wide range of health conditions. General Medicine provides essential care for patients of all ages, addressing both acute and chronic medical issues. General practitioners (GPs) are skilled in managing diseases such as diabetes, hypertension, and respiratory conditions, while also offering preventive care, health screenings, and lifestyle counseling to promote overall well-being. General Medicine serves as the first line of healthcare, coordinating care and referrals to specialists when needed for a more personalized approach to health.'
+    },
+    {
+      name:'Emergency Medicine',
+      path:'./src/images/images/find-speccialist-emergency-med-image.svg',
+      bgImage:'./src/images/emergencyMed.svg',
+      bodyText:'Emergency Medicine focuses on the rapid diagnosis and treatment of acute illnesses and injuries that require immediate attention. This department handles a wide range of medical emergencies, from trauma and accidents to heart attacks, strokes, and respiratory distress. Emergency Medicine professionals are trained to stabilize patients quickly, provide life-saving interventions, and ensure patients receive the appropriate follow-up care. The department operates 24/7, ensuring that urgent medical needs are met at any time, with swift access to diagnostic tools, medications, and specialist care when necessary.'
+   
+    },
+    {
+      name:'Cardiology',
+      path:'./src/images/images/cosmic-specialist-cardiology-image.svg',
+      bgImage:'./src/images/cardiology.svg',
+      bodyText:'Cardiology focuses on the diagnosis, treatment, and prevention of heart-related conditions. This department specializes in managing diseases such as coronary artery disease, heart failure, arrhythmias, and hypertension. Cardiologists use advanced diagnostic tools like EKGs, echocardiograms, and stress tests to assess heart health and detect underlying issues. They work closely with patients to develop personalized treatment plans, which may include lifestyle changes, medications, or surgical interventions. Cardiology plays a vital role in managing long-term heart health and preventing life-threatening cardiac events.'
+   
+    },
+    {
+      name:'Pediatrics',
+      path:'./src/images/images/comsic-speciallist-pediatrics-image.svg',
+      bgImage:'./src/images/paediatrics.svg',
+      bodyText:'Pediatrics focuses on the medical care of infants, children, and adolescents. Pediatricians diagnose, treat, and manage a wide range of childhood conditions, from common illnesses like colds and infections to chronic conditions such as asthma, diabetes, and allergies. They also provide preventive care, including vaccinations, growth monitoring, and developmental screenings to ensure children grow and thrive healthily. Pediatrics is dedicated to promoting the well-being of young patients through age-specific care, while also addressing the unique emotional and psychological needs of children and their families.'
+   
+    },
+    {
+      name:'Nuerology',
+      path:'./src/images/images/cosmic-specialist-nuerology-image.svg',
+      bgImage:'./src/images/Neurology.svg',
+      bodyText:'Neurology focuses on the diagnosis, treatment, and management of disorders affecting the brain, spinal cord, and nervous system. Neurologists specialize in conditions such as stroke, epilepsy, Parkinson’s disease, multiple sclerosis, and migraines. They use advanced diagnostic tools like MRIs, CT scans, and EEGs to assess neurological health and provide targeted treatments. Neurology also plays a key role in managing chronic neurological conditions, improving quality of life, and helping patients regain functionality after neurological events. It is crucial for addressing both acute and long-term issues related to the nervous system.'
+   
+    },
+    {
+      name:'OB-GYN',
+      path:'./src/images/images/cosmic-specialist-og.svg',
+      bgImage:'./src/images/OBGN.svg',
+      bodyText:"OB-GYN focuses on women's health, specifically in the areas of pregnancy, childbirth, and the reproductive system. Obstetrics specialists provide care during pregnancy, labor, and postpartum, while gynecologists focus on the diagnosis and treatment of conditions related to the female reproductive system, such as menstrual disorders, infertility, and menopause. OB-GYNs also conduct routine screenings like Pap smears and mammograms to detect early signs of reproductive health issues. This department plays a key role in ensuring women’s overall health, from adolescence through menopause and beyond."
+   
+    },
+    {
+      name:'Dentistry',
+      path:'./src/images/images/cosmic-specialist-dentistry-image.svg',
+      bgImage:'./src/images/Dentist.svg',
+      bodyText:'Dentistry focuses on the diagnosis, treatment, and prevention of oral health issues, including teeth, gums, and the entire mouth. Dentists provide services such as routine checkups, cleanings, fillings, extractions, and preventive care to maintain good oral hygiene and prevent dental diseases. They also manage complex procedures like root canals, crowns, and orthodontics. Regular dental visits help detect early signs of conditions such as gum disease, cavities, and oral cancer, ensuring long-term dental health and well-being. Dentistry is essential for maintaining not only oral health but also overall health, as oral conditions can impact other body systems.'
+   
+    },
+
+    {
+      name:'Otolarygngology',
+      path:'./src/images/images/comsic-specialist-otolyryngology.svg',
+      bgImage:'./src/images/otalyn.svg',
+      bodyText:'Otolaryngology, also known as ENT (Ear, Nose, and Throat) medicine, focuses on the diagnosis and treatment of conditions related to the ears, nose, throat, and related structures of the head and neck. ENT specialists treat a wide range of disorders, including hearing loss, sinus infections, throat conditions, sleep apnea, and voice disorders. They also address issues related to balance, swallowing, and breathing. Otolaryngologists use specialized techniques and equipment to perform surgeries and non-invasive treatments, helping improve patients quality of life through effective management of ear, nose, and throat conditions.'
+   
+    },
+    {
+      name:'Pschiatry',
+      path:'./src/images/images/cosmic-specialist-psychiatry.svg',
+      bgImage:'./src/images/Pschiatry.svg',
+      bodyText:'Psychiatry focuses on the diagnosis, treatment, and prevention of mental health disorders, including conditions like depression, anxiety, bipolar disorder, schizophrenia, and PTSD. Psychiatrists assess patients mental well-being, prescribe medications, and provide psychotherapy to help manage symptoms. They work with individuals, families, and support systems to develop personalized treatment plans that promote mental and emotional health. Psychiatry plays a crucial role in helping patients navigate mental health challenges and improve their overall quality of life through compassionate care and evidence-based interventions.'
+   
+    },
+    {
+      name:'Radiology',
+      path:'./src/images/images/cosmic-specialist-radiology.svg',
+      bgImage:'./src/images/Radiology.svg',
+      bodyText:"Radiology specializes in the use of medical imaging to diagnose and treat a wide range of conditions. Radiologists use tools like X-rays, CT scans, MRIs, and ultrasounds to create detailed images of the body's internal structures. These images help detect and monitor conditions such as fractures, tumors, infections, and heart disease. Radiology is essential for providing accurate, non-invasive insights into a patient’s health, guiding treatment plans, and improving outcomes. In addition to diagnostic imaging, interventional radiology procedures use imaging techniques to perform minimally invasive treatments for various medical conditions."
+   
+    },
+    {
+      name:'Dermatology',
+      path:'./src/images/images/cosmic-specialist-dermatology.svg',
+      bgImage:'./src/images/dermatology.svg',
+      bodyText:"Dermatology focuses on the diagnosis, treatment, and prevention of skin, hair, and nail conditions. Dermatologists treat a wide range of issues, from common skin conditions like acne, eczema, and psoriasis to more serious concerns such as skin cancer, fungal infections, and allergic reactions. They use various treatments, including topical medications, laser therapy, and surgical procedures, to manage and improve the health and appearance of the skin. Dermatology also emphasizes the importance of skin cancer prevention through regular screenings and patient education, ensuring early detection and effective treatment."
+   
+    },
+    {
+      name:'Pathology',
+      path:'./src/images/images/cosmic-specialist-pathology.svg',
+      bgImage:'./src/images/pathology.svg',
+      bodyText:"Pathology focuses on the study and diagnosis of disease through the examination of tissue, blood, and other body fluids. Pathologists analyze laboratory samples to identify abnormalities, such as infections, cancerous growths, and organ dysfunctions. Their work is crucial in determining the underlying causes of diseases, guiding treatment decisions, and providing accurate diagnostic information for other medical departments. Pathology plays an essential role in both preventative healthcare (through screenings) and in monitoring disease progression, ensuring effective management of various health conditions."
+   
+    },
+    {
+      name:'Oncology',
+      path:'./src/images/images/cosmic-specialist-oncology.svg',
+      bgImage:'./src/images/oncology.svg',
+      bodyText:"Oncology focuses on the diagnosis, treatment, and management of cancer. Oncologists specialize in identifying various types of cancers, such as breast, lung, prostate, and hematologic cancers, and develop personalized treatment plans. These plans may include surgery, chemotherapy, radiation therapy, immunotherapy, and targeted therapies. Oncologists also work closely with patients to manage side effects, monitor treatment progress, and provide support throughout the cancer journey. The goal of oncology is not only to treat cancer but also to improve the quality of life for patients through early detection, advanced treatments, and compassionate care."
+   
+    },
+    {
+      name:'Ophthalmology',
+      path:'./src/images/images/cosmic-specialist-opthamology.svg',
+      bgImage:'./src/images/opthamology.svg',
+      bodyText:"Ophthalmology focuses on the diagnosis, treatment, and management of eye and vision-related conditions. Ophthalmologists are trained to address a wide range of eye issues, including cataracts, glaucoma, macular degeneration, diabetic retinopathy, and vision impairments. They provide services such as routine eye exams, corrective surgeries, and advanced treatments for eye diseases. Ophthalmology also emphasizes preventive care, helping patients maintain optimal eye health and detect issues early. By preserving and restoring vision, this specialty plays a vital role in enhancing patients' quality of life."
+   
+    },
+
+    {
+      name:'Urology',
+      path:'./src/images/images/cosmic-specialist-urology.svg',
+      bgImage:'./src/images/urology.svg',
+      bodyText:"Urology focuses on the diagnosis, treatment, and management of conditions affecting the urinary tract and the male reproductive system. Urologists specialize in a range of issues, including urinary infections, kidney stones, incontinence, prostate disorders, erectile dysfunction, and infertility. They provide both surgical and non-surgical treatments tailored to individual needs. Urology also addresses conditions related to the bladder, kidneys, urethra, and adrenal glands, ensuring comprehensive care for urinary and reproductive health. This specialty emphasizes early detection and effective management to improve patients' overall well-being."
+   
+      
+    },
+    {
+      name:'Physical Therapy',
+      path:'./src/images/images/cosmic-specialist-physicaltheraphy.svg',
+      bgImage:'./src/images/physicaltherapy.svg',
+      bodyText:"Physical Therapy focuses on restoring movement, improving physical function, and relieving pain caused by injuries, illnesses, or chronic conditions. Physical therapists design personalized treatment plans that include exercises, manual therapy, and the use of specialized equipment to help patients regain strength, flexibility, and mobility. They also work on injury prevention and rehabilitation post-surgery or trauma. Physical Therapy plays a vital role in enhancing recovery, managing conditions like arthritis or neurological disorders, and improving the overall quality of life for patients."
+   
+    },
+    {
+      name:'Rheumatology',
+      path:'./src/images/images/cosmic-specialist-rheumatology.svg',
+      bgImage:'./src/images/rheumatology.svg',
+      bodyText:"Rheumatology focuses on the diagnosis and treatment of rheumatic diseases that affect the joints, muscles, and connective tissues. Rheumatologists specialize in managing conditions such as arthritis, lupus, gout, and fibromyalgia, as well as autoimmune and inflammatory disorders. They use advanced diagnostic techniques to assess symptoms and create personalized treatment plans, including medications, physical therapy, and lifestyle modifications. Rheumatology aims to reduce pain, improve mobility, and enhance the quality of life for patients dealing with chronic and often complex musculoskeletal conditions."
+   
+    },
+    {
+      name:'Grastro Enterology',
+      path:'./src/images/images/cosmic-specialist-gastro-enterology.svg',
+      bgImage:'./src/images/gastroenterology.svg',
+      bodyText:"Gastroenterology focuses on the diagnosis, treatment, and management of disorders affecting the digestive system, including the esophagus, stomach, intestines, liver, pancreas, and gallbladder. Gastroenterologists treat conditions such as acid reflux, ulcers, irritable bowel syndrome (IBS), Crohn’s disease, hepatitis, and gastrointestinal cancers. They use advanced procedures like endoscopy and colonoscopy to diagnose and monitor digestive health. This specialty emphasizes personalized care, early detection, and effective management of digestive disorders to improve overall health and quality of life."
+   
+    },
+    {
+      name:'Orthopedics',
+      path:'./src/images/images/cosmic-specialist-gastro-enterology.svg',
+      bgImage:'./src/images/orthopedics.svg',
+      bodyText:"Orthopedics focuses on the care of the musculoskeletal system, treating conditions involving bones, joints, muscles, ligaments, and tendons. Specialists in this field diagnose and manage issues such as fractures, arthritis, back pain, sports injuries, and spinal deformities. Treatments range from physical therapy and medications to advanced surgical procedures like joint replacements and minimally invasive surgeries. Orthopedics is dedicated to restoring mobility, alleviating pain, and helping patients achieve a better quality of life through tailored care and rehabilitation"
+   
+    },
+    {
+      name:'Neonatology',
+      path:'./src/images/images/cosmic-specialist-neonatology.svg',
+      bgImage:'./src/images/neonatology.svg',
+      bodyText:"Neonatology specializes in the care of newborns, particularly those who are premature, critically ill, or have complex medical conditions. Neonatologists provide expert care in neonatal intensive care units (NICUs), managing issues such as low birth weight, respiratory distress, infections, and congenital abnormalities. They work closely with pediatricians and other specialists to ensure the best outcomes for newborns, offering advanced medical interventions and round-the-clock monitoring. Neonatology is dedicated to supporting the health and development of newborns during their most vulnerable early days."
+   
+    },
+    {
+      name:'Nephrology',
+      path:'./src/images/images/cosmic-specialist-nephrology.svg',
+      bgImage:'./src/images/Nephrology.svg',
+      bodyText:"Nephrology focuses on the diagnosis, treatment, and management of kidney-related disorders. Nephrologists address conditions such as chronic kidney disease (CKD), kidney stones, hypertension, and electrolyte imbalances. They also oversee dialysis treatment for patients with kidney failure and coordinate care for those undergoing kidney transplants. Nephrology emphasizes preserving kidney function, preventing disease progression, and improving patients' overall quality of life through personalized care and advanced medical therapies."
+   
+    },
+    {
+      name:'Pulmonology',
+      path:'./src/images/images/cosmic-specialist-pulmonology.svg',
+      bgImage:'./src/images/Pulmonology.svg',
+      bodyText:"Pulmonology focuses on the diagnosis, treatment, and management of respiratory system disorders, including the lungs and airways. Pulmonologists specialize in conditions such as asthma, chronic obstructive pulmonary disease (COPD), pneumonia, lung cancer, and sleep apnea. They use advanced diagnostic tools like pulmonary function tests, imaging, and bronchoscopy to assess lung health. Pulmonology emphasizes improving breathing, managing chronic conditions, and enhancing overall respiratory well-being through personalized treatments and preventive care strategies."
+   
+    },
+    {
+      name:'Geonomics',
+      path:'./src/images/images/cosmic-specialist-geonomics.svg',
+      bgImage:'./src/images/geneomics.svg',
+      bodyText:"Genomics focuses on the study of an individual's genetic material (DNA) to understand how genes influence health, disease, and medical conditions. Genomics plays a key role in personalized medicine by providing insights into genetic predispositions to various diseases, including cancer, heart disease, and genetic disorders. Through advanced technologies like DNA sequencing, genomics helps identify genetic mutations, inform treatment decisions, and predict potential health risks. This specialty enables targeted therapies, early interventions, and preventive strategies tailored to an individual’s genetic profile, improving overall health outcomes."
+   
+    },
+    {
+      name:'Hematology',
+      path:'./src/images/images/cosmic-specialist-hematology.svg',
+      bgImage:'./src/images/hematology.svg',
+      bodyText:"Hematology focuses on the diagnosis, treatment, and management of blood-related disorders. Hematologists specialize in conditions such as anemia, clotting disorders, leukemia, lymphoma, and other blood cancers. They conduct diagnostic tests like blood counts, bone marrow biopsies, and coagulation studies to assess the health of the blood and blood-forming organs. Hematology also includes managing chronic blood conditions and providing therapies such as chemotherapy, blood transfusions, and bone marrow transplants. This specialty plays a vital role in maintaining overall health by addressing critical blood and immune system disorders."
+   
+    },
+      
+  ]
+
+
+  /*DoctorDepartmentModel.find().sort({name:'asc'}).then((res)=>{
+       //console.log(res)
+       res.map((dat,i)=>{
+         const t = data.find((i,d)=>{
+          return i.name === dat.name
+         })
+
+         if(t){
+          new Promise<string>((resolve,reject)=>{
+            uploader.upload(t.bgImage,{
+                folder:'DoctorsDepartment/largeImages'
+             },(error,uploadedResult)=>{
+                
+                if(error){
+                    reject(error.message)
+                }
+    
+                resolve(uploadedResult?.secure_url!!)
+        
+              
+             })
+        }).then( async res=>{
+           await  DoctorDepartmentModel.findOneAndUpdate({name:t.name},{
+            backgroundImage:res,
+            bodyText:t.bodyText
+           })
+        })
+
+
+         }
+       })
+    })*/
+
+
+   // DoctorDepartmentModel.find().sort({name:'asc'}).then((res)=>{console.log(res)})
+
+
+     
+ /* const d = jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2ExZjliZDlkZDI4ODNiMWQ4NjRhZjYiLCJmdWxsTmFtZSI6IiBFbW1hbnVlbCIsImxhc3ROYW1lIjoiQWd3dSIsImVtYWlsIjoiYmVuYWd1NDc3QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEtma2xmWnJnVjB0T1B3RDM0ZUIuRHVFL2FzZzh3ZEV3cXI3SnFzZlZabDhkUWoxL2VNekdpIiwicm9sZSI6ImNsaWVudCIsIl9fdiI6MCwiaWF0IjoxNzM4ODYwNTE2LCJleHAiOjE3NDE0NTI1MTZ9.UzuBVoY2i62HMwB1lHBtJUT5awC86YqTxTdgAgDAFPg',process.env?.JWT_SECRET!! ) as AuthMiddlewareProps
+console.log(
+  d._id
+  )*/
+   
+    
+   /* let buffer:any = null
+  stream.on('data',(data)=>{
+    console.log(data.toLocaleString())
+    
+    buffer = data
+  }).on('end',(d:any)=>{
+    console.log(d)
+    console.log('ended')
+
+      
+  })*/
+
+   
+
+  /*const t =uploadImage.upload_stream({folder:'userOne'},(err:any,res:any)=>{
+
+    
+      
+      
+       if(err){
+        console.log('error comming.')
+        console.log(err)
+        return
+       }
+       console.log(t.writable)
+       stream.on('end',()=>{
+        console.log('ende.....')
+        stream.pipe(t).on('finish',(e:any)=>{
+          console.log('dobe')
+          console.log(e)
+         }).on('error',()=>{
+          console.log('reeror')
+         })
+       })
+         console.log(res)
+      
+  }).end(stream)*/
+
+  
+  
+
+ /*sendMail({receiver:"benagu477@gmail.com",subject:"Cosmic Tech Email verification.",message:"your otp is:3020"}).then(res=>{
+   console.log(res.response.split(' ')[1] ==="2.0.0")
+ }).catch(err=>{
+   console.log(err)
+ })*/
+
+
+   //diagnosisController()
+
+
+   subDetailsId = 6814b4c32619f024f2703aa8
