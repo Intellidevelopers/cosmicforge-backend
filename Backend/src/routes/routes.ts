@@ -38,7 +38,9 @@ mainRouter.use('/user',loginRouter)
 mainRouter.use('/user/medics',medicalPersonnelProfileRouter)
 
 mainRouter.use('/user/medics/certification',medicalPersonnelCertificationAndUploadRouter)
+
 mainRouter.use('/user/subscription',subscriptionRouter)
+
 mainRouter.use('/user/patient',patientProfileRouter)
 
 mainRouter.use('/user/patient',rateAndReviewRouter)

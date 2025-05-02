@@ -195,10 +195,11 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
 
       const subscription =  await SubscriptionModel.findOne({paymentHistory:{
         $elemMatch:{
-
-        paymentReferenceId:data.reference
+         paymentReferenceId:data.reference
         }
       }})
+
+
 
        if(subscription){
 
@@ -206,7 +207,7 @@ export const paystackWebHookEventListener =  async (req:TypedRequest<{
            return history.paymentReferenceId === data.reference
          })
 
-         subscription.updateOne({
+        await subscription.updateOne({
           planName:planData?.subscriptionPlan
          })
 
