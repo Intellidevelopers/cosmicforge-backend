@@ -34,6 +34,22 @@ import SubscriptionModel from "../model/SubscriptionModel";
 
        }
 
+
+       if(user?.role === USER_ROLES.CLIENT){
+      
+        res.status(SERVER_STATUS.SUCCESS).json({
+         title:"Subcription Message",
+         status:SERVER_STATUS.SUCCESS,
+         successful:true,
+         message:"Successfully fetched.",
+         data:{
+             ...userSubscription?.toObject(),
+             generalSubscriptionDetails:generalSubscriptionDetails[0].patient
+         }
+        })
+ 
+        }
+
      }
 
 
@@ -51,7 +67,6 @@ try {
 
     const {referenceID,plan} = req.body
 
-  console.log(plan)
     if(!referenceID || !plan){
         res.status(SERVER_STATUS.BAD_REQUEST).json({
             title:"Subcription Mssage",
@@ -97,6 +112,28 @@ try {
             data:updatedSubscription
            
            })
+    }else{
+
+  const subscription = new SubscriptionModel({
+    userId:user?._id,
+    paymentHistory:[{
+        paymentReferenceId:referenceID,
+        subscriptionPlan:plan,
+        date:Date.now().toString()
+        
+      }]
+  })
+
+    await subscription.save()
+
+    res.status(SERVER_STATUS.SUCCESS).json({
+        title:"Subcription Message",
+        status:SERVER_STATUS.SUCCESS,
+        successful:true,
+        message:"Successfull.",
+        data:subscription
+       
+       })
     }
 
     

@@ -51,7 +51,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
         })
        
 
-        const appointmentFor = await BookAppointmentModel.updateMany({
+        /*const appointmentFor = await BookAppointmentModel.updateMany({
           $and:[
            {
                appointmentDate:{$eq:customDateString},
@@ -72,7 +72,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
           ]
        },{
         appointmentStatus:'cancelled'
-       })
+       })*/
       
       console.log('hdhhdh')
     //console.log(appointmentFor)

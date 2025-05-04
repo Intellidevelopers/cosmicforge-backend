@@ -3,6 +3,8 @@ import SERVER_STATUS from "../../../../util/interface/CODE"
 import { ResponseBodyProps } from "../../../../util/interface/ResponseBodyProps"
 import TypedRequest from "../../../../util/interface/TypedRequest"
 import TypedResponse from "../../../../util/interface/TypedResponse"
+import BookAppointmentModel from "../../../appointment/model/bookAppointmentModel"
+import SubscriptionModel from "../../../subscription/model/SubscriptionModel"
 import MedicalPersonnelProfileModel from "../../profile/model/profileModel"
 import DoctorDepartmentModel from "../model/model"
 
@@ -166,14 +168,82 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
         }).populate('userId')
 
 
+        if(doctors){
+        const  doctorUpdate:any[] = [] 
+        
 
-        res.status(SERVER_STATUS.SUCCESS).json({
-            title:'Get doctors by departments',
-            status:SERVER_STATUS.SUCCESS,
-            successful:true,
-            message:'successfully fetched.',
-            data:doctors
-        })
+         for (const doctor of doctors){
+
+            const isValid = await new Promise<boolean>(async(resolve,reject)=>{
+                const date = new Date()
+                const monthName = date.toLocaleString('en-Us',{
+                    month:'long'
+                  })
+              const subscription = await SubscriptionModel.findOne({
+                userId:doctor.userId
+              })
+             const  appointment = await BookAppointmentModel.find({
+                medicalPersonelID:doctor.userId,
+                appointmentDate:{
+                    $regex:monthName , $options:'i'
+                }
+             })
+
+
+              switch(subscription?.planName){
+                 
+                case 'Free':{
+                    resolve(appointment.length===20)
+                    return
+                }
+
+
+                case 'Basic':{
+                    resolve(appointment.length===50)
+                    return
+                }
+
+
+                case 'Premium':{
+                    resolve(appointment.length ===100)
+                    return
+                }
+
+                case 'Professional':{
+                    resolve(false)
+                    return
+                }
+
+                default : {
+                    resolve(false)
+                }
+           
+              }
+         
+
+          
+
+            })
+               if(!isValid){
+                doctorUpdate.push(doctor)
+               }
+         }
+        
+        
+
+          
+            res.status(SERVER_STATUS.SUCCESS).json({
+                title:'Get doctors by departments',
+                status:SERVER_STATUS.SUCCESS,
+                successful:true,
+                message:'successfully fetched.',
+                data:doctorUpdate
+            })
+        }
+
+  
+
+       
         
      } catch (error:any) {
         res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({

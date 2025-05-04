@@ -41,7 +41,7 @@ export default async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlewarePr
 const runDiagnosis = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlewareProps>,data:any) =>{
    
     const symptoms = data
- 
+ console.log(symptoms)
     try {
         const user = socket.user!!
     

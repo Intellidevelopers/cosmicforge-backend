@@ -7,14 +7,14 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     planName:{
        type:mongoose.SchemaTypes.String,
-        enum:['Free','Basic','Professional','Premium'],
+        enum:['Free','Basic','Professional','Premium','Medium'],
         default:'Free'
     },
 
     paymentHistory:[{
         subscriptionPlan:{
             type:mongoose.SchemaTypes.String,
-            enum:['Basic','Professional','Premium']
+            enum:['Basic','Professional','Premium','Medium']
         },
 
         date:{
@@ -25,6 +25,7 @@ const SubscriptionSchema = new mongoose.Schema({
             type:mongoose.SchemaTypes.String,
          
         },
+    
        
     }]
 
