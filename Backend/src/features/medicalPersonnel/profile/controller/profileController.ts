@@ -71,7 +71,7 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         }
 
 
-        let userAccount = await newUserModel.findOne({ _id: user._id })
+        let userAccount = await newUserModel.findOne({ _id:user._id })
 
         //update token if email is channged
         let token = null

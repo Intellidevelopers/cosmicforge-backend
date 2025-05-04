@@ -165,7 +165,7 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
 
         let doctors = await MedicalPersonnelProfileModel.find({
             department
-        }).populate('userId')
+        }).populate('userId','fullName lastName')
 
 
         if(doctors){
