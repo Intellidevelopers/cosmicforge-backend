@@ -1,0 +1,12 @@
+ enum SERVER_STATUS {
+    SUCCESS =200,
+    BAD_REQUEST = 400,
+    INTERNAL_SERVER_ERROR = 500,
+    CREATED = 201,
+    UNAUTHORIZED = 401,
+     Forbidden = 403
+
+}
+
+
+export default SERVER_STATUS

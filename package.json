@@ -1,0 +1,71 @@
+{
+  "name": "cosmicbackend",
+  "version": "1.0.0",
+  "description": "cosmic tele-medicine backened",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " ts-node index.ts",
+    "build:asset": "copyfiles src/views build",
+    "build": "npm install &&   tsc  &&  cp -r src/views build/src ",
+    "dev": "nodemon",
+    "start:prod": "node build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Intellidevelopers/cosmicforge-backend.git"
+  },
+  "keywords": [
+    "backend",
+    "comsmic",
+    "tele-medicine"
+  ],
+  "author": "cosmic -dev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Intellidevelopers/cosmicforge-backend/issues"
+  },
+  "homepage": "https://github.com/Intellidevelopers/cosmicforge-backend#readme",
+  "dependencies": {
+    "@types/passport": "1.0.0",
+    "@types/passport-google-oauth20": "2.0.0",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "firebase-admin": "^13.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "openai": "^4.96.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "paystack": "^2.0.1",
+    "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.10.7",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^6.4.17",
+    "@types/paystack": "^2.0.4",
+    "@types/socket.io": "^3.0.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

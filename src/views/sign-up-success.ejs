@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href='https://fonts.googleapis.com/css?family=IBM Plex Sans' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Otp to user</title>
+    <style>
+       body {
+        margin:0;
+        padding:0;
+        box-sizing: border-box;
+        font-family: 'IBM Plex Sans';
+       }
+       .logo-container {
+        height:120px; background-color:rgba(247, 249, 252, 1);
+        display: flex;
+        justify-content: end;
+      
+        padding-right:50px;
+       }
+       .email-text-container {
+        width:100; margin: 10%; line-height:30px; word-spacing:3px;
+       }
+      
+       .footer {
+        width: 100%;
+        position:absolute; background: rgba(245, 248, 255, 1); min-height: 150px; width: 100%;
+        display: flex;
+         justify-content: center;
+         align-items: center;
+         bottom:0;
+       }
+       .footer div {
+         line-height:30px;
+         width:80%;
+       }
+       @media only screen and (max-width:768px) {
+        .email-text-container {
+      margin: 5%; line-height:26px; 
+       }
+         
+          .email-text-container {
+            margin: 5%;
+          } 
+
+          .email-text-container :nth-child(2) {
+        margin-top: 15%;
+       }
+       .text-container{
+        margin-top:15%;
+       }
+         
+       }
+    </style>
+
+</head>
+<body>
+
+    <div class="logo-container">
+
+        <img height="32px" width="110px" style="margin-top:50px; margin-left:70px; " src="https://res.cloudinary.com/dwaqh1nvr/image/upload/v1737585966/cosmic_forge_logo_4_cinopk.png"/>
+
+    </div>
+
+    <div class="email-text-container" >
+      <h1 >Successfull SignUp </h1>
+      <p>Hello <%= data.fullName %> ,</p>
+      <p class="text-container">
+
+       You have successfully registered to Cosmic CosmicForge. You can now access the awesome package we have for you.
+        
+        </p>
+        
+    </div>
+
+   
+
+    <footer class="footer" >
+        
+        <div style="" >
+
+            Need help? <a href="/"> Contact our support team </a href="/"> or no longer interested in our newsletters? <a href="/"> Unsubscribe here</a>. Want to give us feedback? Let us know what you think on our <a href="/">feedback site</a>.
+        </div>
+
+    </footer>
+
+    </body>
+</html>
