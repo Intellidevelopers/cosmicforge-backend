@@ -11,7 +11,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
 
     service.schedule('* * * * *',async ()=>{
 
-        console.log('calling every minute')
+        
        
         const date = new Date()
          
@@ -26,7 +26,12 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
          })
          const year = date.getFullYear()
        
-       
+       const  time = date.toLocaleTimeString('en-Us',{
+        timeStyle:'short'
+       })
+
+       console.log(time.toLowerCase().replace(' ',''))
+
          const customDateString = dayInWeek.concat(' ').concat(monthNumber.toString().concat(getDaySuffice(monthNumber))).concat(' ').concat(monthName).concat('  ').concat(year.toString())
        
          //console.log(customDateString)
@@ -34,7 +39,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
         const appointmentForToday = await BookAppointmentModel.find({
            $and:[
             {
-                appointmentDate:{$eq:customDateString}
+                appointmentDate:{customDateString}
             },
             {
               $or:[
@@ -74,7 +79,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
         appointmentStatus:'cancelled'
        })*/
       
-      console.log('hdhhdh')
+  
     //console.log(appointmentFor)
         
 
@@ -82,7 +87,7 @@ let appoinmentBackgroundService  =  async (socket:TypedSocket<AuthMiddlewareProp
 
         if(appointmentForToday && appointmentForToday.length>0 && socConnection){
 
-          console.log(appointmentForToday)
+         
 
               appointmentForToday.map(async(data)=>{
                const  time =  data.appointmentTime?.split('-')[0].charAt(0)

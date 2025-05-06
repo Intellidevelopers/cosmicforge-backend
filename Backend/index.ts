@@ -15,9 +15,8 @@ import { connectDB } from './src/config/database/databaseConfig'
 import cors from 'cors'
 import mainRouter from './src/routes/routes'
 import { errorHandler } from './src/middleware/errorHandlerMiddleware'
-import { withdrawBallance } from './src/features/wallet/controller/walletController'
-import SubscriptionDtailsModel from './src/features/subscription/model/SubscriptionDtailsModel'
 
+import  * as faceApi from 'face-api.js'
 
  dotenv.config()
 
@@ -246,6 +245,9 @@ const patientPlans = [
 
 
 
+
+
+//const detention = faceApi.detectSingleFace(image)
 
 
 

@@ -265,7 +265,7 @@ socketIO.to(userToCallSocketID.connectionId!!).emit('accept_request_to_switch_ca
 
 
 
-socket.on('appointmentSessionStarted',async(data:{doctorID:string,patientID:string,startTime:string,caller:'patient'|'doctor'})=>{
+socket.on('appointmentSessionStarted',async(data:{doctorID:string,patientID:string,startTime:string,caller:'patient'|'doctor',appointmentId:string})=>{
 
 
   /* const appointmentID = await  BookAppointmentModel.findOne({
@@ -274,7 +274,7 @@ socket.on('appointmentSessionStarted',async(data:{doctorID:string,patientID:stri
      })*/
 
   const newAppointmentSession =  new CallModel({
-   // appointmentId:appointmentID?._id,
+    appointmentId:data.appointmentId,
     peers:[data.doctorID,data.patientID],
     session:{
       start:data.startTime,
@@ -352,12 +352,7 @@ socketIO.to(userToCallSocketID.connectionId!!).emit('sessionID',{
 socket.on('appointmentSessionEnded',async(data:{doctorID:string,patientID:string,endTime:string,caller:'patient'|'doctor',sessionID:string,duration:string})=>{
 
 
-  const appointmentID = await  BookAppointmentModel.findOne({
-     patientID:data.patientID,
-     medicalPersonelID:data.doctorID
-    })
-
-    await appointmentID?.updateOne({appointmentStatus:'completed'})
+ 
 
      
  const sessionData =await CallModel.findOne({
@@ -365,6 +360,12 @@ socket.on('appointmentSessionEnded',async(data:{doctorID:string,patientID:string
  })
 
  if(sessionData){
+  const appointmentID = await  BookAppointmentModel.findOne({
+    _id:sessionData.appointmentId
+  })
+
+  await appointmentID?.updateOne({appointmentStatus:'completed'})
+  
   await sessionData.updateOne({
     session:{
       start:sessionData.session?.start,

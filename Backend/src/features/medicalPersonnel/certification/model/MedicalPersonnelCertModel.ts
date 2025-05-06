@@ -15,8 +15,12 @@ const MedicalPersonnelCertificationSchema = new mongoose.Schema({
   },
   date: {
     type: mongoose.SchemaTypes.String
+  },
+  isVerified:{
+  
+      type: mongoose.SchemaTypes.Boolean,
+      default:false
   }
- 
 });
 
 const MedicalPersonnelLicenceSchema = new mongoose.Schema({
@@ -37,7 +41,12 @@ const MedicalPersonnelLicenceSchema = new mongoose.Schema({
   },
   photoWithLicence: {
     type: mongoose.SchemaTypes.String
-  }
+  },
+  isVerified:{
+  
+    type: mongoose.SchemaTypes.Boolean,
+    default:false
+}
 });
 
 const MedicalPersonnelCertificationAndUploadSchema = new mongoose.Schema({

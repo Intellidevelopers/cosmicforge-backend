@@ -63,6 +63,9 @@ export   const updloadCertificateOrLicense = async (
       return;
     }
 
+
+
+
     if (type === "certificate" && (!certificateNo || !certificateImage)) {
       res.status(SERVER_STATUS.BAD_REQUEST).json({
         title: "Upload Licence or Certificate",
@@ -135,6 +138,12 @@ export   const updloadCertificateOrLicense = async (
                     
                                           const  isUploadValid = licenceUrl.includes("https") &&  photoWithLicenceUrl.includes("https")
 
+                                     
+                                          
+
+
+
+
                                           if(!isUploadValid){
                                             res.status(SERVER_STATUS.BAD_REQUEST).json({
                                                 title: 'Upload Licence or Certificate',
@@ -156,6 +165,7 @@ export   const updloadCertificateOrLicense = async (
     licenseNo:licenceNo??userDocument.licence?.licenseNo,
     licenseImage:licenceUrl??userDocument.licence?.licenseImage,
     date,
+  
                 }
             
             })
@@ -367,7 +377,8 @@ export   const updloadCertificateOrLicense = async (
     licenseNo:licenceNo,
     licenseImage:licenceUrl,
     date,
-    photoWithLicence:photeWithLicenceUrl
+    photoWithLicence:photeWithLicenceUrl,
+    isVerified:true
                 }
             
             }).save()
@@ -453,6 +464,7 @@ export   const updloadCertificateOrLicense = async (
                      certificateNo,
                     certificateImage:certUrl,
                      date,
+                     isVerified:true
                 }
             
             }).save()

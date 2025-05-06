@@ -11,6 +11,15 @@ import generateOTP from "../../../util/otpGenerator"
 import sendMail from "../../../config/mail/nodeMailer"
 import passwordHasher from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { USER_ROLES } from "../../../util/interface/UserRole"
+import newUserModel from "../../../features/newUser/model/newUserModel"
+import PatientProfileModel from "../../patient/profile/model/patientProfileModel"
+import MedicalPersonnelProfileModel from "../../medicalPersonnel/profile/model/profileModel"
+import WalletModel from "../../wallet/model/walletModel"
+import SubscriptionModel from "../../subscription/model/SubscriptionModel"
+import ChatModel from "../../io/chat/model/chatModel"
+import AIChatbotModel from "../../ai/diagnosis/model/AIChatBotModel"
+import AIDiagnosisModel from "../../ai/diagnosis/model/AIDiagnosisModel"
 
 
 
@@ -389,6 +398,8 @@ export const completeRegistrationProcess = async (req: TypedRequest<CompleteRegi
             fullName:`${newUser.fullName } ${newUser.lastName}`
         },template:"sign-up-success.ejs"})
 
+        
+
         res.status(SERVER_STATUS.SUCCESS).json({
             title: 'Complete registration message.',
             successful: true,
@@ -411,6 +422,64 @@ export const completeRegistrationProcess = async (req: TypedRequest<CompleteRegi
 
         })
     }
+}
+
+
+
+export const deleteAccount = async (req: TypedRequest<{}>, res: TypedResponse<ResponseBodyProps>) => {
+
+     const user = req.user
+  
+     try {
+
+
+     if(user?.role === USER_ROLES.CLIENT){
+
+        await newUserModel.deleteOne({_id:user?._id})
+        await PatientProfileModel.deleteOne({userId:user._id})
+       await SubscriptionModel.deleteOne({userId:user._id})
+       await AIChatbotModel.deleteOne({userId:user._id})
+       await AIDiagnosisModel.deleteOne({userId:user._id})
+       
+       res.status(SERVER_STATUS.SUCCESS).json({
+        title:'Delete Account Message',
+        status:SERVER_STATUS.SUCCESS,
+        successful:true,
+        message:'Successfully deleted account'
+       })
+        return
+     }
+
+
+     if(user?.role === USER_ROLES.DOCTOR){
+        await newUserModel.deleteOne({_id:user?._id})
+        await MedicalPersonnelProfileModel.deleteOne({userId:user._id})
+        await WalletModel.deleteOne({userId:user._id})
+        await SubscriptionModel.deleteOne({userId:user._id})
+        res.status(SERVER_STATUS.SUCCESS).json({
+            title:'Delete Account Message',
+            status:SERVER_STATUS.SUCCESS,
+            successful:true,
+            message:'Successfully deleted account'
+           })
+
+           return
+
+     }
+
+        
+     } catch (error) {
+
+
+        res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
+            title:'Delete Account Message',
+            status:SERVER_STATUS.INTERNAL_SERVER_ERROR,
+            successful:false,
+            message:'Failed to delete.'
+           })
+        
+     }
+
 }
 
 

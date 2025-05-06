@@ -173,7 +173,7 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
         return
       }
 
-      const isDoctorRegistered = await newUserModel.findOne({_id:user._id})
+      const isDoctorRegistered = await newUserModel.findOne({_id:doctorId})
 
       const patientProfileID =  await PatientProfileModel.findOne({
         userId:user._id
@@ -203,8 +203,8 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
         appointmentDate:date,
         appointmentTime:time,
         appointmentStatus:appointmentStatus ?? 'booked',
-        patientDetails:patientProfileID,
-        medicalPersonelDetails:doctorProfileID
+        patientDetails:patientProfileID?._id,
+        medicalPersonelDetails:doctorProfileID?._id
 
       })
 
@@ -254,9 +254,9 @@ export const getSpecificDoctorAppointments = async (req:TypedRequest<any>,res:Ty
         return
     }
 
-    if(user.role === USER_ROLES.DOCTOR.toString()){
+    if(user.role === USER_ROLES.DOCTOR){
 
-        const appointments = await BookAppointmentModel.find({medicalPersonelID:user._id}).populate([{path:'patientDetails',select:""},{path:'patientID',select:'fullName lastName'}]).sort({createdAt:-1})
+        const appointments = await BookAppointmentModel.find({medicalPersonelID:user._id}).populate([{path:'patientDetails',select:" "},{path:'patientID',select:'fullName lastName'}]).sort({createdAt:-1})
 
 
         res.status(SERVER_STATUS.SUCCESS).json({
