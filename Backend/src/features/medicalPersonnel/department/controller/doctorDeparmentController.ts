@@ -5,6 +5,7 @@ import TypedRequest from "../../../../util/interface/TypedRequest"
 import TypedResponse from "../../../../util/interface/TypedResponse"
 import BookAppointmentModel from "../../../appointment/model/bookAppointmentModel"
 import SubscriptionModel from "../../../subscription/model/SubscriptionModel"
+import MedicalPersonnelCertificationAndUploadModel from "../../certification/model/MedicalPersonnelCertModel"
 import MedicalPersonnelProfileModel from "../../profile/model/profileModel"
 import DoctorDepartmentModel from "../model/model"
 
@@ -163,70 +164,86 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
         }
 
 
+
+
+
         let doctors = await MedicalPersonnelProfileModel.find({
             department
         }).populate('userId','fullName lastName')
+
+      
 
 
         if(doctors){
         const  doctorUpdate:any[] = [] 
         
+      
 
          for (const doctor of doctors){
 
-            const isValid = await new Promise<boolean>(async(resolve,reject)=>{
-                const date = new Date()
-                const monthName = date.toLocaleString('en-Us',{
-                    month:'long'
-                  })
-              const subscription = await SubscriptionModel.findOne({
+        let doctorCertified = await MedicalPersonnelCertificationAndUploadModel.findOne({
                 userId:doctor.userId
-              })
-             const  appointment = await BookAppointmentModel.find({
-                medicalPersonelID:doctor.userId,
-                appointmentDate:{
-                    $regex:monthName , $options:'i'
-                }
-             })
-
-
-              switch(subscription?.planName){
-                 
-                case 'Free':{
-                    resolve(appointment.length===20)
-                    return
-                }
-
-
-                case 'Basic':{
-                    resolve(appointment.length===50)
-                    return
-                }
-
-
-                case 'Premium':{
-                    resolve(appointment.length ===100)
-                    return
-                }
-
-                case 'Professional':{
-                    resolve(false)
-                    return
-                }
-
-                default : {
-                    resolve(false)
-                }
-           
-              }
-         
-
-          
-
             })
-               if(!isValid){
-                doctorUpdate.push(doctor)
-               }
+
+            if(doctorCertified && doctorCertified.licence?.isVerified){
+
+                const isValid = await new Promise<boolean>(async(resolve,reject)=>{
+                    const date = new Date()
+                    const monthName = date.toLocaleString('en-Us',{
+                        month:'long'
+                      })
+                  const subscription = await SubscriptionModel.findOne({
+                    userId:doctor.userId
+                  })
+                 const  appointment = await BookAppointmentModel.find({
+                    medicalPersonelID:doctor.userId,
+                    appointmentDate:{
+                        $regex:monthName , $options:'i'
+                    }
+                 })
+    
+    
+                  switch(subscription?.planName){
+                     
+                    case 'Free':{
+                        resolve(appointment.length===20)
+                        return
+                    }
+    
+    
+                    case 'Basic':{
+                        resolve(appointment.length===50)
+                        return
+                    }
+    
+    
+                    case 'Premium':{
+                        resolve(appointment.length ===100)
+                        return
+                    }
+    
+                    case 'Professional':{
+                        resolve(false)
+                        return
+                    }
+    
+                    default : {
+                        resolve(false)
+                    }
+               
+                  }
+             
+    
+              
+    
+                })
+                   if(!isValid){
+                    doctorUpdate.push(doctor)
+                   }
+
+            }
+     
+           
          }
         
         
