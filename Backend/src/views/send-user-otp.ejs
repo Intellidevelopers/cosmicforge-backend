@@ -1,85 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href='https://fonts.googleapis.com/css?family=IBM Plex Sans' rel='stylesheet'>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Otp to user</title>
+    <title>CF Healthnet OTP Verification</title>
     <style>
-       body {
-        margin:0;
-        padding:0;
-        box-sizing: border-box;
-        font-family: 'IBM Plex Sans';
-       }
-       .logo-container {
-        height:120px; background-color:rgba(247, 249, 252, 1);
-        display: flex;
-        justify-content: end;
-      
-        padding-right:50px;
-       }
-       .email-text-container {
-        width:100; margin: 10%; line-height:30px; word-spacing:3px;
-       }
-       .footer {
-        position:absolute; background: rgba(245, 248, 255, 1); min-height: 150px; width: 100%;
-        display: flex;
-         justify-content: center;
-         align-items: center;
-         bottom:0;
-       }
-       .footer div {
-         line-height:30px;
-         width:80%;
-       }
-       @media only screen and (max-width:768px) {
-        .email-text-container {
-      margin: 5%; line-height:26px; 
-       }
-          .footer{
-           
-        position: relative;
-          }
-          .email-text-container {
-            margin: 5%;
-          } 
-         
-       }
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'IBM Plex Sans', Arial, sans-serif;
+            color: #333333;
+            background-color: #f5f8ff;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .header {
+            background-color: #f7f9fc;
+            padding: 30px 0;
+            text-align: center;
+            border-bottom: 1px solid #e1e8f5;
+        }
+        
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+        
+        .content {
+            padding: 40px 50px;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            color: #1a56db;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        p {
+            margin: 0 0 20px;
+            color: #4a5568;
+            font-size: 16px;
+        }
+        
+        .greeting {
+            font-weight: 500;
+            font-size: 18px;
+            color: #2d3748;
+        }
+        
+        .otp-container {
+            margin: 30px 0;
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid #1a56db;
+        }
+        
+        .otp-label {
+            display: block;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .otp-code {
+            font-family: monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a56db;
+            letter-spacing: 4px;
+            background: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 1px solid #d1ddf7;
+            display: inline-block;
+        }
+        
+        .time-notice {
+            font-size: 14px;
+            color: #718096;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: #1a56db;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .footer {
+            background-color: #f5f8ff;
+            padding: 30px 50px;
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+            border-top: 1px solid #e1e8f5;
+        }
+        
+        .footer a {
+            color: #1a56db;
+            text-decoration: none;
+        }
+        
+        .company-info {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e8f5;
+        }
+        
+        .unsubscribe {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #a0aec0;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .content {
+                padding: 30px 25px;
+            }
+            
+            .footer {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .otp-code {
+                font-size: 28px;
+                letter-spacing: 2px;
+            }
+        }
     </style>
-
 </head>
 <body>
-
-    <div class="logo-container">
-
-        <img height="32px" width="110px" style="margin-top:50px; margin-left:70px; " src="https://res.cloudinary.com/dwaqh1nvr/image/upload/v1737585966/cosmic_forge_logo_4_cinopk.png"/>
-
-    </div>
-
-    <div class="email-text-container" >
-      <h1 >Email Verification</h1>
-      <p>Hey <%= data.email  %> ,</p>
-      <p>
-
-        Thanks for signing up on CosmicForge! This is the start of an exciting journey and we can’t wait to see all the beautiful designs you’ll create with our templates.
-        
-        </p>
-        <p>Use otp code below to verify your account and get started.</p>
-
-        <p>Otp code:<%= data.otp %></p>
-    </div>
-
-   
-
-    <footer class="footer" >
-        
-        <div  >
-
-            Need help? <a href="/"> Contact our support team </a href="/"> or no longer interested in our newsletters? <a href="/"> Unsubscribe here</a>. Want to give us feedback? Let us know what you think on our <a href="/">feedback site</a>.
+    <div class="email-container">
+        <div class="header">
+            <img class="logo" src="https://res.cloudinary.com/dwaqh1nvr/image/upload/v1737585966/cosmic_forge_logo_4_cinopk.png" alt="CF Healthnet Logo">
         </div>
-
-    </footer>
-
-    </body>
+        
+        <div class="content">
+            <h1>CF Healthnet</h1>
+            
+            <p class="greeting">Hi there, <%= data.email  %></p>
+            
+            <p>To proceed further with your registration process on CF HealthNet please use the OTP below</p>
+            
+            <div class="otp-container">
+                <div class="otp-code"><%= data.otp %></div>
+                <div class="time-notice">Please note that this OTP will only be valid for 5 minutes</div>
+            </div>
+            
+            <p>Regards,<br>CF HealthNet</p>
+        </div>
+        
+        <div class="footer">
+            <div class="company-info">
+                CosmicForge HealthNet Limited, is an expanding digital health platform dedicated to revolutionizing the way healthcare is accessed and provided throughout Africa.
+                <br><br>
+                <a href="https://cfhealthnet.com" class="cta-button">Learn More</a>
+            </div>
+            
+            <div class="unsubscribe">
+                You are receiving this email because you signed up on CF HealthNet. 
+                <a href="#">Unsubscribe</a>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
