@@ -7,15 +7,19 @@ import MedicalPersonnelCertificationAndUploadModel from "../model/MedicalPersonn
 
 export   const updloadCertificateOrLicense = async ( 
   req: TypedRequest<{
-    fullName: string;
-    institution: string;
-    certificateNo?: string;
-    licenceNo?: string;
-    licenceImage?: string;
-    certificateImage?: string;
-    date: string;
+    fullName: string,
+    LicenseNumber: string,
+    license: string,
+    expiration: string,
+    country: string,
+    docummentType:string,
+    documentId: string,
+    documentHoldName: string,
+    documentImage: string,
+    pictureWithDocument: string,
+    doctorImage: string,
     type: "licence" | "certificate";
-    photoWithLicence:string
+    photoWithLicence: string
   }>,
   res: TypedResponse<ResponseBodyProps>
 ) => {
@@ -25,39 +29,47 @@ export   const updloadCertificateOrLicense = async (
 
     const user = req.user
      
-
+    
+    
     const {
-      fullName,
-      institution,
-      certificateImage,
-      certificateNo,
-      licenceImage,
-      licenceNo,
-      date,
+      fullName,LicenseNumber,license, expiration,
+      country,
+      docummentType,
+      documentId,
+      documentHoldName,
+      documentImage,
+      pictureWithDocument,
+      doctorImage,
       type,
       photoWithLicence
     } = req.body;
 
     console.log(fullName)
 
-    if (!fullName || !institution || !date || !type) {
+    if (!fullName || !LicenseNumber || !license || !expiration ||
+      !country || !docummentType ||
+      !documentId  ||
+      !documentHoldName ||
+      !documentImage ||
+      !pictureWithDocument ||
+      !doctorImage || !type || !photoWithLicence) {
       res.status(SERVER_STATUS.BAD_REQUEST).json({
         title: "Upload Licence or Certificate",
         status: SERVER_STATUS.BAD_REQUEST,
         successful: false,
         message:
-          "fullName,institution,date and type fields are required to continue."
+          " fullName,LicenseNumber,license, expiration,country,docummentType, documentId,documentHoldName,  documentImage,pictureWithDocument, doctorImage ,type and photoWithLicence fields are required to continue."
       });
 
       return;
     }
 
-    if (type === "licence" && (!licenceNo || !licenceImage || !photoWithLicence)) {
+    if (type === "licence" && (!license || !photoWithLicence || !doctorImage || !documentImage || !pictureWithDocument)) {
       res.status(SERVER_STATUS.BAD_REQUEST).json({
         title: "Upload Licence or Certificate",
         status: SERVER_STATUS.BAD_REQUEST,
         successful: false,
-        message: "licenceImage,photoWithLicence  and licenceNo  fields are required to continue."
+        message: "license,photoWithLicence,doctorImage,documentImage and pictureWithDocument  fields are required to continue."
       });
 
       return;
@@ -66,7 +78,7 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-    if (type === "certificate" && (!certificateNo || !certificateImage)) {
+    /*if (type === "certificate" && (!certificateNo || !certificateImage)) {
       res.status(SERVER_STATUS.BAD_REQUEST).json({
         title: "Upload Licence or Certificate",
         status: SERVER_STATUS.BAD_REQUEST,
@@ -76,13 +88,10 @@ export   const updloadCertificateOrLicense = async (
       });
 
       return;
-    }
+    }*/
 
 
-    const userDocument = await  MedicalPersonnelCertificationAndUploadModel.findOne({
-        userId:user?._id
-
-    })
+    const userDocument = await  MedicalPersonnelCertificationAndUploadModel.findOne({userId:user?._id })
 
     if(userDocument){
         
@@ -90,13 +99,13 @@ export   const updloadCertificateOrLicense = async (
 
                 const regex = /^data:image\/(png|jpg|jpeg|gif|svg);base64,/i;
                      
-                          if(!regex.test(licenceImage!!) || !regex.test(photoWithLicence)){
+                if(!regex.test(license!!) || !regex.test(photoWithLicence) || !regex.test(doctorImage) || !regex.test(documentImage) || !regex.test(pictureWithDocument) ){
                      
                              res.status(SERVER_STATUS.BAD_REQUEST).json({
                                  title: 'Upload Licence or Certificate',
                                  status: SERVER_STATUS.BAD_REQUEST,
                                  successful: false,
-                                 message: 'Invalid licence image or photoWithLicence format provided. only png|jpg|jpeg|gif|svg is supported'
+                                 message: 'Invalid image format provided. only png|jpg|jpeg|gif|svg is supported'
                              })
                      
                              return
@@ -106,7 +115,7 @@ export   const updloadCertificateOrLicense = async (
 
 
                         const licenceUrl = await new Promise<string>((resolve,reject)=>{
-                                              uploader.upload(licenceImage!!,{
+                                              uploader.upload(license!!,{
                                                   folder:user?._id.concat('/licence')
                                                },(error,uploadedResult)=>{
                                                   
@@ -119,6 +128,8 @@ export   const updloadCertificateOrLicense = async (
                                                 
                                                })
                                           })
+
+
 
                          const photoWithLicenceUrl = await new Promise<string>((resolve,reject)=>{
                                             uploader.upload(photoWithLicence!!,{
@@ -135,37 +146,70 @@ export   const updloadCertificateOrLicense = async (
                                              })
                                         })
 
+                                        const doctorImageUrl = await new Promise<string>((resolve,reject)=>{
+                                          uploader.upload(doctorImage!!,{
+                                              folder:user?._id.concat('/doctorImage')
+                                           },(error,uploadedResult)=>{
+                                              
+                                              if(error){
+                                                  reject(error.message)
+                                              }
+                      
+                                              resolve(uploadedResult?.secure_url!!)
+                                      
+                                            
+                                           })
+                                      })
+
+                                      const documentUrl = await new Promise<string>((resolve,reject)=>{
+                                        uploader.upload(documentImage!!,{
+                                            folder:user?._id.concat('/document')
+                                         },(error,uploadedResult)=>{
+                                            
+                                            if(error){
+                                                reject(error.message)
+                                            }
                     
-                                          const  isUploadValid = licenceUrl.includes("https") &&  photoWithLicenceUrl.includes("https")
-
-                                     
+                                            resolve(uploadedResult?.secure_url!!)
+                                    
                                           
+                                         })
+                                    })
 
 
-
-
-                                          if(!isUploadValid){
-                                            res.status(SERVER_STATUS.BAD_REQUEST).json({
-                                                title: 'Upload Licence or Certificate',
-                                                status: SERVER_STATUS.BAD_REQUEST,
-                                                successful: false,
-                                                message: 'Failed to upload.'
-                                            })
-                                            return
+                                    const photoWithDocumentUrl = await new Promise<string>((resolve,reject)=>{
+                                      uploader.upload(pictureWithDocument!!,{
+                                          folder:user?._id.concat('/photoWithDocument')
+                                       },(error,uploadedResult)=>{
+                                          
+                                          if(error){
+                                              reject(error.message)
                                           }
+                  
+                                          resolve(uploadedResult?.secure_url!!)
+                                  
+                                        
+                                       })
+                                  })
 
 
-                                          console.log(licenceUrl)
+
+                  
 
             await userDocument.updateOne({
                 licence:{
-                    fullName:fullName??userDocument.licence?.fullName,
-                     institution:institution??userDocument.licence?.institution,
-                     photoWithLicence:photoWithLicenceUrl,
-    licenseNo:licenceNo??userDocument.licence?.licenseNo,
-    licenseImage:licenceUrl??userDocument.licence?.licenseImage,
-    date,
-  
+                    fullName:fullName??userDocument.licenseDetails?.fullName,
+                     license:licenceUrl??userDocument.licenseDetails?.license,
+                     LicenseNumber:LicenseNumber??userDocument.licenseDetails?.LicenseNumber,
+                     expiration:expiration??userDocument.licenseDetails?.expiration,
+                     country:country??userDocument.licenseDetails?.country,
+                     docummentType:docummentType??userDocument.licenseDetails?.docummentType,
+                     documentId:documentId??userDocument.licenseDetails?.documentId,
+                     documentHoldName:documentHoldName??userDocument.licenseDetails?.documentHoldName,
+                     documentImage:doctorImageUrl??userDocument.licenseDetails?.doctorImage,
+                     pictureWithDocument:photoWithDocumentUrl??userDocument.licenseDetails?.pictureWithDocument,
+                     doctorImage:doctorImageUrl??userDocument.licenseDetails?.doctorImage,
+                     photoWithLicence:photoWithLicenceUrl??userDocument.licenseDetails?.photoWithLicence
                 }
             
             })
@@ -199,7 +243,7 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-        if(type === "certificate"){
+      /*  if(type === "certificate"){
 
 
             const regex = /^data:image\/(png|jpg|jpeg|gif|svg);base64,/i;
@@ -288,7 +332,7 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-        }
+        }*/
 
 
 
@@ -303,7 +347,7 @@ export   const updloadCertificateOrLicense = async (
 
             const regex = /^data:image\/(png|jpg|jpeg|gif|svg);base64,/i;
                      
-            if(!regex.test(licenceImage!!) && ! regex.test(photoWithLicence!!)){
+            if(!regex.test(license!!) || !regex.test(photoWithLicence) || !regex.test(doctorImage) || !regex.test(documentImage) || !regex.test(pictureWithDocument)){
        
                res.status(SERVER_STATUS.BAD_REQUEST).json({
                    title: 'Upload Licence or Certificate',
@@ -316,10 +360,9 @@ export   const updloadCertificateOrLicense = async (
        
             }
 
-
-
+       
           const licenceUrl = await new Promise<string>((resolve,reject)=>{
-                                uploader.upload(licenceImage!!,{
+                                uploader.upload(license!!,{
                                     folder:user?._id.concat('/licence')
                                  },(error,uploadedResult)=>{
                                     
@@ -333,8 +376,9 @@ export   const updloadCertificateOrLicense = async (
                                  })
                             })
 
+                         
 
-                            const photeWithLicenceUrl = await new Promise<string>((resolve,reject)=>{
+        const photoWithLicenceUrl = await new Promise<string>((resolve,reject)=>{
                                 uploader.upload(photoWithLicence!!,{
                                     folder:user?._id.concat('/photoWithLicence')
                                  },(error,uploadedResult)=>{
@@ -349,37 +393,79 @@ export   const updloadCertificateOrLicense = async (
                                  })
                             })
 
+              
+
+                            const doctorImageUrl = await new Promise<string>((resolve,reject)=>{
+                              uploader.upload(doctorImage!!,{
+                                  folder:user?._id.concat('/doctorImage')
+                               },(error,uploadedResult)=>{
+                                  
+                                  if(error){
+                                      reject(error.message)
+                                  }
+          
+                                  resolve(uploadedResult?.secure_url!!)
+                          
+                                
+                               })
+                          })
+                       
+                          const documentUrl = await new Promise<string>((resolve,reject)=>{
+                            uploader.upload(documentImage!!,{
+                                folder:user?._id.concat('/document')
+                             },(error,uploadedResult)=>{
+                                
+                                if(error){
+                                    reject(error.message)
+                                }
+        
+                                resolve(uploadedResult?.secure_url!!)
+                        
+                              
+                             })
+                        })
+
+                       
+                        const photoWithDocumentUrl = await new Promise<string>((resolve,reject)=>{
+                          uploader.upload(documentImage!!,{
+                              folder:user?._id.concat('/photoWithDocument')
+                           },(error,uploadedResult)=>{
+                              
+                              if(error){
+                                  reject(error.message)
+                              }
       
-                            const  isUploadValid = licenceUrl.includes("https") && photeWithLicenceUrl.includes("https")
+                              resolve(uploadedResult?.secure_url!!)
+                      
+                            
+                           })
+                      })
 
-                            if(!isUploadValid){
-                              res.status(SERVER_STATUS.BAD_REQUEST).json({
-                                  title: 'Upload Licence or Certificate',
-                                  status: SERVER_STATUS.BAD_REQUEST,
-                                  successful: false,
-                                  message: 'Failed to upload.'
-                              })
-                              return
-                            }
-
+                    
 
                          
 
 
 
             
-        
-                            const newDocument =      await new MedicalPersonnelCertificationAndUploadModel({
+          const newDocument =      await new MedicalPersonnelCertificationAndUploadModel({
                                 userId:user?._id,
-                licence:{
-                    fullName:fullName,
-                     institution:institution,
-    licenseNo:licenceNo,
-    licenseImage:licenceUrl,
-    date,
-    photoWithLicence:photeWithLicenceUrl,
-    isVerified:true
-                }
+             licenseDetails:{
+              fullName,
+                     license:licenceUrl,
+                     LicenseNumber,
+                     expiration,
+                     country,
+                     docummentType,
+                     documentId,
+                     documentHoldName,
+                     documentImage:doctorImageUrl,
+                     pictureWithDocument:photoWithDocumentUrl,
+                     doctorImage:doctorImageUrl,
+                     photoWithLicence:photoWithLicenceUrl
+                
+          
+             }
             
             }).save()
 
@@ -405,7 +491,7 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-        if(type === "certificate"){
+       /* if(type === "certificate"){
 
 
 
@@ -478,7 +564,7 @@ export   const updloadCertificateOrLicense = async (
             })
 
 
-        }
+        }*/
 
         
 

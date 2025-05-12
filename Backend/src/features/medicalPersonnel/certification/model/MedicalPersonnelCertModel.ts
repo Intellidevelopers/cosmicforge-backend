@@ -16,10 +16,9 @@ const MedicalPersonnelCertificationSchema = new mongoose.Schema({
   date: {
     type: mongoose.SchemaTypes.String
   },
-  isVerified:{
-  
-      type: mongoose.SchemaTypes.Boolean,
-      default:false
+  isVerified: {
+    type: mongoose.SchemaTypes.Boolean,
+    default: false
   }
 });
 
@@ -27,26 +26,43 @@ const MedicalPersonnelLicenceSchema = new mongoose.Schema({
   fullName: {
     type: mongoose.SchemaTypes.String
   },
-  institution: {
+  license: {
     type: mongoose.SchemaTypes.String
   },
-  licenseNo: {
+  LicenseNumber: {
     type: mongoose.SchemaTypes.String
   },
-  licenseImage: {
+  expiration: {
     type: mongoose.SchemaTypes.String
   },
-  date: {
+  country: {
+    type: mongoose.SchemaTypes.String
+  },
+  documentId: {
+    type: mongoose.SchemaTypes.String
+  },
+  documentHoldName: {
+    type: mongoose.SchemaTypes.String
+  },
+  pictureWithDocument: {
+    type: mongoose.SchemaTypes.String
+  },
+  docummentType: {
+    type: mongoose.SchemaTypes.String
+  },
+  documentImage: {
     type: mongoose.SchemaTypes.String
   },
   photoWithLicence: {
     type: mongoose.SchemaTypes.String
   },
-  isVerified:{
-  
+  doctorImage: {
+    type: mongoose.SchemaTypes.String
+  },
+  isVerified: {
     type: mongoose.SchemaTypes.Boolean,
-    default:false
-}
+    default: false
+  }
 });
 
 const MedicalPersonnelCertificationAndUploadSchema = new mongoose.Schema({
@@ -54,10 +70,10 @@ const MedicalPersonnelCertificationAndUploadSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId
   },
 
-  certification: {
+  certificationDetails: {
     type: MedicalPersonnelCertificationSchema
   },
-  licence: {
+  licenseDetails: {
     type: MedicalPersonnelLicenceSchema
   }
 });

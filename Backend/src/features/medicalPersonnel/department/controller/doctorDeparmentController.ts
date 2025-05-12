@@ -185,16 +185,18 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
                 userId:doctor.userId
             })
 
-            if(doctorCertified && doctorCertified.licence?.isVerified){
+         
 
                 const isValid = await new Promise<boolean>(async(resolve,reject)=>{
                     const date = new Date()
                     const monthName = date.toLocaleString('en-Us',{
                         month:'long'
                       })
+                      
                   const subscription = await SubscriptionModel.findOne({
                     userId:doctor.userId
                   })
+
                  const  appointment = await BookAppointmentModel.find({
                     medicalPersonelID:doctor.userId,
                     appointmentDate:{
@@ -237,11 +239,14 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
               
     
                 })
+
+
+
                    if(!isValid){
                     doctorUpdate.push(doctor)
                    }
 
-            }
+         
      
            
          }
