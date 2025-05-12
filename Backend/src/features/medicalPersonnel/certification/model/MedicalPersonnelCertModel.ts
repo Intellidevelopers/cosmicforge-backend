@@ -10,16 +10,41 @@ const MedicalPersonnelCertificationSchema = new mongoose.Schema({
   certificateNo: {
     type: mongoose.SchemaTypes.String
   },
-  certificateImage: {
+  certificate: {
     type: mongoose.SchemaTypes.String
   },
   date: {
+    type: mongoose.SchemaTypes.String
+  },
+  country: {
+    type: mongoose.SchemaTypes.String
+  },
+  docummentType:{
+    type: mongoose.SchemaTypes.String
+  },
+  documentId:{
+    type: mongoose.SchemaTypes.String
+  },
+  documentHoldName:{
+    type: mongoose.SchemaTypes.String
+  },
+  documentImage:{
+    type: mongoose.SchemaTypes.String
+  },
+  pictureWithDocument:{
+    type: mongoose.SchemaTypes.String
+  },
+  doctorImage:{
+    type: mongoose.SchemaTypes.String
+  },
+  photoWithCertification:{
     type: mongoose.SchemaTypes.String
   },
   isVerified: {
     type: mongoose.SchemaTypes.Boolean,
     default: false
   }
+
 });
 
 const MedicalPersonnelLicenceSchema = new mongoose.Schema({

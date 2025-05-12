@@ -19,7 +19,14 @@ export   const updloadCertificateOrLicense = async (
     pictureWithDocument: string,
     doctorImage: string,
     type: "licence" | "certificate";
-    photoWithLicence: string
+    photoWithLicence: string,
+
+
+    institution: string,
+    certificateNo: string,
+    date: string,
+    certificate: string,
+    photoWithCertification: string
   }>,
   res: TypedResponse<ResponseBodyProps>
 ) => {
@@ -41,54 +48,60 @@ export   const updloadCertificateOrLicense = async (
       pictureWithDocument,
       doctorImage,
       type,
-      photoWithLicence
+      photoWithLicence,
+      institution,certificateNo,date,certificate,photoWithCertification
     } = req.body;
 
     console.log(fullName)
 
-    if (!fullName || !LicenseNumber || !license || !expiration ||
+    if (!type ) {
+      res.status(SERVER_STATUS.BAD_REQUEST).json({
+        title: "Upload Licence or Certificate",
+        status: SERVER_STATUS.BAD_REQUEST,
+        successful: false,
+        message:
+          " type field are required to continue."
+      });
+
+      return;
+    }
+
+    if (type === "licence" && (!fullName || !LicenseNumber || !license || !expiration ||
       !country || !docummentType ||
       !documentId  ||
       !documentHoldName ||
       !documentImage ||
-      !pictureWithDocument ||
-      !doctorImage || !type || !photoWithLicence) {
+      !pictureWithDocument  || !photoWithLicence || !doctorImage)) {
       res.status(SERVER_STATUS.BAD_REQUEST).json({
         title: "Upload Licence or Certificate",
         status: SERVER_STATUS.BAD_REQUEST,
         successful: false,
-        message:
-          " fullName,LicenseNumber,license, expiration,country,docummentType, documentId,documentHoldName,  documentImage,pictureWithDocument, doctorImage ,type and photoWithLicence fields are required to continue."
+        message: "fullName,LicenseNumber,license, expiration,country,docummentType, documentId,documentHoldName,  documentImage,pictureWithDocument, doctorImage ,type,photoWithLicence,doctorImage,documentImage and pictureWithDocument  fields are required to continue."
       });
 
       return;
     }
 
-    if (type === "licence" && (!license || !photoWithLicence || !doctorImage || !documentImage || !pictureWithDocument)) {
-      res.status(SERVER_STATUS.BAD_REQUEST).json({
-        title: "Upload Licence or Certificate",
-        status: SERVER_STATUS.BAD_REQUEST,
-        successful: false,
-        message: "license,photoWithLicence,doctorImage,documentImage and pictureWithDocument  fields are required to continue."
-      });
-
-      return;
-    }
+  
 
 
 
-
-    /*if (type === "certificate" && (!certificateNo || !certificateImage)) {
-      res.status(SERVER_STATUS.BAD_REQUEST).json({
+    if (type === "certificate" && (!fullName || !country || !docummentType ||
+      !documentId  ||
+      !documentHoldName ||
+      !documentImage ||
+      !pictureWithDocument  || !doctorImage ||  !institution || !certificateNo || !date || !certificate || !photoWithCertification)) {
+     
+        res.status(SERVER_STATUS.BAD_REQUEST).json({
         title: "Upload Licence or Certificate",
         status: SERVER_STATUS.BAD_REQUEST,
         successful: false,
         message:
-          "certificateNo and certificateImage  fields are required to continue."
+          "fullName,country,docummentType,documentId,documentHoldName,documentImage, pictureWithDocument, doctorImage, institution,certificateNo,certificate, photoWithCertification fields are required to continue."
       });
 
       return;
-    }*/
+    }
 
 
     const userDocument = await  MedicalPersonnelCertificationAndUploadModel.findOne({userId:user?._id })
@@ -206,7 +219,7 @@ export   const updloadCertificateOrLicense = async (
                      docummentType:docummentType??userDocument.licenseDetails?.docummentType,
                      documentId:documentId??userDocument.licenseDetails?.documentId,
                      documentHoldName:documentHoldName??userDocument.licenseDetails?.documentHoldName,
-                     documentImage:doctorImageUrl??userDocument.licenseDetails?.doctorImage,
+                     documentImage:documentUrl??userDocument.licenseDetails?.documentImage,
                      pictureWithDocument:photoWithDocumentUrl??userDocument.licenseDetails?.pictureWithDocument,
                      doctorImage:doctorImageUrl??userDocument.licenseDetails?.doctorImage,
                      photoWithLicence:photoWithLicenceUrl??userDocument.licenseDetails?.photoWithLicence
@@ -243,12 +256,12 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-      /*  if(type === "certificate"){
+       if(type === "certificate"){
 
 
             const regex = /^data:image\/(png|jpg|jpeg|gif|svg);base64,/i;
                      
-            if(!regex.test(certificateImage!!)){
+            if(!regex.test(certificate!!) || !regex.test(photoWithCertification) || !regex.test(doctorImage) || !regex.test(documentImage) || !regex.test(pictureWithDocument) ){
        
                res.status(SERVER_STATUS.BAD_REQUEST).json({
                    title: 'Upload Licence or Certificate',
@@ -264,7 +277,7 @@ export   const updloadCertificateOrLicense = async (
 
 
           const certUrl = await new Promise<string>((resolve,reject)=>{
-                                uploader.upload(certificateImage!!,{
+                                uploader.upload(certificate!!,{
                                     folder:user?._id.concat('/certificate')
                                  },(error,uploadedResult)=>{
                                     
@@ -278,19 +291,55 @@ export   const updloadCertificateOrLicense = async (
                                  })
                             })
 
+                            const photoWithCertUrl = await new Promise<string>((resolve,reject)=>{
+                              uploader.upload(photoWithCertification!!,{
+                                  folder:user?._id.concat('/certificate')
+                               },(error,uploadedResult)=>{
+                                  
+                                  if(error){
+                                      reject(error.message)
+                                  }
+          
+                                  resolve(uploadedResult?.secure_url!!)
+                          
+                                
+                               })
+                          })
+
+
+                          const certDocUrl = await new Promise<string>((resolve,reject)=>{
+                            uploader.upload(certificate!!,{
+                                folder:user?._id.concat('/certificateDoc')
+                             },(error,uploadedResult)=>{
+                                
+                                if(error){
+                                    reject(error.message)
+                                }
+        
+                                resolve(uploadedResult?.secure_url!!)
+                        
+                              
+                             })
+                        })
+
+                        const photoWithCertDocUrl = await new Promise<string>((resolve,reject)=>{
+                          uploader.upload(photoWithCertification!!,{
+                              folder:user?._id.concat('/photoWithCertificate')
+                           },(error,uploadedResult)=>{
+                              
+                              if(error){
+                                  reject(error.message)
+                              }
+      
+                              resolve(uploadedResult?.secure_url!!)
+                      
+                            
+                           })
+                      })
+
 
       
-                            const  isUploadValid = certUrl.includes("https")
-
-                            if(!isUploadValid){
-                              res.status(SERVER_STATUS.BAD_REQUEST).json({
-                                  title: 'Upload Licence or Certificate',
-                                  status: SERVER_STATUS.BAD_REQUEST,
-                                  successful: false,
-                                  message: 'Failed to upload.'
-                              })
-                              return
-                            }
+                          
 
 
 
@@ -300,12 +349,20 @@ export   const updloadCertificateOrLicense = async (
 
 
             await userDocument.updateOne({
-                certification:{
-                    fullName:fullName??userDocument.certification?.fullName,
-                     institution:institution??userDocument.certification?.institution,
-    certificateNo:certificateNo??userDocument.certification?.certificateNo,
-   certificateImage:certUrl??userDocument.certification?.certificateImage,
-    date,
+                certificationDetails:{
+                    fullName:fullName??userDocument.certificationDetails?.fullName,
+                     institution:institution??userDocument.certificationDetails?.institution,
+    certificateNo:certificateNo??userDocument.certificationDetails?.certificateNo,
+   certificate:certUrl??userDocument.certificationDetails?.certificate,
+    date:date??userDocument.certificationDetails?.date,
+    country:country??userDocument.licenseDetails?.country,
+                     docummentType:docummentType??userDocument.certificationDetails?.docummentType,
+                     documentId:documentId??userDocument.certificationDetails?.documentId,
+                     documentHoldName:documentHoldName??userDocument.certificationDetails?.documentHoldName,
+                     documentImage:documentImage??userDocument.certificationDetails?.documentImage,
+                     pictureWithDocument:photoWithCertDocUrl??userDocument.certificationDetails?.pictureWithDocument,
+                    photoWithCertification:photoWithCertUrl??userDocument.certificationDetails?.photoWithCertification,
+                    doctorImage:certDocUrl??userDocument.certificationDetails?.doctorImage
                 }
             
             })
@@ -332,7 +389,7 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-        }*/
+        }
 
 
 
@@ -491,14 +548,14 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-       /* if(type === "certificate"){
+       if(type === "certificate"){
 
 
 
 
             const regex = /^data:image\/(png|jpg|jpeg|gif|svg);base64,/i;
                      
-            if(!regex.test(certificateImage!!)){
+            if(!regex.test(certificate!!) || !regex.test(photoWithCertification) || !regex.test(doctorImage) || !regex.test(documentImage) || !regex.test(pictureWithDocument)){
        
                res.status(SERVER_STATUS.BAD_REQUEST).json({
                    title: 'Upload Licence or Certificate',
@@ -513,20 +570,67 @@ export   const updloadCertificateOrLicense = async (
 
 
 
-          const certUrl = await new Promise<string>((resolve,reject)=>{
-                                uploader.upload(certificateImage!!,{
-                                    folder:user?._id.concat('/certificate')
-                                 },(error,uploadedResult)=>{
-                                    
-                                    if(error){
-                                        reject(error.message)
-                                    }
+         
+            const certUrl = await new Promise<string>((resolve,reject)=>{
+              uploader.upload(certificate!!,{
+                  folder:user?._id.concat('/certificate')
+               },(error,uploadedResult)=>{
+                  
+                  if(error){
+                      reject(error.message)
+                  }
+
+                  resolve(uploadedResult?.secure_url!!)
+          
+                
+               })
+          })
+
+          const photoWithCertUrl = await new Promise<string>((resolve,reject)=>{
+            uploader.upload(photoWithCertification!!,{
+                folder:user?._id.concat('/certificate')
+             },(error,uploadedResult)=>{
+                
+                if(error){
+                    reject(error.message)
+                }
+
+                resolve(uploadedResult?.secure_url!!)
+        
+              
+             })
+        })
+
+
+        const certDocUrl = await new Promise<string>((resolve,reject)=>{
+          uploader.upload(certificate!!,{
+              folder:user?._id.concat('/certificateDoc')
+           },(error,uploadedResult)=>{
+              
+              if(error){
+                  reject(error.message)
+              }
+
+              resolve(uploadedResult?.secure_url!!)
+      
             
-                                    resolve(uploadedResult?.secure_url!!)
-                            
-                                  
-                                 })
-                            })
+           })
+      })
+
+      const photoWithCertDocUrl = await new Promise<string>((resolve,reject)=>{
+        uploader.upload(photoWithCertification!!,{
+            folder:user?._id.concat('/photoWithCertificate')
+         },(error,uploadedResult)=>{
+            
+            if(error){
+                reject(error.message)
+            }
+
+            resolve(uploadedResult?.secure_url!!)
+    
+          
+         })
+    })
 
 
       
@@ -542,15 +646,27 @@ export   const updloadCertificateOrLicense = async (
                               return
                             }
 
-         const newDocument =   await new MedicalPersonnelCertificationAndUploadModel({
-            userId:user?._id,
-                certification:{
-                    fullName:fullName,
-                     institution:institution,
-                     certificateNo,
-                    certificateImage:certUrl,
-                     date,
-                     isVerified:true
+
+
+
+               const newDocument =   await new MedicalPersonnelCertificationAndUploadModel({
+                 userId:user?._id,
+                certificationDetails:{
+                  fullName:fullName,
+                  institution:institution,
+                  certificateNo:certificateNo,
+                  certificate:certUrl,
+                  date:date,
+                  country:country,
+                  docummentType:docummentType,
+                  documentId:documentId,
+                  documentHoldName:documentHoldName,
+                  documentImage:documentImage,
+                  pictureWithDocument:photoWithCertDocUrl,
+                 photoWithCertification:photoWithCertUrl,
+                 doctorImage:certDocUrl
+         
+                 
                 }
             
             }).save()
@@ -564,7 +680,7 @@ export   const updloadCertificateOrLicense = async (
             })
 
 
-        }*/
+        }
 
         
 
