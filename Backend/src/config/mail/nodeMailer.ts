@@ -11,23 +11,31 @@ interface MailProps {
     template:string
 }
 const nodeMail =  nodemailer.createTransport({
-service:'gmail',
+host:'mail.cosmicforgehealthnet.com',
+port:465,
+secure:true,
 auth:{
-    user:"adeagbojosiah1@gmail.com",
-    pass:"bvvmpoeglluldhwj"
+   
+    user:"info@cosmicforgehealthnet.com",
+    pass:"Ir{KLJfIqK9o"
 },
 
 })
+
+//adeagbojosiah1@gmail.com
+//bvvmpoeglluldhwj
 
 
 const sendMail  = async (data:MailProps) => {
    
     const emailTemplatePath = path.join(path.resolve(__dirname,'../../'),'views',data.template)
+
     const htmltoSend = await ejs.renderFile(emailTemplatePath,{
         data:data.emailData
     })
+
     return nodeMail.sendMail({
-        sender:"adeagbojosiah1@gmail.com",
+        sender:"info@cosmicforgehealthnet.com",
         to:data.receiver,
         subject:data.subject,
         html:htmltoSend
