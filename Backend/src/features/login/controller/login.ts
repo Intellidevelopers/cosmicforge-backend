@@ -69,12 +69,14 @@ export const loginUser = async (req: TypedRequest<LoginRequestBodyProps>, res: T
         }
 
         const token = jwt.sign({ ...userAccount.toObject() }, process.env.JWT_SECRET!!, { expiresIn: '30d' })
-
+console.log('fired')
         await sendMail({
             receiver: userAccount.email, subject: "Successfull Login.", emailData: {
                 fullName: `${userAccount.fullName} ${userAccount.lastName}`
             }, template: "login-success.ejs"
         })
+
+        console.log('fired.....')
 
         switch(userAccount.role){
 
@@ -653,6 +655,58 @@ export const resetPassword = async (req: TypedRequest<ResetPasswordProps>, res: 
 
 }
 
+export  const  managePassword = async (req: TypedRequest<{newPassword:string}>, res: TypedResponse<ResponseBodyProps>) =>{
+
+    const user = req.user
+
+   
+    try {
+
+        const {newPassword} = req.body
+
+        if(!newPassword){
+
+    res.status(SERVER_STATUS.BAD_REQUEST).json({
+        title: 'Manage Password Message',
+        successful: false,
+        status: SERVER_STATUS.BAD_REQUEST,
+        message: "newPassword field is required to continue."})
 
 
+           return 
+        }
 
+        const salt = await passwordHasher.genSalt()
+
+        const newHashedPassword =  await passwordHasher.hash(newPassword,salt)
+
+        await  newUserModel.findOneAndUpdate({_id:user?._id},{
+            password:newHashedPassword
+        })
+
+         res.status(SERVER_STATUS.SUCCESS).json({
+        title: 'Manage Password Message',
+        successful: true,
+        status: SERVER_STATUS.SUCCESS,
+        message: "successfully channged password."})
+
+
+    
+        
+    } catch (error:any) {
+
+         res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
+        title: 'Manage Password Message',
+        successful: false,
+        status: SERVER_STATUS.INTERNAL_SERVER_ERROR,
+        message: "newPassword field is required to continue.",error:error.message})
+          
+        
+    
+    
+
+    
+
+}
+
+}

@@ -18,6 +18,7 @@ import { errorHandler } from './src/middleware/errorHandlerMiddleware'
 
 import  * as faceApi from 'face-api.js'
 import sendMail from './src/config/mail/nodeMailer'
+import SubscriptionDtailsModel from './src/features/subscription/model/SubscriptionDtailsModel'
 
  dotenv.config()
 
@@ -60,6 +61,7 @@ const allowedOrigins = [
     })
 );*/
 
+
 app.use(express.json({limit:'50mb'}));
 app.use(express.urlencoded({ extended: true,limit:'50mb' }));
 
@@ -70,23 +72,44 @@ app.use('/api/v1/cosmicforge/',mainRouter)
 
 
 app.get('/',(req,res)=>{
-  res.render(path.join(__dirname,'src','views','reset-password.ejs'),{
+  res.render(path.join(__dirname,'src','views','doctor-verification.ejs'),{
     data:{
       fullName:"Agwu Emmanuel",
-      token:129099
+      token:129099,
+     urlForApproval:`${process.env.backend_base_url}/user/medics/certification/verification?token=kks`,
+    urlForDisApproval:'kkk'
     }
   })
 })
 
+app.get('/hello',(req,res)=>{
+
+  res.render(path.join(__dirname,'src','views','approvedLicenseTemplate.ejs'))
+  
+
+})
+
+
+
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3010
+  
+
 connectDB().then( res=>{
+
   server.listen(PORT,async()=>{
+
+    
     console.log('on port 3010 h gg dgdg gg hhh')
 
 
+  
 
+
+  
+
+  
 
 
      
@@ -100,11 +123,11 @@ connectDB().then( res=>{
 
 
 
-  sendMail({receiver:'jaxjoe31@gmail.com',subject:"Successfull Sign up.",emailData:{
-            fullName:` Agwu Emmanuel Chijekwu`
+  /*sendMail({receiver:'benagu477@gmail.com',subject:"Successfull Sign up.",emailData:{
+            fullName:`Agwu Emmanuel Chijekwu`
         },template:"sign-up-success.ejs"}).then((e)=>{
           console.log(e)
-        }).catch(err=>console.log(err))
+        }).catch(err=>console.log(err))*/
 
 
 

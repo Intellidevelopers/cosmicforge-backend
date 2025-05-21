@@ -1,7 +1,7 @@
 
 import express from 'express'
 import userAuthenticationMiddleware from '../../../../middleware/userAuthenticationMiddleware'
-import { getupdloadCertificateOrLicense, updloadCertificateOrLicense } from '../controller/MedicalPersonnelCertCertController'
+import { approveDoctorLicenseVerification, getupdloadCertificateOrLicense, updloadCertificateOrLicense } from '../controller/MedicalPersonnelCertCertController'
 
 const medicalPersonnelCertificationAndUploadRouter = express.Router()
 
@@ -10,5 +10,6 @@ medicalPersonnelCertificationAndUploadRouter.post('/upload',userAuthenticationMi
 
 medicalPersonnelCertificationAndUploadRouter.get('/all',userAuthenticationMiddleware,getupdloadCertificateOrLicense)
 
+medicalPersonnelCertificationAndUploadRouter.get('/verification',approveDoctorLicenseVerification)
 
 export default medicalPersonnelCertificationAndUploadRouter

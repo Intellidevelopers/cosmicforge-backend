@@ -31,9 +31,14 @@ mainRouter.use(session({
 
  }))
 
+
+ 
+
 mainRouter.use('/user',signUpRouter)
 
 mainRouter.use('/user',loginRouter)
+
+
 
 mainRouter.use('/user/medics',medicalPersonnelProfileRouter)
 

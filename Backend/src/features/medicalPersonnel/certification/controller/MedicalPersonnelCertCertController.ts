@@ -1,9 +1,13 @@
 import uploader from "../../../../config/cloudinary/cloudinary";
+import sendMail from "../../../../config/mail/nodeMailer";
 import SERVER_STATUS from "../../../../util/interface/CODE";
 import { ResponseBodyProps } from "../../../../util/interface/ResponseBodyProps";
 import TypedRequest from "../../../../util/interface/TypedRequest";
 import TypedResponse from "../../../../util/interface/TypedResponse";
+import newUserModel from "../../../newUser/model/newUserModel";
 import MedicalPersonnelCertificationAndUploadModel from "../model/MedicalPersonnelCertModel";
+import jwt from 'jsonwebtoken'
+import path from 'path'
 
 export   const updloadCertificateOrLicense = async ( 
   req: TypedRequest<{
@@ -52,7 +56,7 @@ export   const updloadCertificateOrLicense = async (
       institution,certificateNo,date,certificate,photoWithCertification
     } = req.body;
 
-    console.log(fullName)
+   
 
     if (!type ) {
       res.status(SERVER_STATUS.BAD_REQUEST).json({
@@ -210,7 +214,7 @@ export   const updloadCertificateOrLicense = async (
                   
 
             await userDocument.updateOne({
-                licence:{
+                licenseDetails:{
                     fullName:fullName??userDocument.licenseDetails?.fullName,
                      license:licenceUrl??userDocument.licenseDetails?.license,
                      LicenseNumber:LicenseNumber??userDocument.licenseDetails?.LicenseNumber,
@@ -246,6 +250,47 @@ export   const updloadCertificateOrLicense = async (
             })
 
 
+            /**
+             * send mail to cosmicforge for verification
+             */
+
+              const verificationTokenForApproval = jwt.sign({verificationId:user?._id,license:userDocument.licenseDetails?.license,
+                status:'approved'
+              },process.env.JWT_SECRET!!,{algorithm:'HS256'})
+
+              const verificationTokenForDisApproval = jwt.sign({verificationId:user?._id,license:userDocument.licenseDetails?.license,
+                status:'disapproved'
+              },process.env.JWT_SECRET!!,{algorithm:'HS256'})
+
+
+              const urlForApproval =`${process.env.backend_base_url}/user/medics/certification/verification?token=${verificationTokenForApproval}`
+            
+               const urlForDisApproval =`${process.env.backend_base_url}/user/medics/certification/verification?token=${verificationTokenForDisApproval}`
+
+            
+              await sendMail({receiver:'info@cosmicforgehealthnet.com',subject:"Doctor Requesting for Verification.",emailData:{
+                        fullName:`${fullName}`,
+                        license:licenceUrl??userDocument.licenseDetails?.license,
+                        LicenseNumber:LicenseNumber??userDocument.licenseDetails?.LicenseNumber,
+                        expiration:expiration??userDocument.licenseDetails?.expiration,
+                        country:country??userDocument.licenseDetails?.country,
+                        docummentType:docummentType??userDocument.licenseDetails?.docummentType,
+                        documentId:documentId??userDocument.licenseDetails?.documentId,
+                        documentHoldName:documentHoldName??userDocument.licenseDetails?.documentHoldName,
+                        documentImage:documentUrl??userDocument.licenseDetails?.documentImage,
+                        pictureWithDocument:photoWithDocumentUrl??userDocument.licenseDetails?.pictureWithDocument,
+                        doctorImage:doctorImageUrl??userDocument.licenseDetails?.doctorImage,
+                        photoWithLicence:photoWithLicenceUrl??userDocument.licenseDetails?.photoWithLicence,
+                        verificationId:user?._id,
+                        timeStamp:new Date().toISOString(),
+                        urlForApproval,
+                        urlForDisApproval
+                 
+
+                    },template:"doctor-verification.ejs"})
+
+
+                  
 
 
 
@@ -352,10 +397,10 @@ export   const updloadCertificateOrLicense = async (
                 certificationDetails:{
                     fullName:fullName??userDocument.certificationDetails?.fullName,
                      institution:institution??userDocument.certificationDetails?.institution,
-    certificateNo:certificateNo??userDocument.certificationDetails?.certificateNo,
-   certificate:certUrl??userDocument.certificationDetails?.certificate,
-    date:date??userDocument.certificationDetails?.date,
-    country:country??userDocument.licenseDetails?.country,
+                     certificateNo:certificateNo??userDocument.certificationDetails?.certificateNo,
+                     certificate:certUrl??userDocument.certificationDetails?.certificate,
+                     date:date??userDocument.certificationDetails?.date,
+                     country:country??userDocument.licenseDetails?.country,
                      docummentType:docummentType??userDocument.certificationDetails?.docummentType,
                      documentId:documentId??userDocument.certificationDetails?.documentId,
                      documentHoldName:documentHoldName??userDocument.certificationDetails?.documentHoldName,
@@ -376,6 +421,9 @@ export   const updloadCertificateOrLicense = async (
 
 
 
+
+
+
             res.status(SERVER_STATUS.SUCCESS).json({
                 title: 'Upload Licence or Certificate',
                 status: SERVER_STATUS.SUCCESS,
@@ -387,6 +435,11 @@ export   const updloadCertificateOrLicense = async (
 
 
 
+             
+
+
+
+            
 
 
         }
@@ -541,6 +594,46 @@ export   const updloadCertificateOrLicense = async (
 
 
         
+            /**
+             * send mail to cosmicforge for verification
+             */
+
+             
+
+              const verificationTokenForApproval = jwt.sign({verificationId:user?._id,license:license,
+                status:'approved'
+              },process.env.JWT_SECRET!!,{algorithm:'HS256'})
+
+              const verificationTokenForDisApproval = jwt.sign({verificationId:user?._id,license:license,
+                status:'disapproved'
+              },process.env.JWT_SECRET!!,{algorithm:'HS256'})
+
+
+              const urlForApproval =`${process.env.backend_base_url}/user/medics/certification/verification?token=${verificationTokenForApproval}`
+            
+               const urlForDisApproval =`${process.env.backend_base_url}/user/medics/certification/verification?token=${verificationTokenForDisApproval}`
+
+            await sendMail({receiver:'info@cosmicforgehealthnet.com',subject:"Doctor Requesting for Verification.",emailData:{
+              fullName:`${fullName}`,
+              license:license,
+              LicenseNumber:LicenseNumber,
+              expiration:expiration,
+              country:country,
+              docummentType:docummentType,
+              documentId:documentId,
+              documentHoldName:documentHoldName,
+              documentImage:documentImage,
+              pictureWithDocument:pictureWithDocument,
+              doctorImage:doctorImage,
+              photoWithLicence:photoWithLicence,
+              verificationID:user?._id,
+              timeStamp:new Date().toISOString(),
+              urlForApproval,
+              urlForDisApproval
+       
+
+          },template:"doctor-verification.ejs"})
+
         
         }
 
@@ -722,5 +815,109 @@ export const getupdloadCertificateOrLicense = async ( req: TypedRequest<{}>,
        data:document
     })
     
+
+}
+
+
+
+export  const  approveDoctorLicenseVerification = async (req:TypedRequest<{doctorId:string,}>,res:TypedResponse<ResponseBodyProps>) =>{
+
+
+     const tokenQuery = req.query.token as string
+
+     
+
+    try {
+
+       if(!tokenQuery){
+
+        res.status(SERVER_STATUS.BAD_REQUEST).json({
+            title:"Verification",
+            status:SERVER_STATUS.BAD_REQUEST,
+            successful:false,
+            message:'Failed to process request.'
+        })
+
+        return
+     }
+
+
+     const  token = jwt.verify(tokenQuery!!,process.env.JWT_SECRET!!) as {verificationId:string,license:string,status:'approved'|'disapproved' }
+
+    
+
+     if(!token.verificationId || !token.license || !token.status){
+
+
+        res.status(SERVER_STATUS.BAD_REQUEST).json({
+            title:"Verification",
+            status:SERVER_STATUS.BAD_REQUEST,
+            successful:false,
+            message:'Failed to process request.'
+        })
+
+        return
+     }
+
+
+     if(token.status === 'approved'){
+
+        const doctorDetails = await  MedicalPersonnelCertificationAndUploadModel.findOne({
+      userId:token.verificationId,
+      
+     })
+
+    
+
+
+     if(!doctorDetails){
+        res.status(SERVER_STATUS.BAD_REQUEST).json({
+            title:"Verification",
+            status:SERVER_STATUS.BAD_REQUEST,
+            successful:false,
+            message:'Failed to process request.'
+        })
+
+        return
+     }
+
+     
+      const doctorData = await newUserModel.findOne({
+      _id:doctorDetails?.userId
+     })
+
+     await doctorDetails.updateOne({
+       'licenseDetails.isVerified':true
+     })
+
+
+     res.status(SERVER_STATUS.SUCCESS).render(path.join(path.resolve(__dirname, "../../../../"),'views','approvedLicenseTemplate.ejs'))
+     
+     await  sendMail({receiver: `${doctorData?.email}`,subject:"Doctor Verification .",emailData:{
+          
+        },template:"approvedLicenseTemplate.ejs"})
+
+      
+     }
+
+   
+      
+    } catch (error:any) {
+
+       res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
+            title:"Verification",
+            status:SERVER_STATUS.INTERNAL_SERVER_ERROR,
+            successful:false,
+            message:'Error occured.',
+            error:error.message
+        })
+
+      
+    }
+
+
+     
+
+
 
 }

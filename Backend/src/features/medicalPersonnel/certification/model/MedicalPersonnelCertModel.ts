@@ -100,6 +100,9 @@ const MedicalPersonnelCertificationAndUploadSchema = new mongoose.Schema({
   },
   licenseDetails: {
     type: MedicalPersonnelLicenceSchema
+  },
+  tokenForValidation:{
+      type: mongoose.Schema.Types.String
   }
 });
 

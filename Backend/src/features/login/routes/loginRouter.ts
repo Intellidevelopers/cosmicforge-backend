@@ -1,8 +1,9 @@
 import express from 'express'
-import { LoginRequestBodyProps, loginUser, resendOtpToResetPassword, resetPassword, sendOtpToResetPassword, validateResetPasswordOTP } from '../controller/login'
+import { LoginRequestBodyProps, loginUser, managePassword, resendOtpToResetPassword, resetPassword, sendOtpToResetPassword, validateResetPasswordOTP } from '../controller/login'
 import TypedRequest from '../../../util/interface/TypedRequest'
 import TypedResponse from '../../../util/interface/TypedResponse'
 import { ResponseBodyProps } from '../../../util/interface/ResponseBodyProps'
+import userAuthenticationMiddleware from '../../../middleware/userAuthenticationMiddleware'
 
 
 
@@ -237,6 +238,9 @@ loginRouter.post('/resend-reset-password-otp',resendOtpToResetPassword)
 loginRouter.post('/validate-reset-password-otp',validateResetPasswordOTP)
 
 loginRouter.post('/reset-password',resetPassword)
+
+
+loginRouter.post('/manage-password',userAuthenticationMiddleware,managePassword)
 
 
 
