@@ -1,202 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html style="margin: 0;padding: 0;font-family: 'Inter', Arial, sans-serif;background-color: #F1F0FB;color: #1A1F2C;line-height: 1.6;">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor License Verification Email</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      /* Reset styles */
-      body, html {
-        margin: 0;
-        padding: 0;
-        font-family: 'Inter', Arial, sans-serif;
-        background-color: #F1F0FB;
-        color: #1A1F2C;
-        line-height: 1.6;
-      }
-
-      /* Main container */
-      .email-container {
-        max-width: 650px;
-        margin: 30px auto;
-        background-color: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 162, 0.12);
-      }
-
-      /* Header styles */
-      .header {
-        background-color: rgb(0, 0, 162);
-        color: white;
-        text-align: center;
-        padding: 30px 20px;
-        position: relative;
-      }
-
-      .header-content {
-        position: relative;
-        z-index: 2;
-      }
-
-      .header-title {
-        font-size: 24px;
-        font-weight: 700;
-        margin: 0;
-        letter-spacing: 0.5px;
-      }
-
-      .header-subtitle {
-        font-size: 16px;
-        opacity: 0.9;
-        margin-top: 10px;
-        font-weight: 500;
-      }
-
-      .logo {
-        font-weight: 800;
-        font-size: 20px;
-        letter-spacing: 1px;
-        margin-bottom: 15px;
-      }
-
-      .logo span {
-        color: #D6BCFA;
-      }
-
-      /* Section styles */
-      .section {
-        padding: 24px;
-        border-bottom: 1px solid #E5DEFF;
-        background-color: #FFFFFF;
-      }
-
-      .section-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: rgb(0, 0, 162);
-        margin-bottom: 20px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #E5DEFF;
-        display: flex;
-        align-items: center;
-      }
-
-      .section-title::before {
-        content: "";
-        width: 4px;
-        height: 18px;
-        background-color: rgb(0, 0, 162);
-        margin-right: 10px;
-        border-radius: 4px;
-        display: inline-block;
-      }
-
-      .info-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-        margin-bottom: 10px;
-      }
-
-      .info-box {
-        flex: 1 1 45%;
-      }
-
-      .info-label {
-        display: block;
-        font-weight: 600;
-        margin-top: 16px;
-        color: #403E43;
-        font-size: 14px;
-      }
-
-      .info-value {
-        display: block;
-        margin-top: 4px;
-        color: rgb(0, 0, 162);
-        font-weight: 500;
-      }
-
-      .info-box img {
-        width: 100%;
-        max-height: 180px;
-        object-fit: cover;
-        border-radius: 8px;
-        border: 1px solid #E5DEFF;
-        margin-top: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 162, 0.1);
-      }
-
-      .timestamp-box {
-        background-color: #E5DEFF;
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-top: 12px;
-        font-size: 14px;
-        color: rgb(0, 0, 162);
-        font-weight: 500;
-        display: inline-block;
-      }
-
-      /* Status badge */
-      .status-badge {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 50px;
-        background-color: #F2FCE2;
-        color: rgb(0, 0, 162);
-        font-size: 13px;
-        font-weight: 600;
-        margin-top: 12px;
-      }
-
-      /* Footer */
-      .footer {
-        text-align: center;
-        font-size: 13px;
-        color: #8E9196;
-        padding: 20px;
-        background-color: #F9F8FF;
-      }
-
-      .footer a {
-        color: rgb(0, 0, 162);
-        text-decoration: none;
-      }
-
-      .divider {
-        height: 4px;
-        background-color: rgb(0, 0, 162);
-        margin: 0;
-      }
-
-      /* Responsive adjustments */
-      @media only screen and (max-width: 600px) {
-        .info-row {
-          flex-direction: column;
-          gap: 10px;
-        }
-        
-        .info-box {
-          flex: 100%;
-        }
-        
-        .email-container {
-          margin: 10px;
-          width: calc(100% - 20px);
-        }
-        
-        .header {
-          padding: 20px 15px;
-        }
-        
-        .header-title {
-          font-size: 20px;
-        }
-      }
-    </style>
+    
+    
   </head>
 
  
@@ -227,7 +36,7 @@
             <span class="info-label">Country</span>
             <span class="info-value"><%= data.country %></span>
             
-            <div class="status-badge">Verification Pending</div>
+            <div class="status-badge" style="display: inline-block;padding: 6px 12px;border-radius: 50px;background-color: #F2FCE2;color: rgb(0, 0, 162);font-size: 13px;font-weight: 600;margin-top: 12px;">Verification Pending</div>
           </div>
           <div class="info-box">
             <span class="info-label">License Image</span>
@@ -242,7 +51,7 @@
         </div>
       </div>
 
-      <div class="divider"></div>
+      <div class="divider" style="height: 4px;background-color: rgb(0, 0, 162);margin: 0;"></div>
 
       <div class="section">
         <div class="section-title">Government ID Verification</div>
@@ -264,7 +73,7 @@
         </div>
       </div>
 
-      <div class="divider"></div>
+      <div class="divider" style="height: 4px;background-color: rgb(0, 0, 162);margin: 0;"></div>
 
       <div class="section">
         <div class="section-title">Face Verification</div>
@@ -292,7 +101,7 @@
       <div class="footer">
         <p>© 2024 CosmicForge Healthnet Ltd. All rights reserved.</p>
         <p>This is a system-generated verification document. Please do not reply to this email.</p>
-        <p>For assistance, contact <a href="mailto:support@cosmicforge.health">support@cosmicforge.health</a></p>
+        <p>For assistance, contact <a href="mailto:support@cosmicforge.health" style="color: rgb(0, 0, 162);text-decoration: none;">support@cosmicforge.health</a></p>
       </div>
     </div>
   </body>
