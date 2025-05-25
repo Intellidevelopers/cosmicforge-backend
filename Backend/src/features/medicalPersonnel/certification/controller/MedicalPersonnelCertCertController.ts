@@ -268,7 +268,7 @@ export   const updloadCertificateOrLicense = async (
                const urlForDisApproval =`${process.env.backend_base_url}/user/medics/certification/verification?token=${verificationTokenForDisApproval}`
 
             
-              await sendMail({receiver:'info@cosmicforgehealthnet.com',subject:"Doctor Requesting for Verification.",emailData:{
+              await sendMail({receiver:'noreply@cosmicforgehealthnet.com',subject:"Doctor Requesting for Verification.",emailData:{
                         fullName:`${fullName}`,
                         license:licenceUrl??userDocument.licenseDetails?.license,
                         LicenseNumber:LicenseNumber??userDocument.licenseDetails?.LicenseNumber,
@@ -613,7 +613,7 @@ export   const updloadCertificateOrLicense = async (
             
                const urlForDisApproval =`${process.env.backend_base_url}/user/medics/certification/verification?token=${verificationTokenForDisApproval}`
 
-            await sendMail({receiver:'info@cosmicforgehealthnet.com',subject:"Doctor Requesting for Verification.",emailData:{
+            await sendMail({receiver:'noreply@cosmicforgehealthnet.com',subject:"Doctor Requesting for Verification.",emailData:{
               fullName:`${fullName}`,
               license:license,
               LicenseNumber:LicenseNumber,

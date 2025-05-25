@@ -40,13 +40,13 @@
           </div>
           <div class="info-box">
             <span class="info-label">License Image</span>
-            <img src="<%= data.license %>" alt="License Image" />
+            <img style="height:100%; width:400px; object-fit:contain;"   src="<%= data.license %>" alt="License Image" />
           </div>
         </div>
         <div class="info-row">
           <div class="info-box">
             <span class="info-label">Doctor's Selfie</span>
-            <img style="height:100%; width:100%; object-fit:cover;"  src="<%= data.photoWithLicence %>" alt="Doctor's Selfie" />
+            <img style="height:100%; width:400px; object-fit:contain;"  src="<%= data.photoWithLicence %>" alt="Doctor's Selfie" />
           </div>
         </div>
       </div>
@@ -64,11 +64,11 @@
             <span class="info-value"><%= data.country %></span>
             
             <span class="info-label">ID Document</span>
-            <img style="object-fit:fill; width:100%; height:100px;" src="<%= data.documentImage %>" alt="ID Document" />
+            <img style="object-fit:contain; width:400px; height:100%" src="<%= data.documentImage %>" alt="ID Document" />
           </div>
           <div class="info-box">
             <span class="info-label">Selfie Holding ID</span>
-            <img   src="<%= data.pictureWithDocument %>" alt="Selfie Holding ID" />
+            <img style="height:100%; width:400px; object-fit:contain;"    src="<%= data.pictureWithDocument %>" alt="Selfie Holding ID" />
           </div>
         </div>
       </div>
@@ -80,7 +80,9 @@
         <div class="info-row">
           <div class="info-box">
             <span class="info-label">Captured Image</span>
-            <img  src="<%= data.doctorImage %>" alt="Face Captured" />
+
+            <img style="height:100%; width:400px; object-fit:contain;"    src="<%= data.doctorImage %>" alt="Face Captured" />
+         
           </div>
           <div class="info-box">
             <span class="info-label">Verification Timestamp</span>
@@ -88,7 +90,7 @@
               Submitted: <%= data.timeStamp %>
             </div>
             <span class="info-label">Verification ID</span>
-            <span style="object-fit:fill; width:100%; height:100px;" class="info-value"><%= data.verificationId %></span>
+            <span style="object-fit:contain; width:400px; height:100%;" class="info-value"><%= data.verificationId %></span>
           </div>
         </div>
       </div>

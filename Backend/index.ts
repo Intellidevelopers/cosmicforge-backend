@@ -53,13 +53,13 @@ const allowedOrigins = [
     "https://api.paystack.co"
   ];
   
-  /*app.use(
+  app.use(
     cors({
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
       origin: allowedOrigins,
     })
-);*/
+);
 
 
 app.use(express.json({limit:'50mb'}));
@@ -106,13 +106,72 @@ connectDB().then( res=>{
 
   
 
+    const data = [{
+       name:"Free",
+  
+  
+      message:" Suitable to all Subscribers",
+  
+  
+      usdPrice:"00.00",
+      price:"00.00",
+      duration:"month",
+      commission:"30",
+      offers:["Access to 20 Patients per month.","Regular Profile Listing.","Access to 50 AI Responses.","Access to Chat only.","Access to Support."]
+
+
+
+    },{
+       name:"Basic",
+  
+  
+      message:" Suitable to all Basic Plan Subscribers.",
+  
+  
+      usdPrice:"50.00",
+      price:"60,000.00",
+      duration:"month",
+      commission:"25",
+      offers:["Access to 50 Patients per month.","Regular Profile Listing.","Access to 200 AI Responses.","Video Consultation and Chat.","Access to Standard Support."]
+
+
+
+    },{
+       name:"Professional",
+  
+  
+      message:" Suitable to all Professional Plan Subscriber.",
+  
+  
+      usdPrice:"80.00",
+      price:"100,000.00",
+      duration:"month",
+      commission:"20",
+      offers:["Access to 100 Patients per month.","Top Profile Listing.","Access to 400 AI Responses.","Video Consultation and Chat.","Access to Priority Support."]
+
+
+
+    },
+  {
+       name:"Premium",
+  
+  
+      message:" Suitable to all Premium Plan Subscribers.",
+  
+  
+      usdPrice:"200.00",
+      price:"200,000.00",
+      duration:"month",
+      commission:"15",
+      offers:["Access to Unlimited Patients per month.","Top Profile Listing.","Access to  Unlimited AI Responses.","Video Consultation and Chat.","Access to Priority Support."]
+
+
+
+    }]
 
   
 
-  
-
-
-     
+ 
 
 
 
@@ -123,7 +182,8 @@ connectDB().then( res=>{
 
 
 
-  /*sendMail({receiver:'benagu477@gmail.com',subject:"Successfull Sign up.",emailData:{
+  /*
+sendMail({receiver:'benagu477@gmail.com',subject:"Successfull Sign up.",emailData:{
             fullName:`Agwu Emmanuel Chijekwu`
         },template:"sign-up-success.ejs"}).then((e)=>{
           console.log(e)

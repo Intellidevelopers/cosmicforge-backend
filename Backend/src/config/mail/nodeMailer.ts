@@ -13,8 +13,8 @@ const nodeMail = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: "info@cosmicforgehealthnet.com",
-    pass: "infopassword@cosmicforgehealthnet.com"
+    user: "noreply@cosmicforgehealthnet.com",
+    pass: "Aevy4BlOMxbp"
   }
 });
 
@@ -33,11 +33,13 @@ const sendMail = async (data: MailProps) => {
   });
 
   return nodeMail.sendMail({
-    sender: "info@cosmicforgehealthnet.com",
+    sender: "noreply@cosmicforgehealthnet.com",
     to: data.receiver,
     subject: data.subject,
-    from: "info@cosmicforgehealthnet.com",
-
+    from: "noreply@cosmicforgehealthnet.com",
+     headers:{
+      'Auto-Submitted':'auto-generated'
+     },
     html: htmltoSend
   });
 };
