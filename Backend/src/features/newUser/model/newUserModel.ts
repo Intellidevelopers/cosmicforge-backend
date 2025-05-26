@@ -41,7 +41,7 @@ enum UserRoleProps {
         required:[true,'user must have a role.'],
         enum:[UserRoleProps,'not a valid role assigned']
     }
- })
+ },{timestamps:true})
 
 
  export default model('users',UserSchema.pre('save',async function(next){
