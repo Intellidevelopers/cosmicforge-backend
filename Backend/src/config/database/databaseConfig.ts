@@ -12,7 +12,7 @@ import mongoose from 'mongoose'
  // const source = "mongodb+srv://CosmicForge:DevTeam1234@cluster0.amtdi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   //const target = "mongodb+srv://cosmicforgehealthnetDb:ew6EOylqK6oAVm3o@cosmicforge1.ouy8f.mongodb.net/CosmicForgeDb?retryWrites=true&w=majority&appName=Cosmicforge1"
    
-  const ts =  mongoose.createConnection(STAGING_URL)
+  const ts =  mongoose.connect(STAGING_URL)
 /*
   const sd =   mongoose.createConnection(source)
 
