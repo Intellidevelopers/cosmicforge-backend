@@ -24,6 +24,8 @@ export default async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlewarePr
     socket.emit('all-chatBot',userChatBot)
    }
 
+  
+
 
      socket.on('perform-diagnosis',(data)=>{
            runDiagnosis(socketIO,socket,data)
@@ -54,7 +56,7 @@ const runDiagnosis = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddle
 
 
             const openAI = new OpenAI({
-                apiKey:'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'
+                apiKey:process.env.open_ai_key
             })
 
            let result = await openAI.responses.create({
@@ -105,7 +107,8 @@ const runDiagnosis = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddle
 
         }
 
-    } catch (error) {
+    } catch (error:any) {
+        console.log(error.message)
         socket.emit('diagnosis-failed','Something went wrong try again.')
     }
 }
@@ -129,7 +132,7 @@ const aiChatBot = async (socketIO:Socket.Server,socket:TypedSocket<AuthMiddlewar
 
 
             const openAI = new OpenAI({
-                apiKey:'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'
+                apiKey:process.env.open_ai_key
             })
         
            let result = await openAI.responses.create({

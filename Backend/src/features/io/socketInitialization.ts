@@ -98,6 +98,8 @@ export default  (socketIO:Socket.Server) =>{
       console.log('updating....')
       console.log(userConnection?.userId)
       console.log(socket.id)
+
+      
        socket.emit('message',JSON.stringify(userConnection))
 
           Call_USER(socketIO,socket)
