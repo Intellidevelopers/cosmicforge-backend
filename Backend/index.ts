@@ -43,14 +43,15 @@ import SubscriptionDtailsModel from './src/features/subscription/model/Subscript
 
 app.set("view engine",'ejs')
 app.set('views','./src/views')
- app.use(cors())
+
 
 
 const allowedOrigins = [
     "http://127.0.0.1:5500",
     "https://www.cfhealthnet.com",
     "http://localhost:5173",
-    "https://api.paystack.co"
+    "https://api.paystack.co",
+    "https://www.google.com"
   ];
   
   app.use(
@@ -60,6 +61,7 @@ const allowedOrigins = [
       origin: allowedOrigins,
     })
 );
+
 
 
 app.use(express.json({limit:'50mb'}));
