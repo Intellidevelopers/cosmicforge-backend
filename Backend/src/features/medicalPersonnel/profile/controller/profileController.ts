@@ -19,6 +19,7 @@ export interface MedicalPersonnelRequestProps {
     department?: string,
     location?: string,
     profilePicture?: string,
+    currency:'NGN' | 'USD',
     pricing:number,
     fullName:string,
     lastName:string,
@@ -56,9 +57,9 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         }
 
 
-        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture,pricing,fullName,lastName, workingHours,experience } = req.body
+        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture,pricing,fullName,lastName, workingHours,experience,currency } = req.body
 
-        if (!email && !mobileNo && !professionalTitle && !specialization && !currentClinic && !location && !profilePicture && !department && !pricing && !fullName && !lastName ) {
+        if (!email && !mobileNo && !professionalTitle && !specialization && !currentClinic && !location && !profilePicture && !department && !pricing && !fullName && !lastName &&  !currency) {
 
             res.status(SERVER_STATUS.BAD_REQUEST).json({
                 title: 'Update Profile Message',
@@ -79,7 +80,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         if(fullName || lastName){
 
              if(userAccount?.fullName!==fullName || userAccount?.lastName!==lastName){
-            await userAccount?.updateOne({
+           
+                await userAccount?.updateOne({
                 fullName:fullName ?? userAccount.fullName,
                 lastName:lastName ?? userAccount.fullName
               })
@@ -188,7 +190,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                 location: location ?? userProfile.location,
                 pricing:pricing?? userProfile.pricing,
                 experience,
-                workTime: workingHours
+                workTime: workingHours,
+                currency:currency ?? userProfile.currency
 
                 
 
@@ -535,6 +538,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
 
 
     } catch (error: any) {
+
+        console.log(error)
         res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
             title: 'Update Profile Message',
             status: SERVER_STATUS.INTERNAL_SERVER_ERROR,

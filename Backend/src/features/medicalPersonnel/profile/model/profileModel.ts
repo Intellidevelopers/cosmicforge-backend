@@ -122,7 +122,11 @@ const medicalPersonnelProfileSchema = new mongoose.Schema({
         type:mongoose.SchemaTypes.String 
      },
      workTime:workingHourSchema,
-
+      currency:{
+        type:mongoose.SchemaTypes.String,
+        enum:['USD',"NGN"],
+       default:''
+     },
      pricing:{
         type:mongoose.SchemaTypes.String,
         
@@ -140,6 +144,18 @@ const medicalPersonnelProfileSchema = new mongoose.Schema({
 
 const  MedicalPersonnelProfileModel =  mongoose.model('medicalPersonnelProfile',medicalPersonnelProfileSchema.pre('save',async function (next){
      const numberOfUsers = await newUserModel.countDocuments()
+     const cosmicId = 'COSMIC-'.concat(numberOfUsers.toString().padStart(4,'0'))
+     
+     const idGenerated = await  MedicalPersonnelProfileModel.find({
+        userCosmicID:cosmicId
+      })
+
+      if(idGenerated){
+        this.userCosmicID  = 'COSMIC-'.concat(Number(numberOfUsers+1).toString().padStart(4,'0'))
+         next()
+         return
+      }
+
      this.userCosmicID =  'COSMIC-'.concat(numberOfUsers.toString().padStart(4,'0'))
      next()
 }))

@@ -134,7 +134,7 @@ export const registerNewUser = async (req: TypedRequest<RequestBodyProps>, res: 
         })
 
     } catch (error: any) {
-
+         console.log(error.messager)
         res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
             title: 'Register new user message',
             successful: false,
@@ -325,6 +325,9 @@ export const validateOTP = async (req: TypedRequest<ValidateOTPRequestProps>, re
 
 
 }
+
+
+
 export const completeRegistrationProcess = async (req: TypedRequest<CompleteRegistrationRequestProps>, res: TypedResponse<ResponseBodyProps>) => {
 
 
