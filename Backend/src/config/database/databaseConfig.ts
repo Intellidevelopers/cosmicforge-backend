@@ -13,82 +13,114 @@ import mongoose from 'mongoose'
   //const target = "mongodb+srv://cosmicforgehealthnetDb:ew6EOylqK6oAVm3o@cosmicforge1.ouy8f.mongodb.net/CosmicForgeDb?retryWrites=true&w=majority&appName=Cosmicforge1"
    
   const ts =  mongoose.connect(STAGING_URL)
-/*
+
   const sd =   mongoose.createConnection(source)
 
 
 
-  const patientVitalSignsSchema = new mongoose.Schema({
-    
-       bodyTemperature:{
-          type:mongoose.SchemaTypes.String
-       },
-       bloodPressure:{
-          type:mongoose.SchemaTypes.String
-       },
-       oxygenSaturation:{
-          type:mongoose.SchemaTypes.String
-       },
-       weight:{
-          type:mongoose.SchemaTypes.String
-       },
-       height:{
-          type:mongoose.SchemaTypes.String
-       },
-       gender:{
-          type:mongoose.SchemaTypes.String ,
-          enum:['male','female']
-      },
-      dateOfBirth:{
-          type:mongoose.SchemaTypes.String ,  
-      },
   
-  })
-  
-  
-   const patientProfileSchema = new mongoose.Schema({
-        userId:{
-           type:mongoose.SchemaTypes.ObjectId,
-           ref:'users'
-       },
-       profileType:{
-          type:mongoose.SchemaTypes.String,
-          enum:['personal','family']
+   /*
    
-       },
-       mobileNo:{
+   const DoctorSubscriptionDetailsSchema = new mongoose.Schema({
+   
+       name:{
            type:mongoose.SchemaTypes.String
        },
-       homeAddress:{
-           type:mongoose.SchemaTypes.String
-       },
-       workAddress:{
-           type:mongoose.SchemaTypes.String
-       },
-       profilePicture:{
-           type:mongoose.SchemaTypes.String 
-       },
-      vitalSigns:{
-          type:patientVitalSignsSchema
-      }
    
    
+       message:{
+           type:mongoose.SchemaTypes.String
+       },
+   
+   
+       currency:{
+             type:mongoose.SchemaTypes.String,
+             enum:['NGN','USD'],
+             default:"NGN"
+       },
+       usdPrice:{
+         type:mongoose.SchemaTypes.String,
+         default:''
+       },
+       price:{
+           type:mongoose.SchemaTypes.String
+       },
+       duration:{
+           type:mongoose.SchemaTypes.String
+       },
+       commission:{
+           type:mongoose.SchemaTypes.String
+       },
+       offers:[{
+          type:mongoose.SchemaTypes.String
+       }]
+   
+   })
+   
+   const PatientSubscriptionDetailsSchema = new mongoose.Schema({
+   
+       name:{
+           type:mongoose.SchemaTypes.String
+       },
+   
+   
+       message:{
+           type:mongoose.SchemaTypes.String
+       },
+   
+   
+       currency:{
+             type:mongoose.SchemaTypes.String,
+             enum:['NGN','USD'],
+             default:"NGN"
+       },
+       usdPrice:{
+         type:mongoose.SchemaTypes.String,
+         default:''
+       },
+       price:{
+           type:mongoose.SchemaTypes.String
+       },
+       duration:{
+           type:mongoose.SchemaTypes.String
+       },
+       commission:{
+           type:mongoose.SchemaTypes.String
+       },
+       offers:[{
+          type:mongoose.SchemaTypes.String
+       }]
    
    })
    
    
+   const SubscriptionDtailsSchema = new mongoose.Schema({
+   
+       patient:{
+           type:[PatientSubscriptionDetailsSchema]
+       },
+   
+       doctor:{
+           type:[DoctorSubscriptionDetailsSchema]
+       }
+   
+   
+       
+   })
    
 
 
 
-  const tModel  =   ts.model('patientProfile',patientProfileSchema)
+  const tModel  =   ts.model('subscriptionModelDetails',SubscriptionDtailsSchema)
 
 
-    const sModel  =  sd.model('patientProfile',patientProfileSchema)
+    const sModel  =  sd.model('subscriptionModelDetails',SubscriptionDtailsSchema)
 
  const doc = await  sModel.find().exec()
 
  await tModel.insertMany(doc)
+
 */
+
    return  ts
  } 

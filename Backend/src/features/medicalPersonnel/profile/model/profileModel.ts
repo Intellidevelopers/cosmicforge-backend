@@ -124,8 +124,8 @@ const medicalPersonnelProfileSchema = new mongoose.Schema({
      workTime:workingHourSchema,
       currency:{
         type:mongoose.SchemaTypes.String,
-        enum:['USD',"NGN"],
-       default:''
+        enum:["USD","NGN"],
+       
      },
      pricing:{
         type:mongoose.SchemaTypes.String,

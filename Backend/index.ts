@@ -16,9 +16,9 @@ import cors from 'cors'
 import mainRouter from './src/routes/routes'
 import { errorHandler } from './src/middleware/errorHandlerMiddleware'
 
-import  * as faceApi from 'face-api.js'
 import sendMail from './src/config/mail/nodeMailer'
 import SubscriptionDtailsModel from './src/features/subscription/model/SubscriptionDtailsModel'
+import MedicalPersonnelProfileModel from './src/features/medicalPersonnel/profile/model/profileModel'
 
  dotenv.config()
 
@@ -193,7 +193,7 @@ sendMail({receiver:'benagu477@gmail.com',subject:"Successfull Sign up.",emailDat
 
 
 
- 
+     console.log(await MedicalPersonnelProfileModel.find())
 
  
    
