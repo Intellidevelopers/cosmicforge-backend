@@ -181,11 +181,13 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
 
          for (const doctor of doctors){
 
-        let doctorCertified = await MedicalPersonnelCertificationAndUploadModel.findOne({
-                userId:doctor.userId
-            })
+        
 
+         let doctorStatus= await MedicalPersonnelCertificationAndUploadModel.findOne({
+            userId:doctor.userId
+         })
          
+          let  doctorPlan = ''
 
                 const isValid = await new Promise<boolean>(async(resolve,reject)=>{
                     const date = new Date()
@@ -196,6 +198,8 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
                   const subscription = await SubscriptionModel.findOne({
                     userId:doctor.userId
                   })
+
+                   doctorPlan = subscription?.planName!!
 
                  const  appointment = await BookAppointmentModel.find({
                     medicalPersonelID:doctor.userId,
@@ -243,7 +247,9 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
 
 
                    if(!isValid){
-                    doctorUpdate.push(doctor)
+                    doctorUpdate.push({...doctor.toJSON(),isVerified:doctorStatus?.licenseDetails?.isVerified??false,totalPatient:await BookAppointmentModel.find({
+                        appointmentStatus:'completed'
+                    }).countDocuments(),doctorPlan})
                    }
 
          
@@ -251,8 +257,7 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
            
          }
         
-        
-
+     
           
             res.status(SERVER_STATUS.SUCCESS).json({
                 title:'Get doctors by departments',

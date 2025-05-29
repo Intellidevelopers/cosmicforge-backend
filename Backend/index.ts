@@ -193,7 +193,7 @@ sendMail({receiver:'benagu477@gmail.com',subject:"Successfull Sign up.",emailDat
 
 
 
-     console.log(await MedicalPersonnelProfileModel.find())
+     //console.log(await MedicalPersonnelProfileModel.find())
 
  
    
