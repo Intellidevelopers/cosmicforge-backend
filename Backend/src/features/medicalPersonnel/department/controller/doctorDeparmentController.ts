@@ -186,6 +186,12 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
          let doctorStatus= await MedicalPersonnelCertificationAndUploadModel.findOne({
             userId:doctor.userId
          })
+
+               
+                  
+
+
+
          
           let  doctorPlan = ''
 
@@ -198,6 +204,10 @@ export const  getDoctorsBySpecificDepartment = async (req:TypedRequest<{departme
                   const subscription = await SubscriptionModel.findOne({
                     userId:doctor.userId
                   })
+
+                  if(subscription){
+                     await doctor.updateOne({subscriptionDetails:subscription._id})
+                  }
 
                    doctorPlan = subscription?.planName!!
 

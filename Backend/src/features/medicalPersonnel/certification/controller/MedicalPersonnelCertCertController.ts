@@ -5,6 +5,7 @@ import { ResponseBodyProps } from "../../../../util/interface/ResponseBodyProps"
 import TypedRequest from "../../../../util/interface/TypedRequest";
 import TypedResponse from "../../../../util/interface/TypedResponse";
 import newUserModel from "../../../newUser/model/newUserModel";
+import MedicalPersonnelProfileModel from "../../profile/model/profileModel";
 import MedicalPersonnelCertificationAndUploadModel from "../model/MedicalPersonnelCertModel";
 import jwt from 'jsonwebtoken'
 import path from 'path'
@@ -555,9 +556,7 @@ export   const updloadCertificateOrLicense = async (
 
                          
 
-
-
-            
+     
           const newDocument =      await new MedicalPersonnelCertificationAndUploadModel({
                                 userId:user?._id,
              licenseDetails:{
@@ -581,6 +580,9 @@ export   const updloadCertificateOrLicense = async (
 
 
             
+
+         await MedicalPersonnelProfileModel.findOneAndUpdate({_id:user?._id},{certificationDetails:newDocument._id})
+       
 
 
 
@@ -763,6 +765,10 @@ export   const updloadCertificateOrLicense = async (
                 }
             
             }).save()
+
+
+               await MedicalPersonnelProfileModel.findOneAndUpdate({_id:user?._id},{certificationDetails:newDocument._id})
+       
 
             res.status(SERVER_STATUS.SUCCESS).json({
                 title: 'Upload Licence or Certificate',

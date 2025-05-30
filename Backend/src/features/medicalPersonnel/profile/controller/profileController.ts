@@ -21,6 +21,7 @@ export interface MedicalPersonnelRequestProps {
     profilePicture?: string,
     currency:'NGN' | 'USD',
     pricing:number,
+    pricingForThirtyMins:string,
     fullName:string,
     lastName:string,
     experience:{},
@@ -57,9 +58,9 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
         }
 
 
-        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture,pricing,fullName,lastName, workingHours,experience,currency } = req.body
+        const { email, mobileNo, professionalTitle, specialization, currentClinic, department, location, profilePicture,pricing,fullName,lastName, workingHours,experience,currency,pricingForThirtyMins } = req.body
 
-        if (!email && !mobileNo && !professionalTitle && !specialization && !currentClinic && !location && !profilePicture && !department && !pricing && !fullName && !lastName &&  !currency) {
+        if (!email && !mobileNo && !professionalTitle && !specialization && !currentClinic && !location && !profilePicture && !department && !pricing && !fullName && !lastName &&  !currency && !pricingForThirtyMins) {
 
             res.status(SERVER_STATUS.BAD_REQUEST).json({
                 title: 'Update Profile Message',
@@ -191,8 +192,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
                 pricing:pricing?? userProfile.pricing,
                 experience,
                 workTime: workingHours,
-                currency:currency ?? userProfile.currency
-
+                currency:currency ?? userProfile.currency,
+               pricingForThirtyMins: pricingForThirtyMins ?? userProfile.pricingForThirtyMins
                 
 
             }, {
@@ -379,7 +380,8 @@ export const updateProfile = async (req: TypedRequest<MedicalPersonnelRequestPro
             currentClinic,
             department,
             location,
-            pricing
+            pricing,
+            pricingForThirtyMins
 
         })
 

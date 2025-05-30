@@ -19,7 +19,7 @@ const  otpVerificationSchema =  new mongoose.Schema({
         }
         
     
-})
+},{expires:'24h'})
 
 
 export default  mongoose.model('otp',otpVerificationSchema)

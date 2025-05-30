@@ -127,12 +127,25 @@ const medicalPersonnelProfileSchema = new mongoose.Schema({
         enum:["USD","NGN"],
        
      },
+     
+      pricingForThirtyMins:{
+        type:mongoose.SchemaTypes.String,
+        
+     },
      pricing:{
         type:mongoose.SchemaTypes.String,
         
      },
      earlistAvailability:{
         type:mongoose.SchemaTypes.Date
+     },
+     certificationDetails:{
+        type:mongoose.Schema.ObjectId,
+        ref:'medicalPersonnelLicenceOrCertificate'
+     },
+     subscriptionDetails:{
+        type:mongoose.Schema.ObjectId,
+        ref:'subscription'
      }
      
      

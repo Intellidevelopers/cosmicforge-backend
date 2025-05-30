@@ -22,7 +22,7 @@ const  resetPasswordOtpVerificationSchema =  new mongoose.Schema({
         }
         
     
-})
+},{expires:'24h'})
 
 
 export default  mongoose.model('resetPassword',resetPasswordOtpVerificationSchema)
