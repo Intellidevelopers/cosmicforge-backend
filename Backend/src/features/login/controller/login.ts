@@ -70,13 +70,15 @@ export const loginUser = async (req: TypedRequest<LoginRequestBodyProps>, res: T
 
         const token = jwt.sign({ ...userAccount.toObject() }, process.env.JWT_SECRET!!, { expiresIn: '30d' })
 console.log('fired')
-        await sendMail({
+      
+  await sendMail({
             receiver: userAccount.email, subject: "Successfull Login.", emailData: {
                 fullName: `${userAccount.fullName} ${userAccount.lastName}`
             }, template: "login-success.ejs"
         })
 
         console.log('fired.....')
+
 
         switch(userAccount.role){
 
@@ -128,10 +130,12 @@ console.log('fired')
 
         
 
+        
+
       
 
     } catch (error: any) {
-
+         console.log(error.message)
         res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
             title: "Login Message",
             status: SERVER_STATUS.INTERNAL_SERVER_ERROR,

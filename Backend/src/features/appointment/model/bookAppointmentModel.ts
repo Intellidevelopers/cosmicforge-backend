@@ -105,7 +105,9 @@ const BookAppointmentSchema = new mongoose.Schema({
         default:'pending'
 
       },
-
+      sessionDuration:{
+       type:mongoose.SchemaTypes.Number
+      },
     createdAt:{
         type:mongoose.SchemaTypes.Date,
         default:Date.now()

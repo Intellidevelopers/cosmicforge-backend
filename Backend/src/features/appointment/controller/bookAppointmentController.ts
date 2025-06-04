@@ -16,7 +16,8 @@ import MedicalPersonnelProfileModel from "../../medicalPersonnel/profile/model/p
      cardFee:string
      vat:string
      total:string,
-     paymentReference:string
+     paymentReference:string,
+     
  
  }
 
@@ -27,8 +28,10 @@ interface bookAppointmentProps {
    time:string,
     appointmentType: string
     payment:paymentProps,
-    appointmentStatus:string
+    appointmentStatus:string,
+    sessionDuration:Number
 }
+
 
 export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res:TypedResponse<ResponseBodyProps>) => {
 
@@ -58,15 +61,15 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
     }
 
 
-    const {doctorId,date,time,appointmentType,payment,appointmentStatus} = req.body
+    const {doctorId,date,time,appointmentType,payment,appointmentStatus,sessionDuration} = req.body
      
-      if(!doctorId || !date || !time||  !appointmentType){
+      if(!doctorId || !date || !time||  !appointmentType || !sessionDuration){
 
         res.status(SERVER_STATUS.BAD_REQUEST).json({
             title:"Book Appointment Message.",
             status:SERVER_STATUS.BAD_REQUEST,
             successful:false,
-            message:"doctorId,date,time and appointmentType fields are needed to continue."
+            message:"doctorId,date,time,sessionDuration and appointmentType fields are needed to continue."
         })
         return
       }
@@ -178,6 +181,7 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
       const patientProfileID =  await PatientProfileModel.findOne({
         userId:user._id
       })
+
       const doctorProfileID = await MedicalPersonnelProfileModel.findOne({
         userId:doctorId
       })
@@ -204,7 +208,8 @@ export const bookAppointment = async (req:TypedRequest<bookAppointmentProps>,res
         appointmentTime:time,
         appointmentStatus:appointmentStatus ?? 'booked',
         patientDetails:patientProfileID?._id,
-        medicalPersonelDetails:doctorProfileID?._id
+        medicalPersonelDetails:doctorProfileID?._id,
+         sessionDuration:sessionDuration
 
       })
 
@@ -306,5 +311,59 @@ export const getSpecificDoctorAppointments = async (req:TypedRequest<any>,res:Ty
 
    } 
 
+}
+
+
+export  const getSpecificDoctorAppointmentsById =   async (req:TypedRequest<any>,res:TypedResponse<ResponseBodyProps>) => {
+
+  try {
+
+    const user = req.user
+
+    if(!user){
+        res.status(SERVER_STATUS.Forbidden).json({
+            title:" Appointment Message.",
+            status:SERVER_STATUS.Forbidden,
+            successful:false,
+            message:"You are not authorized"
+        })
+        return
+    }
+
+   
+
+    const appointments = await BookAppointmentModel.find({patientID:user._id}).populate([{path:'medicalPersonelDetails',select:""},{path:'medicalPersonelID',select:'fullName lastName'}]).sort({createdAt:-1})
+
+
+    res.status(SERVER_STATUS.SUCCESS).json({
+        title:" Appointment Message.",
+        status:SERVER_STATUS.SUCCESS,
+        successful:true,
+        message:"Successfully fetched.",
+        data:{
+            totalAppointments:appointments.length,
+            appointments
+        }
+    })
+
+   
+
+    
+   
+
+
+
+    
+   } catch (error:any) {
+
+    res.status(SERVER_STATUS.INTERNAL_SERVER_ERROR).json({
+        title:"Book Appointment Message.",
+        status:SERVER_STATUS.INTERNAL_SERVER_ERROR,
+        successful:false,
+        message:"Internal Server Error.",
+        error:error.message
+    }) 
+
+   } 
 }
 

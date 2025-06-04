@@ -1,6 +1,6 @@
 import express from 'express'
 import userAuthenticationMiddleware from '../../../middleware/userAuthenticationMiddleware'
-import { bookAppointment, getSpecificDoctorAppointments } from '../controller/bookAppointmentController'
+import { bookAppointment, getSpecificDoctorAppointments, getSpecificDoctorAppointmentsById } from '../controller/bookAppointmentController'
 
 
 const bookAppointmentRouter = express.Router()
@@ -133,6 +133,8 @@ const bookAppointmentRouter = express.Router()
 bookAppointmentRouter.post('/patient/appointment/book',userAuthenticationMiddleware,bookAppointment)
 
 bookAppointmentRouter.get('/medics/appointments',userAuthenticationMiddleware,getSpecificDoctorAppointments)
+
+bookAppointmentRouter.get('/medics/appointmentsbyId',userAuthenticationMiddleware,getSpecificDoctorAppointmentsById)
 
 
 export default bookAppointmentRouter
